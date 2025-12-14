@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Atari 2600 SFX Editor</title>
+<style>
+body {
+	background-color: #1e1e1e;
+	color: #f0f0f0;
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+h1 {
+	text-align: center;
+	margin: 20px 0;
+}
+
+.panelContainer {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+	flex-wrap: wrap;
+	margin-bottom: 20px;
+}
+
+.panel {
+	border: 1px solid #555;
+	padding: 15px;
+	background-color: #2b2b2b;
+	border-radius: 5px;
+}
+
+#stepPanel {
+	width: 520px; 
+}
+
+#playbackPanel, #tableManagementPanel {
+	width: 200px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 15px;
+}
+
+.panel h3 {
+	margin-top: 0;
+	margin-bottom: 15px;
+	text-align: center;
+}
+
+.inputRow {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.inputRow label {
+	flex: 0 0 220px; 
+	text-align: right;
+	margin-right: 10px;
+}
+
+.inputRow input[type="number"], .inputRow select {
+	flex: 1 1 auto;
+	background-color: #333;
+	color: #f0f0f0;
+	border: 1px solid #555;
+	border-radius: 3px;
+	padding: 4px;
+	text-align: center;
+	max-width: 200px; 
+}
+
+/* Step Panel button */
+#stepPanel button {
+	margin-left: 230px; 
+	padding: 6px 12px;
+	background-color: #2196F3;
+	color: white;
+	border: 1px solid #555;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+#stepPanel button:hover {
+	background-color: #1E88E5;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 10px auto;
+	width: 95%;
+	background-color: #2b2b2b;
+}
+
+th, td {
+	border: 1px solid #555;
+	padding: 5px 10px;
+	text-align: center;
+}
+
+th {
+	background-color: #3a3a3a;
+}
+
+#tonesTable select, #tonesTable input[type="number"] {
+	background-color: #333;
+	color: #f0f0f0;
+	border: 1px solid #555;
+	border-radius: 3px;
+	padding: 4px;
+	text-align: center;
+}
+
+#tonesTable select {
+	width: 250px;
+}
+
+#tonesTable input[type="number"] {
+	width: 80px;
+}
+
+#frequencyTableLabel, #controlVolumeTableLabel {
+	margin-top: 10px;
+	text-align: center;
+	color: #ffcc00;
+}
+
+/* Table buttons */
+button.playBtn {
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	cursor: pointer;
+	border-radius: 3px;
+	padding: 8px;
+	width: 180px;
+}
+
+button.playBtn:hover {
+	background-color: #45A049;
+}
+
+button.deleteBtn {
+	background-color: #F44336;
+	color: white;
+	border: none;
+	cursor: pointer;
+	border-radius: 3px;
+	padding: 8px;
+}
+
+button.deleteBtn:hover {
+	background-color: #D32F2F;
+}
+
+/* Uniform buttons: Step Add / Insert Before */
+#tonesTable .uniformBtn,
+#stepPanel button {
+	background-color: #2196F3;  /* blue */
+	color: white;
+	border: 1px solid #555;
+	border-radius: 3px;
+	cursor: pointer;
+	padding: 8px;
+	width: 180px;
+}
+
+#tonesTable .uniformBtn:hover,
+#stepPanel button:hover {
+	background-color: #1E88E5;
+}
+
+/* Table Management Buttons grey only */
+#tableManagementPanel .uniformBtn {
+	background-color: #757575; /* grey */
+	color: white;
+	border: 1px solid #555;
+	border-radius: 3px;
+	cursor: pointer;
+	padding: 8px;
+	width: 180px;
+}
+
+#tableManagementPanel .uniformBtn:hover {
+	background-color: #616161; /* darker grey on hover */
+}
+
+/* Playback panel buttons grey, same size as table buttons */
+#playbackPanel {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 15px;
+	height: 100%;
+}
+
+#playbackPanel .uniformBtn {
+	background-color: #757575;  /* grey */
+	color: white;
+	border: 1px solid #555;
+	border-radius: 3px;
+	cursor: pointer;
+	padding: 8px;
+	width: 180px;
+	text-align: center;
+}
+
+#playbackPanel .uniformBtn:hover {
+	background-color: #616161;  /* darker grey */
+}
+
+/* Copy Tables Buttons grey */
+#copyTablesPanel .uniformBtn {
+	background-color: #9e9e9e; /* grey */
+	color: white;
+	border: 1px solid #555;
+	border-radius: 3px;
+	cursor: pointer;
+	padding: 8px;
+	width: 180px;
+}
+
+#copyTablesPanel .uniformBtn:hover {
+	background-color: #757575; /* darker grey */
+}
+
+/* Copy Tables Panel: Center buttons horizontally */
+#copyTablesPanel {
+	width: 260px;
+	margin-top: 30px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	align-items: center;
+}
+
+/* Toast styling */
+#toast {
+  visibility: hidden;
+  min-width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 10px;
+  position: fixed;
+  z-index: 100;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  font-size: 16px;
+}
+
+#toast.show {
+  visibility: visible;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+</style>
+</head>
+<body>
+
+<h1>Atari 2600 SFX Editor with TIA Sound Generator</h1>
+
+<div class="panelContainer">
+  <div class="panel" id="stepPanel">
+    <h3>Step Parameters</h3>
+    <div class="inputRow">
+      <label for="freq">Frequency (1=high, 31=low):</label>
+      <input id="freq" type="number" min="1" max="31" value="4">
+    </div>
+    <div class="inputRow">
+      <label for="ctl">Control:</label>
+      <select id="ctl">
+        <option value="1">1 = Buzzy</option>
+        <option value="2">2 = Distortion</option>
+        <option value="3">3 = Flangy</option>
+        <option value="4">4 = Pure</option>
+        <option value="5">5 = Pure</option>
+        <option value="6" selected>6 = Between Pure/Buzzy</option>
+        <option value="7">7 = Reedy</option>
+        <option value="8">8 = White Noise</option>
+        <option value="9">9 = Reedy</option>
+        <option value="10">10 = Between Pure/Buzzy</option>
+        <option value="11">11 = Silent-ish</option>
+        <option value="12">12 = Low Pure</option>
+        <option value="13">13 = Low Pure</option>
+        <option value="14">14 = Electronic Low</option>
+        <option value="15">15 = Electronic Low</option>
+      </select>
+    </div>
+    <div class="inputRow">
+      <label for="vol">Volume (0=off, 15=high):</label>
+      <input id="vol" type="number" min="0" max="15" value="10">
+    </div>
+    <div class="inputRow">
+      <label for="repeat">Repeat (1-30):</label>
+      <input id="repeat" type="number" min="1" max="30" value="1">
+    </div>
+    <button onclick="injectManualSample()" class="uniformBtn">Add Steps at End</button>
+  </div>
+
+  <div class="panel" id="playbackPanel">
+    <h3>Playback</h3>
+    <button onclick="playFromTable()" class="uniformBtn">Play</button>
+    <button onclick="stopAudio()" class="uniformBtn">Stop</button>
+  </div>
+
+  <div class="panel" id="tableManagementPanel">
+    <h3>Table Management</h3>
+    <button class="uniformBtn" onclick="newTable()">New Table</button>
+    <button class="uniformBtn" onclick="saveTable()">Save Table</button>
+    <button class="uniformBtn" onclick="loadTable()">Load Table</button>
+    <input type="file" id="loadFileInput" accept=".json" style="display:none" />
+  </div>
+</div>
+
+<table id="tonesTable">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Frequency</th>
+      <th>Control</th>
+      <th>Volume</th>
+      <th>Repeat</th>
+      <th>Play</th>
+      <th>Delete</th>
+      <th>Insert Before</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<div id="frequencyTableLabel">Frequency Table:</div>
+<div id="controlVolumeTableLabel">Control/Volume Table:</div>
+
+<div class="panelContainer" style="justify-content: center; margin-top: 20px;">
+  <div class="panel" id="copyTablesPanel">
+    <h3>Copy Tables</h3>
+    <button class="uniformBtn" onclick="copyFrequency()">Copy Frequency Table</button>
+    <button class="uniformBtn" onclick="copyControlVolume()">Copy Control/Volume Table</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="wasm_exec.js"></script>
+<script>
+const go = new Go();
+WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(result => {
+	go.run(result.instance);
+});
+
+let tonesArray = [];
+let currentAudioSource = null;
+
+// Tone options
+const ctlOptions = [
+  {v:1,l:"1 = Buzzy"}, {v:2,l:"2 = Distortion"}, {v:3,l:"3 = Flangy"},
+  {v:4,l:"4 = Pure"}, {v:5,l:"5 = Pure"}, {v:6,l:"6 = Between Pure/Buzzy"},
+  {v:7,l:"7 = Reedy"}, {v:8,l:"8 = White Noise"}, {v:9,l:"9 = Reedy"},
+  {v:10,l:"10 = Between Pure/Buzzy"}, {v:11,l:"11 = Silent-ish"}, {v:12,l:"12 = Low Pure"},
+  {v:13,l:"13 = Low Pure"}, {v:14,l:"14 = Electronic Low"}, {v:15,l:"15 = Electronic Low"}
+];
+
+// Toast
+function showToast(message) {
+	const toast = document.getElementById("toast");
+	toast.textContent = message;
+	toast.className = "show";
+	setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+}
+
+// --- Step Table ---
+function injectManualSample() {
+	const freq = parseInt(document.getElementById("freq").value);
+	const vol  = parseInt(document.getElementById("vol").value);
+	const ctl  = parseInt(document.getElementById("ctl").value);
+	const repeat = parseInt(document.getElementById("repeat").value) || 1;
+	tonesArray.push({ frequency: freq, control: ctl, volume: vol, repeat });
+	updateTable();
+}
+
+// Update table UI
+function updateTable() {
+	const tbody = document.querySelector("#tonesTable tbody");
+	tbody.innerHTML = "";
+	tonesArray.forEach((tone, index) => {
+		const row = tbody.insertRow();
+		row.insertCell().textContent = index + 1;
+
+		const freqCell = row.insertCell();
+		const freqInput = document.createElement("input");
+		freqInput.type = "number";
+		freqInput.min = 1;
+		freqInput.max = 31;
+		freqInput.value = tone.frequency;
+		freqInput.onchange = updateToneFromTable;
+		freqCell.appendChild(freqInput);
+
+		const ctlCell = row.insertCell();
+		const ctlSelect = document.createElement("select");
+		ctlOptions.forEach(optData => {
+			const opt = document.createElement("option");
+			opt.value = optData.v;
+			opt.text = optData.l;
+			if(optData.v === tone.control) opt.selected = true;
+			ctlSelect.appendChild(opt);
+		});
+		ctlSelect.onchange = updateToneFromTable;
+		ctlCell.appendChild(ctlSelect);
+
+		const volCell = row.insertCell();
+		const volInput = document.createElement("input");
+		volInput.type = "number";
+		volInput.min = 0;
+		volInput.max = 15;
+		volInput.value = tone.volume;
+		volInput.onchange = updateToneFromTable;
+		volCell.appendChild(volInput);
+
+		const repeatCell = row.insertCell();
+		const repeatInput = document.createElement("input");
+		repeatInput.type = "number";
+		repeatInput.min = 1;
+		repeatInput.max = 30;
+		repeatInput.value = tone.repeat || 1;
+		repeatInput.onchange = updateToneFromTable;
+		repeatCell.appendChild(repeatInput);
+
+		const playCell = row.insertCell();
+		const playBtn = document.createElement("button");
+		playBtn.textContent = "Play";
+		playBtn.className = "playBtn";
+		playBtn.onclick = () => playStep(index);
+		playCell.appendChild(playBtn);
+
+		const delCell = row.insertCell();
+		const delBtn = document.createElement("button");
+		delBtn.textContent = "X";
+		delBtn.className = "deleteBtn";
+		delBtn.onclick = () => { tonesArray.splice(index, 1); updateTable(); };
+		delCell.appendChild(delBtn);
+
+		const insertCell = row.insertCell();
+		const insertBtn = document.createElement("button");
+		insertBtn.textContent = "Insert Before";
+		insertBtn.className = "uniformBtn";
+		insertBtn.onclick = () => {
+			const freq = parseInt(document.getElementById("freq").value);
+			const ctl  = parseInt(document.getElementById("ctl").value);
+			const vol  = parseInt(document.getElementById("vol").value);
+			const repeat = parseInt(document.getElementById("repeat").value) || 1;
+			tonesArray.splice(index, 0, { frequency: freq, control: ctl, volume: vol, repeat });
+			updateTable();
+		};
+		insertCell.appendChild(insertBtn);
+	});
+	updateLabels();
+}
+
+// Update tone array from table
+function updateToneFromTable() {
+	const tbody = document.querySelector("#tonesTable tbody");
+	tonesArray = [];
+	for (let i = 0; i < tbody.rows.length; i++) {
+		const row = tbody.rows[i];
+		const freq = parseInt(row.cells[1].querySelector("input").value);
+		const ctl  = parseInt(row.cells[2].querySelector("select").value);
+		const vol  = parseInt(row.cells[3].querySelector("input").value);
+		const repeat = parseInt(row.cells[4].querySelector("input").value) || 1;
+		tonesArray.push({ frequency: freq, control: ctl, volume: vol, repeat });
+	}
+	updateLabels();
+}
+
+// Update table labels
+function updateLabels() {
+	const expanded = [];
+	tonesArray.forEach(step => {
+		for (let i = 0; i < (step.repeat||1); i++) expanded.push({ frequency: step.frequency, control: step.control, volume: step.volume });
+	});
+	const freqArray = [0].concat(expanded.map(s => s.frequency).reverse());
+	document.getElementById("frequencyTableLabel").textContent = "Frequency Table: " + freqArray.join(", ");
+	const cvArray = ["0"].concat(expanded.map(step => {
+		const byte = ((step.control & 0x0F)<<4)|(step.volume & 0x0F);
+		return "$"+byte.toString(16).padStart(2,"0").toUpperCase();
+	}).reverse());
+	document.getElementById("controlVolumeTableLabel").textContent = "Control/Volume Table: " + cvArray.join(", ");
+}
+
+// --- Playback ---
+function playFromTable() {
+	updateToneFromTable();
+	if(typeof window.updateSamples === "function") {
+		const expandedArray = [];
+		tonesArray.forEach(step => {
+			for (let i=0;i<(step.repeat||1);i++) expandedArray.push({frequency: step.frequency, control: step.control, volume: step.volume});
+		});
+		window.updateSamples(JSON.stringify(expandedArray,null,4));
+		if(typeof window.playSample === "function") window.playSample(0);
+	}
+}
+
+function playStep(index) {
+	const step = tonesArray[index];
+	if(!step) return;
+	const expanded = [];
+	for(let i=0;i<(step.repeat||1);i++) expanded.push({frequency: step.frequency, control: step.control, volume: step.volume});
+	if(typeof window.updateSamples === "function") {
+		window.updateSamples(JSON.stringify(expanded,null,4));
+		if(typeof window.playSample === "function") window.playSample(0);
+	}
+}
+
+function stopAudio() {
+	if(currentAudioSource) {
+		currentAudioSource.stop();
+		currentAudioSource = null;
+	}
+}
+
+// --- Table Management ---
+function newTable() {
+	tonesArray = [];
+	updateTable();
+	showToast("New table created");
+}
+
+function saveTable() {
+	const dataStr = JSON.stringify(tonesArray,null,4);
+	const blob = new Blob([dataStr], {type:"application/json"});
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = "tones.json";
+	a.click();
+	URL.revokeObjectURL(url);
+	showToast("Table saved!");
+}
+
+function loadTable() {
+	document.getElementById("loadFileInput").click();
+}
+
+document.getElementById("loadFileInput").addEventListener("change", function(e){
+	const file = e.target.files[0];
+	if(!file) return;
+	const reader = new FileReader();
+	reader.onload = function(ev){
+		try {
+			tonesArray = JSON.parse(ev.target.result);
+			updateTable();
+			showToast("Table loaded!");
+		}catch(err){
+			showToast("Failed to load table");
+		}
+	};
+	reader.readAsText(file);
+});
+
+// --- Copy Tables ---
+function copyFrequency() {
+	const freqLabel = document.getElementById("frequencyTableLabel");
+	navigator.clipboard.writeText(freqLabel.textContent).then(()=>showToast("Frequency Table copied!"));
+}
+
+function copyControlVolume() {
+	const cvLabel = document.getElementById("controlVolumeTableLabel");
+	navigator.clipboard.writeText(cvLabel.textContent).then(()=>showToast("Control/Volume Table copied!"));
+}
+</script>
+
+</body>
+</html>
