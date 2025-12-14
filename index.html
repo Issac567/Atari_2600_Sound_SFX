@@ -136,139 +136,195 @@ const ctlOptions = [
   {v:13,l:"13 = Low Pure"}, {v:14,l:"14 = Electronic Low"}, {v:15,l:"15 = Electronic Low"}
 ];
 
-function showToast(msg){ const toast=document.getElementById("toast"); toast.textContent=msg; toast.className="show"; setTimeout(()=>{toast.className=toast.className.replace("show","");},3000); }
+function showToast(msg){
+  const toast=document.getElementById("toast");
+  toast.textContent=msg;
+  toast.className="show";
+  setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
+}
 
 function injectManualSample(){
-	const freq=parseInt(document.getElementById("freq").value);
-	const vol=parseInt(document.getElementById("vol").value);
-	const ctl=parseInt(document.getElementById("ctl").value);
-	const repeat=parseInt(document.getElementById("repeat").value)||1;
-	tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
-	updateTable();
+  const freq=parseInt(document.getElementById("freq").value);
+  const vol=parseInt(document.getElementById("vol").value);
+  const ctl=parseInt(document.getElementById("ctl").value);
+  const repeat=parseInt(document.getElementById("repeat").value)||1;
+  tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
+  updateTable();
 }
 
 function updateTable(){
-	const tbody=document.querySelector("#tonesTable tbody");
-	tbody.innerHTML="";
-	tonesArray.forEach((tone,index)=>{
-		const row=tbody.insertRow();
-		row.setAttribute("draggable","true");
-		row.dataset.index=index;
+  const tbody=document.querySelector("#tonesTable tbody");
+  tbody.innerHTML="";
+  tonesArray.forEach((tone,index)=>{
+    const row=tbody.insertRow();
+    row.setAttribute("draggable","true");
+    row.dataset.index=index;
 
-		row.addEventListener("dragstart",e=>{ e.dataTransfer.setData("text/plain",index); e.currentTarget.style.opacity="0.5"; });
-		row.addEventListener("dragend",e=>{ e.currentTarget.style.opacity="1"; });
-		row.addEventListener("dragover",e=>{ e.preventDefault(); row.classList.add("drag-over"); });
-		row.addEventListener("dragleave",e=>{ row.classList.remove("drag-over"); });
-		row.addEventListener("drop",e=>{
-			e.preventDefault(); row.classList.remove("drag-over");
-			const draggedIndex=parseInt(e.dataTransfer.getData("text/plain"));
-			const targetIndex=parseInt(row.dataset.index);
-			if(draggedIndex===targetIndex) return;
-			const draggedTone=tonesArray[draggedIndex];
-			tonesArray.splice(draggedIndex,1);
-			tonesArray.splice(targetIndex,0,draggedTone);
-			updateTable();
-		});
+    row.addEventListener("dragstart",e=>{ e.dataTransfer.setData("text/plain",index); e.currentTarget.style.opacity="0.5"; });
+    row.addEventListener("dragend",e=>{ e.currentTarget.style.opacity="1"; });
+    row.addEventListener("dragover",e=>{ e.preventDefault(); row.classList.add("drag-over"); });
+    row.addEventListener("dragleave",e=>{ row.classList.remove("drag-over"); });
+    row.addEventListener("drop",e=>{
+      e.preventDefault(); row.classList.remove("drag-over");
+      const draggedIndex=parseInt(e.dataTransfer.getData("text/plain"));
+      const targetIndex=parseInt(row.dataset.index);
+      if(draggedIndex===targetIndex) return;
+      const draggedTone=tonesArray[draggedIndex];
+      tonesArray.splice(draggedIndex,1);
+      tonesArray.splice(targetIndex,0,draggedTone);
+      updateTable();
+    });
 
-		row.insertCell().textContent=index+1;
+    row.insertCell().textContent=index+1;
 
-		const freqCell=row.insertCell();
-		const freqInput=document.createElement("input"); freqInput.type="number"; freqInput.min=1; freqInput.max=31; freqInput.value=tone.frequency; freqInput.onchange=updateToneFromTable; freqCell.appendChild(freqInput);
+    const freqCell=row.insertCell();
+    const freqInput=document.createElement("input"); freqInput.type="number"; freqInput.min=1; freqInput.max=31; freqInput.value=tone.frequency; freqInput.onchange=updateToneFromTable; freqCell.appendChild(freqInput);
 
-		const ctlCell=row.insertCell();
-		const ctlSelect=document.createElement("select");
-		ctlOptions.forEach(opt=>{ const o=document.createElement("option"); o.value=opt.v; o.text=opt.l; if(opt.v===tone.control) o.selected=true; ctlSelect.appendChild(o); });
-		ctlSelect.onchange=updateToneFromTable; ctlCell.appendChild(ctlSelect);
+    const ctlCell=row.insertCell();
+    const ctlSelect=document.createElement("select");
+    ctlOptions.forEach(opt=>{ const o=document.createElement("option"); o.value=opt.v; o.text=opt.l; if(opt.v===tone.control) o.selected=true; ctlSelect.appendChild(o); });
+    ctlSelect.onchange=updateToneFromTable; ctlCell.appendChild(ctlSelect);
 
-		const volCell=row.insertCell();
-		const volInput=document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volInput.onchange=updateToneFromTable; volCell.appendChild(volInput);
+    const volCell=row.insertCell();
+    const volInput=document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volInput.onchange=updateToneFromTable; volCell.appendChild(volInput);
 
-		const repeatCell=row.insertCell();
-		const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=30; repeatInput.value=tone.repeat||1; repeatInput.onchange=updateToneFromTable; repeatCell.appendChild(repeatInput);
+    const repeatCell=row.insertCell();
+    const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=30; repeatInput.value=tone.repeat||1; repeatInput.onchange=updateToneFromTable; repeatCell.appendChild(repeatInput);
 
-		const playCell=row.insertCell();
-		const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; playBtn.onclick=()=>playStep(index); playCell.appendChild(playBtn);
+    const playCell=row.insertCell();
+    const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; playBtn.onclick=()=>playStep(index); playCell.appendChild(playBtn);
 
-		const delCell=row.insertCell();
-		const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="deleteBtn"; delBtn.onclick=()=>{ tonesArray.splice(index,1); updateTable(); }; delCell.appendChild(delBtn);
+    const delCell=row.insertCell();
+    const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="deleteBtn"; delBtn.onclick=()=>{ tonesArray.splice(index,1); updateTable(); }; delCell.appendChild(delBtn);
 
-		const insertCell=row.insertCell();
-		const insertBtn=document.createElement("button"); insertBtn.textContent="Insert Before"; insertBtn.className="uniformBtn";
-		insertBtn.onclick=()=>{
-			const freq=parseInt(document.getElementById("freq").value);
-			const ctl=parseInt(document.getElementById("ctl").value);
-			const vol=parseInt(document.getElementById("vol").value);
-			const repeat=parseInt(document.getElementById("repeat").value)||1;
-			tonesArray.splice(index,0,{frequency:freq,control:ctl,volume:vol,repeat});
-			updateTable();
-		};
-		insertCell.appendChild(insertBtn);
-	});
+    const insertCell=row.insertCell();
+    const insertBtn=document.createElement("button"); insertBtn.textContent="Insert Before"; insertBtn.className="uniformBtn";
+    insertBtn.onclick=()=>{ 
+      const freq=parseInt(document.getElementById("freq").value);
+      const ctl=parseInt(document.getElementById("ctl").value);
+      const vol=parseInt(document.getElementById("vol").value);
+      const repeat=parseInt(document.getElementById("repeat").value)||1;
+      tonesArray.splice(index,0,{frequency:freq,control:ctl,volume:vol,repeat});
+      updateTable();
+    };
+    insertCell.appendChild(insertBtn);
+  });
 
-	Array.from(tbody.rows).forEach((row,idx)=>row.dataset.index=idx);
-	updateLabels();
+  Array.from(tbody.rows).forEach((row,idx)=>row.dataset.index=idx);
+  updateLabels();
 }
 
 function updateToneFromTable(){
-	const tbody=document.querySelector("#tonesTable tbody");
-	tonesArray=[];
-	for(let i=0;i<tbody.rows.length;i++){
-		const row=tbody.rows[i];
-		const freq=parseInt(row.cells[1].querySelector("input").value);
-		const ctl=parseInt(row.cells[2].querySelector("select").value);
-		const vol=parseInt(row.cells[3].querySelector("input").value);
-		const repeat=parseInt(row.cells[4].querySelector("input").value)||1;
-		tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
-	}
-	updateLabels();
+  const tbody=document.querySelector("#tonesTable tbody");
+  tonesArray=[];
+  for(let i=0;i<tbody.rows.length;i++){
+    const row=tbody.rows[i];
+    const freq=parseInt(row.cells[1].querySelector("input").value);
+    const ctl=parseInt(row.cells[2].querySelector("select").value);
+    const vol=parseInt(row.cells[3].querySelector("input").value);
+    const repeat=parseInt(row.cells[4].querySelector("input").value)||1;
+    tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
+  }
+  updateLabels();
 }
 
 function updateLabels(){
-	const expanded=[];
-	tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
-	const freqArray=[0].concat(expanded.map(s=>s.frequency).reverse());
-	document.getElementById("frequencyTableLabel").textContent="Frequency Table: "+freqArray.join(", ");
-	const cvArray=["0"].concat(expanded.map(step=>{ const byte=((step.control&0x0F)<<4)|(step.volume&0x0F); return "$"+byte.toString(16).padStart(2,"0").toUpperCase(); }).reverse());
-	document.getElementById("controlVolumeTableLabel").textContent="Control/Volume Table: "+cvArray.join(", ");
+  const expanded=[];
+  tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
+
+  const freqArray=["byte. 0"].concat(expanded.map(s=>s.frequency).reverse());
+  document.getElementById("frequencyTableLabel").textContent="Frequency Table: "+freqArray.join(", ");
+
+  const cvArray=["byte. 0"].concat(expanded.map(step=>{
+    const byte=((step.control&0x0F)<<4)|(step.volume&0x0F);
+    return "$"+byte.toString(16).padStart(2,"0").toUpperCase();
+  }).reverse());
+  document.getElementById("controlVolumeTableLabel").textContent="Control/Volume Table: "+cvArray.join(", ");
 }
 
 function playFromTable(){
-	updateToneFromTable();
-	if(typeof window.updateSamples==="function"){
-		const expanded=[];
-		tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
-		window.updateSamples(JSON.stringify(expanded,null,4));
-		if(typeof window.playSample==="function") window.playSample(0);
-	}
+  updateToneFromTable();
+  if(typeof window.updateSamples==="function"){
+    const expanded=[];
+    tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
+    window.updateSamples(JSON.stringify(expanded,null,4));
+    if(typeof window.playSample==="function") window.playSample(0);
+  }
 }
 
 function playStep(index){
-	const step=tonesArray[index];
-	if(!step) return;
-	const expanded=[];
-	for(let i=0;i<(step.repeat||1);i++) expanded.push({frequency:step.frequency,control:step.control,volume:step.volume});
-	if(typeof window.updateSamples==="function"){
-		window.updateSamples(JSON.stringify(expanded,null,4));
-		if(typeof window.playSample==="function") window.playSample(0);
-	}
+  const step=tonesArray[index];
+  if(!step) return;
+  const expanded=[];
+  for(let i=0;i<(step.repeat||1);i++) expanded.push({frequency:step.frequency,control:step.control,volume:step.volume});
+  if(typeof window.updateSamples==="function"){
+    window.updateSamples(JSON.stringify(expanded,null,4));
+    if(typeof window.playSample==="function") window.playSample(0);
+  }
 }
 
-function stopAudio(){ if(currentAudioSource){ currentAudioSource.stop(); currentAudioSource=null; } }
-function newTable(){ if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ tonesArray=[]; updateTable(); showToast("New table created"); } }
-function saveTable(){ const dataStr=JSON.stringify(tonesArray,null,4); const blob=new Blob([dataStr],{type:"application/json"}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="tones.json"; a.click(); URL.revokeObjectURL(url); showToast("Table saved!"); }
-function loadTable(){ document.getElementById("loadFileInput").click(); }
+function stopAudio(){ 
+  if(currentAudioSource){ 
+    try{ currentAudioSource.stop(); }catch{} 
+    currentAudioSource=null; 
+  } 
+}
 
-document.getElementById("loadFileInput").addEventListener("change",function(e){
-	const file=e.target.files[0]; if(!file) return;
-	const reader=new FileReader();
-	reader.onload=function(ev){
-		try{ tonesArray=JSON.parse(ev.target.result); updateTable(); showToast("Table loaded!"); } catch(err){ showToast("Failed to load table"); }
-	};
-	reader.readAsText(file);
+function newTable(){ 
+  if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ 
+    tonesArray=[]; updateTable(); showToast("New table created"); 
+  } 
+}
+
+function saveTable(){ 
+  const dataStr=JSON.stringify(tonesArray,null,4); 
+  const blob=new Blob([dataStr],{type:"application/json"}); 
+  const url=URL.createObjectURL(blob); 
+  const a=document.createElement("a"); 
+  a.href=url; 
+  a.download="tones.json"; 
+  a.click(); 
+  URL.revokeObjectURL(url); 
+  showToast("Table saved!"); 
+}
+
+function loadTable(){ 
+  document.getElementById("loadFileInput").click(); 
+}
+
+document.getElementById("loadFileInput").addEventListener("change", function(e){
+    const file = e.target.files[0]; 
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(ev){
+        try {
+            const loadedTones = JSON.parse(ev.target.result);
+            if (!Array.isArray(loadedTones)) throw new Error("Invalid JSON format");
+            tonesArray = loadedTones;
+            updateTable(); // ensure table refresh
+            showToast("Table loaded!");
+        } catch(err) {
+            showToast("Failed to load table");
+            console.error(err);
+        }
+        e.target.value = ""; // reset input
+    };
+    reader.readAsText(file);
 });
 
-function copyFrequency(){ navigator.clipboard.writeText(document.getElementById("frequencyTableLabel").textContent).then(()=>showToast("Frequency Table copied!")); }
-function copyControlVolume(){ navigator.clipboard.writeText(document.getElementById("controlVolumeTableLabel").textContent).then(()=>showToast("Control/Volume Table copied!")); }
+// Copy buttons excluding label
+function copyFrequency(){ 
+    const text = document.getElementById("frequencyTableLabel").textContent;
+    const values = text.replace(/^Frequency Table:\s*/, "");
+    navigator.clipboard.writeText(values).then(()=>showToast("Frequency Table copied!")); 
+}
+
+function copyControlVolume(){ 
+    const text = document.getElementById("controlVolumeTableLabel").textContent;
+    const values = text.replace(/^Control\/Volume Table:\s*/, "");
+    navigator.clipboard.writeText(values).then(()=>showToast("Control/Volume Table copied!")); 
+}
 </script>
 
 <script>
@@ -278,3 +334,5 @@ WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(resul
 
 </body>
 </html>
+
+
