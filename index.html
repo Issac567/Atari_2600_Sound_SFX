@@ -4,164 +4,50 @@
 <meta charset="UTF-8">
 <title>Atari 2600 SFX Editor</title>
 <style>
-body {
-	background-color: #1e1e1e;
-	color: #f0f0f0;
-	font-family: Arial, sans-serif;
-	margin: 0;
-	padding: 0;
-}
+body { background-color: #1e1e1e; color: #f0f0f0; font-family: Arial, sans-serif; margin:0; padding:0; }
+h1 { text-align: center; margin: 20px 0; }
 
-h1 {
-	text-align: center;
-	margin: 20px 0;
-}
-
-.panelContainer {
-	display: flex;
-	justify-content: center;
-	gap: 20px;
-	flex-wrap: wrap;
-	margin-bottom: 20px;
-}
-
-.panel {
-	border: 1px solid #555;
-	padding: 15px;
-	background-color: #2b2b2b;
-	border-radius: 5px;
-}
-
+.panelContainer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
+.panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
 #stepPanel { width: 520px; }
-
-#playbackPanel, #tableManagementPanel {
-	width: 200px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 15px;
-	height: 200px;
-}
-
+#playbackPanel, #tableManagementPanel { width: 200px; display:flex; flex-direction: column; align-items:center; gap:15px; height:200px; }
 #playbackPanel { justify-content: flex-start; }
+.panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
+.inputRow { display:flex; align-items:center; margin-bottom:10px; }
+.inputRow label { flex:0 0 220px; text-align:right; margin-right:10px; }
+.inputRow input[type="number"], .inputRow select { flex:1 1 auto; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; max-width:200px; }
+#stepPanel button { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; }
+#stepPanel button:hover { background-color:#1E88E5; }
 
-.panel h3 { margin-top: 0; margin-bottom: 15px; text-align: center; }
+table { border-collapse:collapse; margin:10px auto; width:95%; background-color:#2b2b2b; }
+th, td { border:1px solid #555; padding:5px 10px; text-align:center; }
+th { background-color:#3a3a3a; }
+#tonesTable select, #tonesTable input[type="number"] { background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; }
+#tonesTable select { width:250px; }
+#tonesTable input[type="number"] { width:80px; }
 
-.inputRow {
-	display: flex;
-	align-items: center;
-	margin-bottom: 10px;
-}
+#frequencyTableLabel, #controlVolumeTableLabel { margin-top:10px; text-align:center; color:#ffcc00; }
 
-.inputRow label {
-	flex: 0 0 220px;
-	text-align: right;
-	margin-right: 10px;
-}
+button.playBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
+button.playBtn:hover { background-color:#45A049; }
+button.deleteBtn { background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
+button.deleteBtn:hover { background-color:#D32F2F; }
+#tonesTable .uniformBtn, #stepPanel button { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+#tonesTable .uniformBtn:hover, #stepPanel button:hover { background-color:#1E88E5; }
+#tableManagementPanel .uniformBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+#tableManagementPanel .uniformBtn:hover { background-color:#616161; }
+#playbackPanel .uniformBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
+#playbackPanel .uniformBtn:hover { background-color:#616161; }
+#copyTablesPanel .uniformBtn { background-color:#9e9e9e; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+#copyTablesPanel .uniformBtn:hover { background-color:#757575; }
+#copyTablesPanel { width:260px; margin-top:30px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
 
-.inputRow input[type="number"], .inputRow select {
-	flex: 1 1 auto;
-	background-color: #333;
-	color: #f0f0f0;
-	border: 1px solid #555;
-	border-radius: 3px;
-	padding: 4px;
-	text-align: center;
-	max-width: 200px;
-}
+#toast { visibility:hidden; min-width:200px; background-color:#333; color:#fff; text-align:center; border-radius:4px; padding:10px; position:fixed; z-index:100; left:50%; bottom:30px; transform:translateX(-50%); font-size:16px; }
+#toast.show { visibility:visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+@keyframes fadein { from {bottom:0; opacity:0;} to {bottom:30px; opacity:1;} }
+@keyframes fadeout { from {bottom:30px; opacity:1;} to {bottom:0; opacity:0;} }
 
-#stepPanel button {
-	margin-left: 230px;
-	padding: 6px 12px;
-	background-color: #2196F3;
-	color: white;
-	border: 1px solid #555;
-	border-radius: 3px;
-	cursor: pointer;
-}
-
-#stepPanel button:hover { background-color: #1E88E5; }
-
-table {
-	border-collapse: collapse;
-	margin: 10px auto;
-	width: 95%;
-	background-color: #2b2b2b;
-}
-
-th, td {
-	border: 1px solid #555;
-	padding: 5px 10px;
-	text-align: center;
-}
-
-th { background-color: #3a3a3a; }
-
-#tonesTable select, #tonesTable input[type="number"] {
-	background-color: #333;
-	color: #f0f0f0;
-	border: 1px solid #555;
-	border-radius: 3px;
-	padding: 4px;
-	text-align: center;
-}
-
-#tonesTable select { width: 250px; }
-#tonesTable input[type="number"] { width: 80px; }
-
-#frequencyTableLabel, #controlVolumeTableLabel {
-	margin-top: 10px;
-	text-align: center;
-	color: #ffcc00;
-}
-
-/* Buttons styling */
-button.playBtn { background-color: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 3px; padding: 8px; width: 180px; }
-button.playBtn:hover { background-color: #45A049; }
-
-button.deleteBtn { background-color: #F44336; color: white; border: none; cursor: pointer; border-radius: 3px; padding: 8px; }
-button.deleteBtn:hover { background-color: #D32F2F; }
-
-#tonesTable .uniformBtn, #stepPanel button { background-color: #2196F3; color: white; border: 1px solid #555; border-radius: 3px; cursor: pointer; padding: 8px; width: 180px; }
-#tonesTable .uniformBtn:hover, #stepPanel button:hover { background-color: #1E88E5; }
-
-#tableManagementPanel .uniformBtn { background-color: #757575; color: white; border: 1px solid #555; border-radius: 3px; cursor: pointer; padding: 8px; width: 180px; }
-#tableManagementPanel .uniformBtn:hover { background-color: #616161; }
-
-#playbackPanel .uniformBtn { background-color: #757575; color: white; border: 1px solid #555; border-radius: 3px; cursor: pointer; padding: 8px; width: 180px; text-align: center; }
-#playbackPanel .uniformBtn:hover { background-color: #616161; }
-
-#copyTablesPanel .uniformBtn { background-color: #9e9e9e; color: white; border: 1px solid #555; border-radius: 3px; cursor: pointer; padding: 8px; width: 180px; }
-#copyTablesPanel .uniformBtn:hover { background-color: #757575; }
-
-#copyTablesPanel { width: 260px; margin-top: 30px; text-align: center; display: flex; flex-direction: column; gap: 15px; align-items: center; }
-
-/* Toast styling */
-#toast {
-  visibility: hidden;
-  min-width: 200px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 4px;
-  padding: 10px;
-  position: fixed;
-  z-index: 100;
-  left: 50%;
-  bottom: 30px;
-  transform: translateX(-50%);
-  font-size: 16px;
-}
-
-#toast.show {
-  visibility: visible;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-
-@keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-@keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-
-tr.drag-over { border: 2px dashed #ffcc00; }
+tr.drag-over { border:2px dashed #ffcc00; }
 </style>
 </head>
 <body>
@@ -178,20 +64,13 @@ tr.drag-over { border: 2px dashed #ffcc00; }
     <div class="inputRow">
       <label for="ctl">Control:</label>
       <select id="ctl">
-        <option value="1">1 = Buzzy</option>
-        <option value="2">2 = Distortion</option>
-        <option value="3">3 = Flangy</option>
-        <option value="4">4 = Pure</option>
-        <option value="5">5 = Pure</option>
-        <option value="6" selected>6 = Between Pure/Buzzy</option>
-        <option value="7">7 = Reedy</option>
-        <option value="8">8 = White Noise</option>
-        <option value="9">9 = Reedy</option>
-        <option value="10">10 = Between Pure/Buzzy</option>
-        <option value="11">11 = Silent-ish</option>
-        <option value="12">12 = Low Pure</option>
-        <option value="13">13 = Low Pure</option>
-        <option value="14">14 = Electronic Low</option>
+        <option value="1">1 = Buzzy</option><option value="2">2 = Distortion</option>
+        <option value="3">3 = Flangy</option><option value="4">4 = Pure</option>
+        <option value="5">5 = Pure</option><option value="6" selected>6 = Between Pure/Buzzy</option>
+        <option value="7">7 = Reedy</option><option value="8">8 = White Noise</option>
+        <option value="9">9 = Reedy</option><option value="10">10 = Between Pure/Buzzy</option>
+        <option value="11">11 = Silent-ish</option><option value="12">12 = Low Pure</option>
+        <option value="13">13 = Low Pure</option><option value="14">14 = Electronic Low</option>
         <option value="15">15 = Electronic Low</option>
       </select>
     </div>
@@ -208,7 +87,7 @@ tr.drag-over { border: 2px dashed #ffcc00; }
 
   <div class="panel" id="playbackPanel">
     <h3>Playback</h3>
-    <button onclick="playFromTable()" class="uniformBtn">Play</button>
+    <button onclick="playFromTable()" class="playBtn">Play All</button>
     <button onclick="stopAudio()" class="uniformBtn">Stop</button>
   </div>
 
@@ -224,14 +103,8 @@ tr.drag-over { border: 2px dashed #ffcc00; }
 <table id="tonesTable">
   <thead>
     <tr>
-      <th>#</th>
-      <th>Frequency</th>
-      <th>Control</th>
-      <th>Volume</th>
-      <th>Repeat</th>
-      <th>Play</th>
-      <th>Delete</th>
-      <th>Insert Before</th>
+      <th>#</th><th>Frequency</th><th>Control</th><th>Volume</th>
+      <th>Repeat</th><th>Play</th><th>Delete</th><th>Insert Before</th>
     </tr>
   </thead>
   <tbody></tbody>
@@ -240,7 +113,7 @@ tr.drag-over { border: 2px dashed #ffcc00; }
 <div id="frequencyTableLabel">Frequency Table:</div>
 <div id="controlVolumeTableLabel">Control/Volume Table:</div>
 
-<div class="panelContainer" style="justify-content: center; margin-top: 20px;">
+<div class="panelContainer" style="justify-content:center; margin-top:20px;">
   <div class="panel" id="copyTablesPanel">
     <h3>Copy Tables</h3>
     <button class="uniformBtn" onclick="copyFrequency()">Copy Frequency Table</button>
@@ -263,216 +136,144 @@ const ctlOptions = [
   {v:13,l:"13 = Low Pure"}, {v:14,l:"14 = Electronic Low"}, {v:15,l:"15 = Electronic Low"}
 ];
 
-function showToast(message) {
-	const toast = document.getElementById("toast");
-	toast.textContent = message;
-	toast.className = "show";
-	setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-}
+function showToast(msg){ const toast=document.getElementById("toast"); toast.textContent=msg; toast.className="show"; setTimeout(()=>{toast.className=toast.className.replace("show","");},3000); }
 
-function injectManualSample() {
-	const freq = parseInt(document.getElementById("freq").value);
-	const vol  = parseInt(document.getElementById("vol").value);
-	const ctl  = parseInt(document.getElementById("ctl").value);
-	const repeat = parseInt(document.getElementById("repeat").value) || 1;
-	tonesArray.push({ frequency: freq, control: ctl, volume: vol, repeat });
+function injectManualSample(){
+	const freq=parseInt(document.getElementById("freq").value);
+	const vol=parseInt(document.getElementById("vol").value);
+	const ctl=parseInt(document.getElementById("ctl").value);
+	const repeat=parseInt(document.getElementById("repeat").value)||1;
+	tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
 	updateTable();
 }
 
-function updateTable() {
-	const tbody = document.querySelector("#tonesTable tbody");
-	tbody.innerHTML = "";
+function updateTable(){
+	const tbody=document.querySelector("#tonesTable tbody");
+	tbody.innerHTML="";
+	tonesArray.forEach((tone,index)=>{
+		const row=tbody.insertRow();
+		row.setAttribute("draggable","true");
+		row.dataset.index=index;
 
-	tonesArray.forEach((tone, index) => {
-		const row = tbody.insertRow();
-		row.setAttribute("draggable", "true");
-		row.dataset.index = index;
-
-		// Drag events
-		row.addEventListener("dragstart", (e) => {
-			e.dataTransfer.setData("text/plain", index);
-			e.currentTarget.style.opacity = "0.5";
-		});
-		row.addEventListener("dragend", (e) => { e.currentTarget.style.opacity = "1"; });
-		row.addEventListener("dragover", (e) => { e.preventDefault(); row.classList.add("drag-over"); });
-		row.addEventListener("dragleave", (e) => { row.classList.remove("drag-over"); });
-		row.addEventListener("drop", (e) => {
-			e.preventDefault();
-			row.classList.remove("drag-over");
-			const draggedIndex = parseInt(e.dataTransfer.getData("text/plain"));
-			const targetIndex = parseInt(row.dataset.index);
-			if(draggedIndex === targetIndex) return;
-			const draggedTone = tonesArray[draggedIndex];
-			tonesArray.splice(draggedIndex, 1);
-			tonesArray.splice(targetIndex, 0, draggedTone);
+		row.addEventListener("dragstart",e=>{ e.dataTransfer.setData("text/plain",index); e.currentTarget.style.opacity="0.5"; });
+		row.addEventListener("dragend",e=>{ e.currentTarget.style.opacity="1"; });
+		row.addEventListener("dragover",e=>{ e.preventDefault(); row.classList.add("drag-over"); });
+		row.addEventListener("dragleave",e=>{ row.classList.remove("drag-over"); });
+		row.addEventListener("drop",e=>{
+			e.preventDefault(); row.classList.remove("drag-over");
+			const draggedIndex=parseInt(e.dataTransfer.getData("text/plain"));
+			const targetIndex=parseInt(row.dataset.index);
+			if(draggedIndex===targetIndex) return;
+			const draggedTone=tonesArray[draggedIndex];
+			tonesArray.splice(draggedIndex,1);
+			tonesArray.splice(targetIndex,0,draggedTone);
 			updateTable();
 		});
 
-		row.insertCell().textContent = index + 1;
+		row.insertCell().textContent=index+1;
 
-		const freqCell = row.insertCell();
-		const freqInput = document.createElement("input");
-		freqInput.type = "number"; freqInput.min = 1; freqInput.max = 31; freqInput.value = tone.frequency;
-		freqInput.onchange = updateToneFromTable; freqCell.appendChild(freqInput);
+		const freqCell=row.insertCell();
+		const freqInput=document.createElement("input"); freqInput.type="number"; freqInput.min=1; freqInput.max=31; freqInput.value=tone.frequency; freqInput.onchange=updateToneFromTable; freqCell.appendChild(freqInput);
 
-		const ctlCell = row.insertCell();
-		const ctlSelect = document.createElement("select");
-		ctlOptions.forEach(optData => {
-			const opt = document.createElement("option"); opt.value = optData.v; opt.text = optData.l;
-			if(optData.v === tone.control) opt.selected = true;
-			ctlSelect.appendChild(opt);
-		});
-		ctlSelect.onchange = updateToneFromTable; ctlCell.appendChild(ctlSelect);
+		const ctlCell=row.insertCell();
+		const ctlSelect=document.createElement("select");
+		ctlOptions.forEach(opt=>{ const o=document.createElement("option"); o.value=opt.v; o.text=opt.l; if(opt.v===tone.control) o.selected=true; ctlSelect.appendChild(o); });
+		ctlSelect.onchange=updateToneFromTable; ctlCell.appendChild(ctlSelect);
 
-		const volCell = row.insertCell();
-		const volInput = document.createElement("input");
-		volInput.type = "number"; volInput.min = 0; volInput.max = 15; volInput.value = tone.volume;
-		volInput.onchange = updateToneFromTable; volCell.appendChild(volInput);
+		const volCell=row.insertCell();
+		const volInput=document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volInput.onchange=updateToneFromTable; volCell.appendChild(volInput);
 
-		const repeatCell = row.insertCell();
-		const repeatInput = document.createElement("input");
-		repeatInput.type = "number"; repeatInput.min = 1; repeatInput.max = 30; repeatInput.value = tone.repeat || 1;
-		repeatInput.onchange = updateToneFromTable; repeatCell.appendChild(repeatInput);
+		const repeatCell=row.insertCell();
+		const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=30; repeatInput.value=tone.repeat||1; repeatInput.onchange=updateToneFromTable; repeatCell.appendChild(repeatInput);
 
-		const playCell = row.insertCell();
-		const playBtn = document.createElement("button"); playBtn.textContent = "Play"; playBtn.className = "playBtn";
-		playBtn.onclick = () => playStep(index); playCell.appendChild(playBtn);
+		const playCell=row.insertCell();
+		const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; playBtn.onclick=()=>playStep(index); playCell.appendChild(playBtn);
 
-		const delCell = row.insertCell();
-		const delBtn = document.createElement("button"); delBtn.textContent = "X"; delBtn.className = "deleteBtn";
-		delBtn.onclick = () => { tonesArray.splice(index, 1); updateTable(); }; delCell.appendChild(delBtn);
+		const delCell=row.insertCell();
+		const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="deleteBtn"; delBtn.onclick=()=>{ tonesArray.splice(index,1); updateTable(); }; delCell.appendChild(delBtn);
 
-		const insertCell = row.insertCell();
-		const insertBtn = document.createElement("button"); insertBtn.textContent = "Insert Before"; insertBtn.className = "uniformBtn";
-		insertBtn.onclick = () => {
-			const freq = parseInt(document.getElementById("freq").value);
-			const ctl  = parseInt(document.getElementById("ctl").value);
-			const vol  = parseInt(document.getElementById("vol").value);
-			const repeat = parseInt(document.getElementById("repeat").value) || 1;
-			tonesArray.splice(index, 0, { frequency: freq, control: ctl, volume: vol, repeat });
+		const insertCell=row.insertCell();
+		const insertBtn=document.createElement("button"); insertBtn.textContent="Insert Before"; insertBtn.className="uniformBtn";
+		insertBtn.onclick=()=>{
+			const freq=parseInt(document.getElementById("freq").value);
+			const ctl=parseInt(document.getElementById("ctl").value);
+			const vol=parseInt(document.getElementById("vol").value);
+			const repeat=parseInt(document.getElementById("repeat").value)||1;
+			tonesArray.splice(index,0,{frequency:freq,control:ctl,volume:vol,repeat});
 			updateTable();
 		};
 		insertCell.appendChild(insertBtn);
 	});
 
-	// Reassign dataset.index after update
-	Array.from(tbody.rows).forEach((row, idx) => row.dataset.index = idx);
-
+	Array.from(tbody.rows).forEach((row,idx)=>row.dataset.index=idx);
 	updateLabels();
 }
 
-function updateToneFromTable() {
-	const tbody = document.querySelector("#tonesTable tbody");
-	tonesArray = [];
-	for (let i = 0; i < tbody.rows.length; i++) {
-		const row = tbody.rows[i];
-		const freq = parseInt(row.cells[1].querySelector("input").value);
-		const ctl  = parseInt(row.cells[2].querySelector("select").value);
-		const vol  = parseInt(row.cells[3].querySelector("input").value);
-		const repeat = parseInt(row.cells[4].querySelector("input").value) || 1;
-		tonesArray.push({ frequency: freq, control: ctl, volume: vol, repeat });
+function updateToneFromTable(){
+	const tbody=document.querySelector("#tonesTable tbody");
+	tonesArray=[];
+	for(let i=0;i<tbody.rows.length;i++){
+		const row=tbody.rows[i];
+		const freq=parseInt(row.cells[1].querySelector("input").value);
+		const ctl=parseInt(row.cells[2].querySelector("select").value);
+		const vol=parseInt(row.cells[3].querySelector("input").value);
+		const repeat=parseInt(row.cells[4].querySelector("input").value)||1;
+		tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
 	}
 	updateLabels();
 }
 
-function updateLabels() {
-	const expanded = [];
-	tonesArray.forEach(step => {
-		for (let i = 0; i < (step.repeat||1); i++) expanded.push({ frequency: step.frequency, control: step.control, volume: step.volume });
-	});
-	const freqArray = [0].concat(expanded.map(s => s.frequency).reverse());
-	document.getElementById("frequencyTableLabel").textContent = "Frequency Table: " + freqArray.join(", ");
-	const cvArray = ["0"].concat(expanded.map(step => {
-		const byte = ((step.control & 0x0F)<<4)|(step.volume & 0x0F);
-		return "$"+byte.toString(16).padStart(2,"0").toUpperCase();
-	}).reverse());
-	document.getElementById("controlVolumeTableLabel").textContent = "Control/Volume Table: " + cvArray.join(", ");
+function updateLabels(){
+	const expanded=[];
+	tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
+	const freqArray=[0].concat(expanded.map(s=>s.frequency).reverse());
+	document.getElementById("frequencyTableLabel").textContent="Frequency Table: "+freqArray.join(", ");
+	const cvArray=["0"].concat(expanded.map(step=>{ const byte=((step.control&0x0F)<<4)|(step.volume&0x0F); return "$"+byte.toString(16).padStart(2,"0").toUpperCase(); }).reverse());
+	document.getElementById("controlVolumeTableLabel").textContent="Control/Volume Table: "+cvArray.join(", ");
 }
 
-function playFromTable() {
+function playFromTable(){
 	updateToneFromTable();
-	if(typeof window.updateSamples === "function") {
-		const expandedArray = [];
-		tonesArray.forEach(step => {
-			for (let i=0;i<(step.repeat||1);i++) expandedArray.push({frequency: step.frequency, control: step.control, volume: step.volume});
-		});
-		window.updateSamples(JSON.stringify(expandedArray,null,4));
-		if(typeof window.playSample === "function") window.playSample(0);
-	}
-}
-
-function playStep(index) {
-	const step = tonesArray[index];
-	if(!step) return;
-	const expanded = [];
-	for(let i=0;i<(step.repeat||1);i++) expanded.push({frequency: step.frequency, control: step.control, volume: step.volume});
-	if(typeof window.updateSamples === "function") {
+	if(typeof window.updateSamples==="function"){
+		const expanded=[];
+		tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
 		window.updateSamples(JSON.stringify(expanded,null,4));
-		if(typeof window.playSample === "function") window.playSample(0);
+		if(typeof window.playSample==="function") window.playSample(0);
 	}
 }
 
-function stopAudio() {
-	if(currentAudioSource) {
-		currentAudioSource.stop();
-		currentAudioSource = null;
+function playStep(index){
+	const step=tonesArray[index];
+	if(!step) return;
+	const expanded=[];
+	for(let i=0;i<(step.repeat||1);i++) expanded.push({frequency:step.frequency,control:step.control,volume:step.volume});
+	if(typeof window.updateSamples==="function"){
+		window.updateSamples(JSON.stringify(expanded,null,4));
+		if(typeof window.playSample==="function") window.playSample(0);
 	}
 }
 
-function newTable() {
-	if (confirm("Are you sure you want to create a new table? This will clear all current steps.")) {
-		tonesArray = [];
-		updateTable();
-		showToast("New table created");
-	}
-}
+function stopAudio(){ if(currentAudioSource){ currentAudioSource.stop(); currentAudioSource=null; } }
+function newTable(){ if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ tonesArray=[]; updateTable(); showToast("New table created"); } }
+function saveTable(){ const dataStr=JSON.stringify(tonesArray,null,4); const blob=new Blob([dataStr],{type:"application/json"}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="tones.json"; a.click(); URL.revokeObjectURL(url); showToast("Table saved!"); }
+function loadTable(){ document.getElementById("loadFileInput").click(); }
 
-function saveTable() {
-	const dataStr = JSON.stringify(tonesArray,null,4);
-	const blob = new Blob([dataStr], {type:"application/json"});
-	const url = URL.createObjectURL(blob);
-	const a = document.createElement("a");
-	a.href = url;
-	a.download = "tones.json";
-	a.click();
-	URL.revokeObjectURL(url);
-	showToast("Table saved!");
-}
-
-function loadTable() { document.getElementById("loadFileInput").click(); }
-
-document.getElementById("loadFileInput").addEventListener("change", function(e){
-	const file = e.target.files[0];
-	if(!file) return;
-	const reader = new FileReader();
-	reader.onload = function(ev){
-		try {
-			tonesArray = JSON.parse(ev.target.result);
-			updateTable();
-			showToast("Table loaded!");
-		}catch(err){
-			showToast("Failed to load table");
-		}
+document.getElementById("loadFileInput").addEventListener("change",function(e){
+	const file=e.target.files[0]; if(!file) return;
+	const reader=new FileReader();
+	reader.onload=function(ev){
+		try{ tonesArray=JSON.parse(ev.target.result); updateTable(); showToast("Table loaded!"); } catch(err){ showToast("Failed to load table"); }
 	};
 	reader.readAsText(file);
 });
 
-function copyFrequency() {
-	const freqLabel = document.getElementById("frequencyTableLabel");
-	navigator.clipboard.writeText(freqLabel.textContent).then(()=>showToast("Frequency Table copied!"));
-}
-
-function copyControlVolume() {
-	const cvLabel = document.getElementById("controlVolumeTableLabel");
-	navigator.clipboard.writeText(cvLabel.textContent).then(()=>showToast("Control/Volume Table copied!"));
-}
+function copyFrequency(){ navigator.clipboard.writeText(document.getElementById("frequencyTableLabel").textContent).then(()=>showToast("Frequency Table copied!")); }
+function copyControlVolume(){ navigator.clipboard.writeText(document.getElementById("controlVolumeTableLabel").textContent).then(()=>showToast("Control/Volume Table copied!")); }
 </script>
 
 <script>
-const go = new Go();
-WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(result => {
-	go.run(result.instance);
-});
+const go=new Go();
+WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(result => { go.run(result.instance); });
 </script>
 
 </body>
