@@ -55,6 +55,7 @@ button.deleteBtn:hover { background-color:#D32F2F; }
 tr.drag-over { border:2px dashed #ffcc00; }
 
 #versionLabel { text-align: center; margin: 20px 0; color: #888; font-size: 14px; font-style: italic; }
+
 </style>
 </head>
 <body>
@@ -64,10 +65,12 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <div class="panelContainer">
   <div class="panel" id="stepPanel">
     <h3>Step Parameters</h3>
+    
     <div class="inputRow">
       <label for="freq">Frequency (1=high, 31=low):</label>
       <input id="freq" type="number" min="1" max="31" value="4">
     </div>
+
     <div class="inputRow">
       <label for="ctl">Control:</label>
       <select id="ctl">
@@ -81,19 +84,24 @@ tr.drag-over { border:2px dashed #ffcc00; }
         <option value="15">15 = Electronic Low</option>
       </select>
     </div>
+
     <div class="inputRow">
       <label for="vol">Volume (0=off, 15=high):</label>
       <input id="vol" type="number" min="0" max="15" value="10">
     </div>
+
     <div class="inputRow">
       <label for="repeat">Repeat (1-30):</label>
       <input id="repeat" type="number" min="1" max="30" value="1">
     </div>
+
     <button onclick="btnAddtoStep()" class="uniformBtn">Add Steps at End</button>
+
   </div>
 
   <div class="panel" id="playbackPanel">
     <h3>Playback</h3>
+    
     <button onclick="playallFromTable()" class="playBtn">Play All</button>
     <button onclick="stopAudio()" class="uniformBtn">Stop</button>
     
@@ -139,7 +147,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 </div>
 
 <div id="toast"></div>
-<div id="versionLabel">Version 1.09</div>
+<div id="versionLabel">Version 1.10</div>
 
 <script src="wasm_exec.js"></script>
 <script>
@@ -152,6 +160,38 @@ const ctlOptions = [
   {v:10,l:"10 = Between Pure/Buzzy"}, {v:11,l:"11 = Silent-ish"}, {v:12,l:"12 = Low Pure"},
   {v:13,l:"13 = Low Pure"}, {v:14,l:"14 = Electronic Low"}, {v:15,l:"15 = Electronic Low"}
 ];
+
+//-----------------------------------------------------------------------------------
+// This plays the sound when values are changed in Step Parameters Panel
+const stepInputs = ["freq","ctl","vol","repeat"].map(id => document.getElementById(id));
+
+stepInputs.forEach(input => {
+    input.addEventListener("change", () => {
+        const freq = parseInt(document.getElementById("freq").value);
+        const ctl  = parseInt(document.getElementById("ctl").value);
+        const vol  = parseInt(document.getElementById("vol").value);
+        const repeat = parseInt(document.getElementById("repeat").value) || 1;
+
+        const expanded = [];
+        for(let i=0; i<repeat; i++){
+            expanded.push({frequency: freq, control: ctl, volume: vol});
+        }
+
+        updateCopyLabels();
+
+        // Only play if "Play on Change" is checked
+        if(document.getElementById("playOnChange").checked){
+            // Stop any currently playing audio
+            stopAudioFromGo();
+
+            if(typeof window.updateSamples === "function"){
+                window.updateSamples(JSON.stringify(expanded,null,4));
+                if(typeof window.playSample === "function") window.playSample(0);
+            }
+        }
+    });
+});
+//-----------------------------------------------------------------------------------
 
 function showToast(msg){
   const toast=document.getElementById("toast");
@@ -236,6 +276,7 @@ function updateTable(){
   updateCopyLabels();
 }
 
+// This plays the sound when values are changed in Table
 function updateToneFromTableAndPlay(index) {
     const row = document.querySelector("#tonesTable tbody").rows[index];
     if (!row) return;
@@ -262,6 +303,7 @@ function updateToneFromTableAndPlay(index) {
     }
 }
 
+// This just adds the Tone Values into table
 function updateToneFromTable(){
   const tbody=document.querySelector("#tonesTable tbody");
   tonesArray=[];
