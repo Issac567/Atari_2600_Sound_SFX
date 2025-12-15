@@ -34,10 +34,15 @@ button.deleteBtn { background-color:#F44336; color:white; border:none; cursor:po
 button.deleteBtn:hover { background-color:#D32F2F; }
 #tonesTable .uniformBtn, #stepPanel button { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
 #tonesTable .uniformBtn:hover, #stepPanel button:hover { background-color:#1E88E5; }
+
 #tableManagementPanel .uniformBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
 #tableManagementPanel .uniformBtn:hover { background-color:#616161; }
+
 #playbackPanel .uniformBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
 #playbackPanel .uniformBtn:hover { background-color:#616161; }
+.playOnChangeRow { width: 160px; display: flex; justify-content: center; margin-bottom: 15px; }
+
+
 #copyTablesPanel .uniformBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
 #copyTablesPanel .uniformBtn:hover { background-color:#616161; }
 #copyTablesPanel { width:260px; margin-top:10px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
@@ -84,13 +89,23 @@ tr.drag-over { border:2px dashed #ffcc00; }
       <label for="repeat">Repeat (1-30):</label>
       <input id="repeat" type="number" min="1" max="30" value="1">
     </div>
-    <button onclick="injectManualSample()" class="uniformBtn">Add Steps at End</button>
+    <button onclick="btnAddtoStep()" class="uniformBtn">Add Steps at End</button>
   </div>
 
   <div class="panel" id="playbackPanel">
     <h3>Playback</h3>
-    <button onclick="playFromTable()" class="playBtn">Play All</button>
+    <button onclick="playallFromTable()" class="playBtn">Play All</button>
     <button onclick="stopAudio()" class="uniformBtn">Stop</button>
+    
+    <!-- Styled Play on Change Checkbox -->
+    <div class="playOnChangeRow">
+      <label class="customCheckbox">
+        <input type="checkbox" id="playOnChange" checked>
+        <span class="checkmark"></span>
+        Play on Change
+      </label>
+    </div>
+
   </div>
 
   <div class="panel" id="tableManagementPanel">
@@ -124,12 +139,12 @@ tr.drag-over { border:2px dashed #ffcc00; }
 </div>
 
 <div id="toast"></div>
-<div id="versionLabel">Version 1.07</div>
+<div id="versionLabel">Version 1.08</div>
 
 <script src="wasm_exec.js"></script>
 <script>
 let tonesArray = [];
-let currentAudioSource = null;
+//let currentAudioSource = null;
 
 const ctlOptions = [
   {v:1,l:"1 = Buzzy"}, {v:2,l:"2 = Distortion"}, {v:3,l:"3 = Flangy"},
@@ -146,7 +161,7 @@ function showToast(msg){
   setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
 }
 
-function injectManualSample(){
+function btnAddtoStep(){
   const freq=parseInt(document.getElementById("freq").value);
   const vol=parseInt(document.getElementById("vol").value);
   const ctl=parseInt(document.getElementById("ctl").value);
@@ -181,18 +196,23 @@ function updateTable(){
     row.insertCell().textContent=index+1;
 
     const freqCell=row.insertCell();
-    const freqInput=document.createElement("input"); freqInput.type="number"; freqInput.min=1; freqInput.max=31; freqInput.value=tone.frequency; freqInput.onchange=updateToneFromTable; freqCell.appendChild(freqInput);
+    const freqInput=document.createElement("input"); freqInput.type="number"; freqInput.min=1; freqInput.max=31; freqInput.value=tone.frequency; freqCell.appendChild(freqInput);
 
     const ctlCell=row.insertCell();
     const ctlSelect=document.createElement("select");
     ctlOptions.forEach(opt=>{ const o=document.createElement("option"); o.value=opt.v; o.text=opt.l; if(opt.v===tone.control) o.selected=true; ctlSelect.appendChild(o); });
-    ctlSelect.onchange=updateToneFromTable; ctlCell.appendChild(ctlSelect);
+    ctlCell.appendChild(ctlSelect);
 
     const volCell=row.insertCell();
-    const volInput=document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volInput.onchange=updateToneFromTable; volCell.appendChild(volInput);
+    const volInput=document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volCell.appendChild(volInput);
 
     const repeatCell=row.insertCell();
-    const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=30; repeatInput.value=tone.repeat||1; repeatInput.onchange=updateToneFromTable; repeatCell.appendChild(repeatInput);
+    const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=30; repeatInput.value=tone.repeat||1; repeatCell.appendChild(repeatInput);
+    
+    freqInput.onchange = () => updateToneFromTableAndPlay(index);
+    ctlSelect.onchange = () => updateToneFromTableAndPlay(index);
+    volInput.onchange = () => updateToneFromTableAndPlay(index);
+    repeatInput.onchange = () => updateToneFromTableAndPlay(index);
 
     const playCell=row.insertCell();
     const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; playBtn.onclick=()=>playStep(index); playCell.appendChild(playBtn);
@@ -214,7 +234,33 @@ function updateTable(){
   });
 
   Array.from(tbody.rows).forEach((row,idx)=>row.dataset.index=idx);
-  updateLabels();
+  updateCopyLabels();
+}
+
+function updateToneFromTableAndPlay(index) {
+    const row = document.querySelector("#tonesTable tbody").rows[index];
+    if (!row) return;
+
+    const freq = parseInt(row.cells[1].querySelector("input").value);
+    const ctl = parseInt(row.cells[2].querySelector("select").value);
+    const vol = parseInt(row.cells[3].querySelector("input").value);
+    const repeat = parseInt(row.cells[4].querySelector("input").value) || 1;
+
+    // Update only this step
+    tonesArray[index] = { frequency: freq, control: ctl, volume: vol, repeat };
+
+    // Update copy labels
+    updateCopyLabels();
+
+    // Check if "Play on Change" is enabled
+    const playOnChange = document.getElementById("playOnChange").checked;
+    if (playOnChange) {
+        // Stop any currently playing audio
+        stopAudioFromGo();
+
+        // Play this step
+        playStep(index);
+    }
 }
 
 function updateToneFromTable(){
@@ -228,10 +274,10 @@ function updateToneFromTable(){
     const repeat=parseInt(row.cells[4].querySelector("input").value)||1;
     tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
   }
-  updateLabels();
+  updateCopyLabels();
 }
 
-function updateLabels(){
+function updateCopyLabels(){
   const expanded=[];
   tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
 
@@ -245,7 +291,7 @@ function updateLabels(){
   document.getElementById("controlVolumeTableLabel").textContent="Control/Volume Table: "+cvArray.join(", ");
 }
 
-function playFromTable(){
+function playallFromTable(){
   updateToneFromTable();
   if(typeof window.updateSamples==="function"){
     const expanded=[];
@@ -267,10 +313,6 @@ function playStep(index){
 }
 
 function stopAudio(){ 
-  //if(currentAudioSource){ 
-  //  try{ currentAudioSource.stop(); }catch{} 
-  //  currentAudioSource=null; 
-  //} 
   stopAudioFromGo(); 
 }
 
