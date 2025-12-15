@@ -9,7 +9,7 @@ h1 { text-align: center; margin: 20px 0; }
 
 .panelContainer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
 .panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
-#stepPanel { width: 520px; }
+#stepPanel { width: 460px; }
 #playbackPanel, #tableManagementPanel { width: 200px; display:flex; flex-direction: column; align-items:center; gap:15px; height:200px; }
 #playbackPanel { justify-content: flex-start; }
 .panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
@@ -38,9 +38,9 @@ button.deleteBtn:hover { background-color:#D32F2F; }
 #tableManagementPanel .uniformBtn:hover { background-color:#616161; }
 #playbackPanel .uniformBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
 #playbackPanel .uniformBtn:hover { background-color:#616161; }
-#copyTablesPanel .uniformBtn { background-color:#9e9e9e; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
-#copyTablesPanel .uniformBtn:hover { background-color:#757575; }
-#copyTablesPanel { width:260px; margin-top:30px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
+#copyTablesPanel .uniformBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+#copyTablesPanel .uniformBtn:hover { background-color:#616161; }
+#copyTablesPanel { width:260px; margin-top:10px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
 
 #toast { visibility:hidden; min-width:200px; background-color:#333; color:#fff; text-align:center; border-radius:4px; padding:10px; position:fixed; z-index:100; left:50%; bottom:30px; transform:translateX(-50%); font-size:16px; }
 #toast.show { visibility:visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
@@ -124,7 +124,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 </div>
 
 <div id="toast"></div>
-<div id="versionLabel">Version 1.06</div>
+<div id="versionLabel">Version 1.07</div>
 
 <script src="wasm_exec.js"></script>
 <script>
@@ -267,10 +267,11 @@ function playStep(index){
 }
 
 function stopAudio(){ 
-  if(currentAudioSource){ 
-    try{ currentAudioSource.stop(); }catch{} 
-    currentAudioSource=null; 
-  } 
+  //if(currentAudioSource){ 
+  //  try{ currentAudioSource.stop(); }catch{} 
+  //  currentAudioSource=null; 
+  //} 
+  stopAudioFromGo(); 
 }
 
 function newTable(){ 
