@@ -48,6 +48,8 @@ button.deleteBtn:hover { background-color:#D32F2F; }
 @keyframes fadeout { from {bottom:30px; opacity:1;} to {bottom:0; opacity:0;} }
 
 tr.drag-over { border:2px dashed #ffcc00; }
+
+#versionLabel { text-align: center; margin: 20px 0; color: #888; font-size: 14px; font-style: italic; }
 </style>
 </head>
 <body>
@@ -122,6 +124,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 </div>
 
 <div id="toast"></div>
+<div id="versionLabel">Version 1.05</div>
 
 <script src="wasm_exec.js"></script>
 <script>
@@ -305,15 +308,15 @@ document.getElementById("loadFileInput").addEventListener("change", function(e){
             updateTable(); // ensure table refresh
             showToast("Table loaded!");
         } catch(err) {
-            showToast("Failed to load table");
-            console.error(err);
+            showToast("Failed to load table: " + err.message);
         }
-        e.target.value = ""; // reset input
+
+        // Reset file input so the same file can be loaded again
+        e.target.value = "";
     };
     reader.readAsText(file);
 });
 
-// Copy buttons excluding label
 function copyFrequency(){ 
     const text = document.getElementById("frequencyTableLabel").textContent;
     const values = text.replace(/^Frequency Table:\s*/, "");
