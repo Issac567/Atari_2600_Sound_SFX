@@ -9,8 +9,8 @@ h1 { text-align: center; margin: 20px 0; }
 
 .panelContainer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
 .panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
-#stepPanel { width: 460px; }
-#playbackPanel, #tableManagementPanel { width: 200px; display:flex; flex-direction: column; align-items:center; gap:15px; height:200px; }
+#stepPanel { width: 460px; height: 220px;}
+#playbackPanel, #tableManagementPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
 #playbackPanel { justify-content: flex-start; }
 .panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
 .inputRow { display:flex; align-items:center; margin-bottom:10px; }
@@ -147,7 +147,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 </div>
 
 <div id="toast"></div>
-<div id="versionLabel">Version 1.10</div>
+<div id="versionLabel">Version 1.11</div>
 
 <script src="wasm_exec.js"></script>
 <script>
@@ -296,7 +296,7 @@ function updateToneFromTableAndPlay(index) {
     const playOnChange = document.getElementById("playOnChange").checked;
     if (playOnChange) {
         // Stop any currently playing audio
-        stopAudioFromGo();
+        //stopAudioFromGo();
 
         // Play this step
         playStep(index);
@@ -333,6 +333,7 @@ function updateCopyLabels(){
 }
 
 function playallFromTable(){
+  stopAudioFromGo();
   updateToneFromTable();
   if(typeof window.updateSamples==="function"){
     const expanded=[];
@@ -343,6 +344,7 @@ function playallFromTable(){
 }
 
 function playStep(index){
+   stopAudioFromGo();
   const step=tonesArray[index];
   if(!step) return;
   const expanded=[];
