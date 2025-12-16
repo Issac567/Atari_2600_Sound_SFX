@@ -5,76 +5,100 @@
 <title>Atari 2600 SFX Editor</title>
 <style>
 
+/*================================================================================*/
 /* General body and header styles */
+/*================================================================================*/
 body { background-color: #1e1e1e; color: #f0f0f0; font-family: Arial, sans-serif; margin:0; padding:0; }
 h1 { text-align: center; margin: 20px 0; }
 
+/*================================================================================*/
 /* Styles for panel container and individual panels */
+/*================================================================================*/
 .panelContainer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
 .panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
 
-/* Styles for headings and textboxes and Dropdown in Step Parameter panels */
+/*================================================================================*/
+/* STEP PARAMETERS: Styles for Step Parameters Panel layout */
+/*================================================================================*/
+#stepPanel { width: 460px; height: 220px;}
+
+/* Styles for headings, labels, textboxes and Dropdown */
 .panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
 .inputRow { display:flex; align-items:center; margin-bottom:10px; }
 .inputRow label { flex:0 0 220px; text-align:right; margin-right:10px; }
 .inputRow input[type="number"], .inputRow select { flex:1 1 auto; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; max-width:200px; }
 .inputRow select {max-width:210px; }
 
-/* Styles for Step Parameters Panel size */
-#stepPanel { width: 460px; height: 220px;}
+/* Styles for "Add Steps at end" Button */
+button.addStepsBtn { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
+button.addStepsBtn:hover { background-color:#1E88E5; }
 
-/* Styles for Add Step Button in Step Parameters Panel */
-#stepPanel button { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; }
-#stepPanel button:hover { background-color:#1E88E5; }
+/*================================================================================*/
+/* PLAYBACK: Styles for Playback Management Panel layout */
+/*================================================================================*/
+#playbackPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
 
-/* Styles for Main table layout in the editor */
+/* Styles for "Play All" Button */
+button.playAllBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
+button.playAllBtn:hover { background-color:#45A049; }
+
+/* Styles for "Stop" Button */
+button.stopBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
+button.stopBtn:hover { background-color:#616161; }
+
+/* Stlyes for "Play on Change" checkbox */
+.playOnChangeRow { width: 160px; display: flex; justify-content: center; margin-bottom: 15px; }
+
+/*================================================================================*/
+/* TABLE MANAGEMENT: Styles for Table Management Panel layout */
+/*================================================================================*/
+#tableManagementPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
+
+/* Styles for All 3 Buttons */
+#tableManagementPanel .uniformMangBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+#tableManagementPanel .uniformMangBtn:hover { background-color:#616161; }
+
+/*================================================================================*/
+/* TABLE: Styles for table layout */
+/*================================================================================*/
 table { border-collapse:collapse; margin:10px auto; width:95%; background-color:#2b2b2b; }
 th, td { border:1px solid #555; padding:5px 10px; text-align:center; }
 th { background-color:#3a3a3a; }
 
-/* Styles for Dropdown and Textboxes in tones table */
+/* Styles for Dropdown and Textboxes */
 #tonesTable select, #tonesTable input[type="number"] { background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; }
-#tonesTable select { width:250px; }
+#tonesTable select { width:230px; }
 #tonesTable input[type="number"] { width:80px; }
 
-/* Styles for Add Step Button styling shared with tones table */
-#tonesTable .uniformBtn, #stepPanel button { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
-#tonesTable .uniformBtn:hover, #stepPanel button:hover { background-color:#1E88E5; }
-
-/* Styles for the Play Button in the Table */
+/* Styles for the "Play" Button  */
 button.playBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
 button.playBtn:hover { background-color:#45A049; }
 
-/* Styles for the Delete Button in the Table */
+/* Styles for the "Delete" Button  */
 button.deleteBtn { background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
 button.deleteBtn:hover { background-color:#D32F2F; }
 
-/* Styles for buttons in the Table Management Panel */
-#tableManagementPanel .uniformBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
-#tableManagementPanel .uniformBtn:hover { background-color:#616161; }
+/* Styles for "Insert Before"  */
+button.insertBtn { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
+button.insertBtn:hover { background-color:#1E88E5; }
 
-/* Styles for Playback and Table Management Panels size and layout */
-#playbackPanel, #tableManagementPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
-
-/* Styles for Playback Panel alignment */
-#playbackPanel { justify-content: flex-start; }
-
-/* Styles for buttons in the Playback Panel */
-#playbackPanel .uniformBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
-#playbackPanel .uniformBtn:hover { background-color:#616161; }
-
-/* Stlyes for 'Play on Change' checkbox in Playback Panel */
-.playOnChangeRow { width: 160px; display: flex; justify-content: center; margin-bottom: 15px; }
-
-/* Styles for Frequency and Volume Textbox at bottom */
+/*================================================================================*/
+/* FREQ/VOL LABEL: Styles for Frequency and Volume label at bottom */
+/*================================================================================*/
 #frequencyTableLabel, #controlVolumeTableLabel { margin-top:20px; text-align:center; color:#ffcc00; }
 
-/* Styles for buttons and layout in the Copy Table Panel */
-#copyTablesPanel .uniformBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
-#copyTablesPanel .uniformBtn:hover { background-color:#616161; }
+/*================================================================================*/
+/* COPY TABLE: Styles for Copy Management Panel layout */
+/*================================================================================*/
 #copyTablesPanel { width:260px; margin-top:0px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
 
-/* Styles for toast notifications */
+/* Styles for All 2 buttons  */
+#copyTablesPanel .uniformCopyBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+#copyTablesPanel .uniformCopyBtn:hover { background-color:#616161; }
+
+/*================================================================================*/
+/* TOAST: Styles for toast notifications */
+/*================================================================================*/
 #toast { visibility:hidden; min-width:200px; background-color:#333; color:#fff; text-align:center; border-radius:4px; padding:10px; position:fixed; z-index:100; left:50%; bottom:30px; transform:translateX(-50%); font-size:16px; }
 #toast.show { visibility:visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
 /* Fade-in animation for toast */
@@ -82,10 +106,14 @@ button.deleteBtn:hover { background-color:#D32F2F; }
 /* Fade-out animation for toast */
 @keyframes fadeout { from {bottom:30px; opacity:1;} to {bottom:0; opacity:0;} }
 
-/* Style for table row being dragged over */
+/*================================================================================*/
+/* DRAG OVER: Style for table row being dragged over */
+/*================================================================================*/
 tr.drag-over { border:2px dashed #ffcc00; }
 
-/* Style for version label at the bottom of the editor */
+/*================================================================================*/
+/* VERSION LABEL: Style for version label at the bottom of the editor */
+/*================================================================================*/
 #versionLabel { text-align: center; margin: 20px 0; color: #888; font-size: 14px; font-style: italic; }
 
 </style>
@@ -94,7 +122,9 @@ tr.drag-over { border:2px dashed #ffcc00; }
 
 <h1>Atari 2600 SFX Editor with TIA Sound Generator</h1>
 
+<!-- ======================================= -->
 <!-- This is a Step Parameters Panel -->
+<!-- ======================================= -->
 <div class="panelContainer">
   <div class="panel" id="stepPanel">
     <h3>Step Parameters</h3>
@@ -133,23 +163,25 @@ tr.drag-over { border:2px dashed #ffcc00; }
     </div>
 
     <!-- This is a Add StepButton -->
-    <button id="addStepsBtn" onclick="btnAddtoStep()" class="uniformBtn">
+    <button id="addStepsBtn" onclick="btnAddtoStepEnd()" class="addStepsBtn">
       Add Steps at End
     </button>
 
   </div>
 
+  <!-- ======================================= -->
   <!-- This is a Playback Panel -->
+   <!-- ======================================= -->
   <div class="panel" id="playbackPanel">
     <h3>Playback</h3>
     
     <!-- This is a Play All Button -->
-    <button id="playAllBtn" onclick="playallFromTable()" class="playBtn">
+    <button id="playAllBtn" onclick="playAllatTable()" class="playAllBtn">
       Play All
     </button>
 
     <!-- This is a Stop Button -->
-    <button id="stopBtn" onclick="stopAudio()" class="uniformBtn">
+    <button id="stopBtn" onclick="stopAudio()" class="stopBtn">
       Stop
     </button>
 
@@ -164,22 +196,24 @@ tr.drag-over { border:2px dashed #ffcc00; }
 
   </div>
 
+  <!-- ======================================= -->
   <!-- This is a Table Management Panel -->
+  <!-- ======================================= -->
   <div class="panel" id="tableManagementPanel">
     <h3>Table Management</h3>
 
     <!-- This is a New Table Button -->
-    <button id="newTableBtn" class="uniformBtn" onclick="newTable()">
+    <button id="newTableBtn" class="uniformMangBtn" onclick="newTable()">
       New Table
     </button>
 
     <!-- This is a New Save Button -->
-    <button id="saveTableBtn" class="uniformBtn" onclick="saveTable()">
+    <button id="saveTableBtn" class="uniformMangBtn" onclick="saveTable()">
       Save Table
     </button>
 
     <!-- This is a Load Table Button -->
-    <button id="loadTableBtn" class="uniformBtn" onclick="loadTable()">
+    <button id="loadTableBtn" class="uniformMangBtn" onclick="loadTable()">
       Load Table
     </button>
 
@@ -187,7 +221,9 @@ tr.drag-over { border:2px dashed #ffcc00; }
   </div>
 </div>
 
+<!-- ======================================= -->
 <!-- This is a Table Headers -->
+<!-- ======================================= -->
 <table id="tonesTable">
   <thead>
     <tr>
@@ -198,34 +234,45 @@ tr.drag-over { border:2px dashed #ffcc00; }
   <tbody></tbody>
 </table>
 
+<!-- ======================================= -->
 <!-- This is a Frequency Label at bottom -->
+<!-- ======================================= -->
 <div id="frequencyTableLabel">Frequency Table:</div>
 
+<!-- ======================================= -->
 <!-- This is a Control/Volume Label at bottom -->
+<!-- ======================================= -->
 <div id="controlVolumeTableLabel">Control/Volume Table:</div>
 
+<!-- ======================================= -->
 <!-- This is a Copy Table Panel -->
+<!-- ======================================= -->
 <div class="panelContainer" style="justify-content:center; margin-top:20px;">
   <div class="panel" id="copyTablesPanel">
     <h3>Copy Tables</h3>
 
     <!-- This is a Copy Freq Button -->
-    <button id="copyFreqBtn" class="uniformBtn" onclick="copyFrequency()">
+    <button id="copyFreqBtn" class="uniformCopyBtn" onclick="copyFrequency()">
       Copy Frequency Table
     </button>
 
     <!-- This is a Control/Vol Button -->
-    <button id="copyCtlVolBtn" class="uniformBtn" onclick="copyControlVolume()">
+    <button id="copyCtlVolBtn" class="uniformCopyBtn" onclick="copyControlVolume()">
       Copy Control/Volume Table
     </button>
 
   </div>
 </div>
 
+<!-- ======================================= -->
+<!-- This is a toast -->
+<!-- ======================================= -->
 <div id="toast"></div>
 
+<!-- ======================================= -->
 <!-- This is a Version label -->
-<div id="versionLabel">Version 1.14</div>
+<!-- ======================================= -->
+<div id="versionLabel">Version 1.15</div>
 
 <script src="wasm_exec.js"></script>
 <script>
@@ -239,46 +286,13 @@ const ctlOptions = [
   {v:13,l:"13 = Low Pure"}, {v:14,l:"14 = Electronic Low"}, {v:15,l:"15 = Electronic Low"}
 ];
 
-//-----------------------------------------------------------------------------------
-// This plays the sound when values are changed in Step Parameters Panel
-const stepInputs = ["freq","ctl","vol","repeat"].map(id => document.getElementById(id));
+  // One time Setup call 
+  setupStepInputsListener();
 
-stepInputs.forEach(input => {
-    input.addEventListener("change", () => {
-        const freq = parseInt(document.getElementById("freq").value);
-        const ctl  = parseInt(document.getElementById("ctl").value);
-        const vol  = parseInt(document.getElementById("vol").value);
-        const repeat = parseInt(document.getElementById("repeat").value) || 1;
-
-        const expanded = [];
-        for(let i=0; i<repeat; i++){
-            expanded.push({frequency: freq, control: ctl, volume: vol});
-        }
-
-        updateCopyLabels();
-
-        // Only play if "Play on Change" is checked
-        if(document.getElementById("playOnChange").checked){
-            // Stop any currently playing audio
-            stopAudioFromGo();
-
-            if(typeof window.updateSamples === "function"){
-                window.updateSamples(JSON.stringify(expanded,null,4));
-                if(typeof window.playSample === "function") window.playSample(0);
-            }
-        }
-    });
-});
-//-----------------------------------------------------------------------------------
-
-function showToast(msg){
-  const toast=document.getElementById("toast");
-  toast.textContent=msg;
-  toast.className="show";
-  setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
-}
-
-function btnAddtoStep(){
+//--------------------------------------------------------------------------------------------
+// When "Add Steps at end" Button is pressed, Step Parameters inputs will load into table by Add Steps at end button
+//--------------------------------------------------------------------------------------------
+function btnAddtoStepEnd(){
   const freq=parseInt(document.getElementById("freq").value);
   const vol=parseInt(document.getElementById("vol").value);
   const ctl=parseInt(document.getElementById("ctl").value);
@@ -287,6 +301,9 @@ function btnAddtoStep(){
   updateTable();
 }
 
+//--------------------------------------------------------------------------------------------
+// This updates table with tones values
+//--------------------------------------------------------------------------------------------
 function updateTable(){
   const tbody=document.querySelector("#tonesTable tbody");
   tbody.innerHTML="";
@@ -326,20 +343,24 @@ function updateTable(){
     const repeatCell=row.insertCell();
     const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=30; repeatInput.value=tone.repeat||1; repeatCell.appendChild(repeatInput);
     
-    freqInput.onchange = () => updateToneFromTableAndPlay(index);
-    ctlSelect.onchange = () => updateToneFromTableAndPlay(index);
-    volInput.onchange = () => updateToneFromTableAndPlay(index);
-    repeatInput.onchange = () => updateToneFromTableAndPlay(index);
+    freqInput.onchange = () => updateToneFromTableAndPlay(index); ctlSelect.onchange = () => updateToneFromTableAndPlay(index); volInput.onchange = () => updateToneFromTableAndPlay(index); repeatInput.onchange = () => updateToneFromTableAndPlay(index);
 
     const playCell=row.insertCell();
-    const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; playBtn.onclick=()=>playStep(index); playCell.appendChild(playBtn);
+    const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; 
+    playBtn.onclick=()=>playStep(index); 
+      playCell.appendChild(playBtn);
 
     const delCell=row.insertCell();
-    const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="deleteBtn"; delBtn.onclick=()=>{ tonesArray.splice(index,1); updateTable(); }; delCell.appendChild(delBtn);
+    const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="deleteBtn"; 
+    delBtn.onclick=()=>{ 
+      tonesArray.splice(index,1); 
+      updateTable(); 
+    }; 
+      delCell.appendChild(delBtn);
 
     const insertCell=row.insertCell();
-    const insertBtn=document.createElement("button"); insertBtn.textContent="Insert Before"; insertBtn.className="uniformBtn";
-    insertBtn.onclick=()=>{ 
+    const insertBtn=document.createElement("button"); insertBtn.textContent="Insert Before"; insertBtn.className="insertBtn";
+    insertBtn.onclick=()=>{
       const freq=parseInt(document.getElementById("freq").value);
       const ctl=parseInt(document.getElementById("ctl").value);
       const vol=parseInt(document.getElementById("vol").value);
@@ -347,14 +368,16 @@ function updateTable(){
       tonesArray.splice(index,0,{frequency:freq,control:ctl,volume:vol,repeat});
       updateTable();
     };
-    insertCell.appendChild(insertBtn);
+      insertCell.appendChild(insertBtn);
   });
 
   Array.from(tbody.rows).forEach((row,idx)=>row.dataset.index=idx);
   updateCopyLabels();
 }
 
-// This plays the sound when values are changed in Table
+//--------------------------------------------------------------------------------------------
+// This plays the sound when values are changed at Table
+//--------------------------------------------------------------------------------------------
 function updateToneFromTableAndPlay(index) {
     const row = document.querySelector("#tonesTable tbody").rows[index];
     if (!row) return;
@@ -373,13 +396,57 @@ function updateToneFromTableAndPlay(index) {
     const playOnChange = document.getElementById("playOnChange").checked;
     if (playOnChange) {
         // Stop any currently playing audio in playstep function
-
-        // Play this step
         playStep(index);
     }
 }
+//--------------------------------------------------------------------------------------------
+// This plays the sound when values are changed in Step Parameters Panel (Function works as Listener)
+//--------------------------------------------------------------------------------------------
+function setupStepInputsListener() {
+    const stepInputs = ["freq","ctl","vol","repeat"].map(id => document.getElementById(id));
 
-// This just adds the Tone Values (frequency, Volume, Control and Repeat) into table
+    stepInputs.forEach(input => {
+        input.addEventListener("change", () => {
+            const freq = parseInt(document.getElementById("freq").value);
+            const ctl  = parseInt(document.getElementById("ctl").value);
+            const vol  = parseInt(document.getElementById("vol").value);
+            const repeat = parseInt(document.getElementById("repeat").value) || 1;
+
+            const expanded = [];
+            for(let i = 0; i < repeat; i++) {
+                expanded.push({frequency: freq, control: ctl, volume: vol});
+            }
+
+            updateCopyLabels();
+
+            // Only play if "Play on Change" is checked
+            if(document.getElementById("playOnChange").checked){
+                stopAudioFromGo();
+
+                if(typeof window.updateSamples === "function"){
+                    window.updateSamples(JSON.stringify(expanded, null, 4));
+                    if(typeof window.playSample === "function") window.playSample(0);
+                }
+            }
+        });
+    });
+}
+
+//--------------------------------------------------------------------------------------------
+// When "Play All" Button is pressed, this will play all steps from table in sequence
+//--------------------------------------------------------------------------------------------
+function playAllatTable(){
+  stopAudioFromGo();
+  updateToneFromTable();
+  if(typeof window.updateSamples==="function"){
+    const expanded=[];
+    tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
+    window.updateSamples(JSON.stringify(expanded,null,4));
+    if(typeof window.playSample==="function") window.playSample(0);
+  }
+}
+
+// This just adds the All Tone Values (frequency, Volume, Control and Repeat) all steps from table. Called by playallFromTable button
 function updateToneFromTable(){
   const tbody=document.querySelector("#tonesTable tbody");
   tonesArray=[];
@@ -394,41 +461,9 @@ function updateToneFromTable(){
   updateCopyLabels();
 }
 
-// The export SFX table bytes textboxes.  2 textboxes below will be updated with fresh data
-function updateCopyLabels(){
-  const expanded=[];
-  tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
-
-  const freqArray=["byte. 0"].concat(expanded.map(s=>s.frequency).reverse());
-  document.getElementById("frequencyTableLabel").textContent="Frequency Table: "+freqArray.join(", ");
-
-  const cvArray=["byte. 0"].concat(expanded.map(step=>{
-    const byte=((step.control&0x0F)<<4)|(step.volume&0x0F);
-    return "$"+byte.toString(16).padStart(2,"0").toUpperCase();
-  }).reverse());
-  document.getElementById("controlVolumeTableLabel").textContent="Control/Volume Table: "+cvArray.join(", ");
-
-// ✅ Check Atari limitation by total number of bytes
-  const totalBytes = expanded.length + 1; // +1 for the initial "byte. 0"
-  const maxBytes = 255;
-  if (totalBytes > maxBytes) {
-    showToast(`Warning: Total byte array exceeds Atari 2600 limitation! (${totalBytes}/${maxBytes} bytes)`);
-}
-}
-
-// This will play all steps in table in sequence
-function playallFromTable(){
-  stopAudioFromGo();
-  updateToneFromTable();
-  if(typeof window.updateSamples==="function"){
-    const expanded=[];
-    tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
-    window.updateSamples(JSON.stringify(expanded,null,4));
-    if(typeof window.playSample==="function") window.playSample(0);
-  }
-}
-
-// This will play the selected step only
+//--------------------------------------------------------------------------------------------
+// When "Play" button in Table is pressed, this will play the selected step
+//-------------------------------------------------------------------------------------------- 
 function playStep(index){
    stopAudioFromGo();
   const step=tonesArray[index];
@@ -441,20 +476,26 @@ function playStep(index){
   }
 }
 
+//--------------------------------------------------------------------------------------------
 // Stop audio in Main.Go call
+//--------------------------------------------------------------------------------------------
 function stopAudio(){ 
   stopAudioFromGo(); 
 }
 
+//--------------------------------------------------------------------------------------------
 // This will clear all table
+//--------------------------------------------------------------------------------------------
 function newTable(){ 
   if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ 
     tonesArray=[]; updateTable(); showToast("New table created"); 
   } 
 }
 
+//--------------------------------------------------------------------------------------------
 // This will save tone values as Json (Frequency, COntrol, Volume and Repeat)
 // Remember Frequency, Control and Volume is only used to generate the tone
+//--------------------------------------------------------------------------------------------
 function saveTable(){ 
   const dataStr=JSON.stringify(tonesArray,null,4); 
   const blob=new Blob([dataStr],{type:"application/json"}); 
@@ -467,12 +508,16 @@ function saveTable(){
   showToast("Table saved!"); 
 }
 
+//--------------------------------------------------------------------------------------------
 // Load Json Table
+//--------------------------------------------------------------------------------------------
 function loadTable(){ 
   document.getElementById("loadFileInput").click(); 
 }
 
+//--------------------------------------------------------------------------------------------
 // Load file routine
+//--------------------------------------------------------------------------------------------
 document.getElementById("loadFileInput").addEventListener("change", function(e){
     const file = e.target.files[0]; 
     if (!file) return;
@@ -495,24 +540,63 @@ document.getElementById("loadFileInput").addEventListener("change", function(e){
     reader.readAsText(file);
 });
 
+//--------------------------------------------------------------------------------------------
 // Copy Frequency Table to Clipboard
+//--------------------------------------------------------------------------------------------
 function copyFrequency(){ 
     const text = document.getElementById("frequencyTableLabel").textContent;
     const values = text.replace(/^Frequency Table:\s*/, "");
     navigator.clipboard.writeText(values).then(()=>showToast("Frequency Table copied!")); 
 }
 
+//--------------------------------------------------------------------------------------------
 // Copy Control/Volume Table to Clipboard
+//--------------------------------------------------------------------------------------------
 function copyControlVolume(){ 
     const text = document.getElementById("controlVolumeTableLabel").textContent;
     const values = text.replace(/^Control\/Volume Table:\s*/, "");
     navigator.clipboard.writeText(values).then(()=>showToast("Control/Volume Table copied!")); 
 }
+
+//--------------------------------------------------------------------------------------------
+// The export SFX table bytes textboxes.  2 textboxes below will be updated with fresh data
+//--------------------------------------------------------------------------------------------
+function updateCopyLabels(){
+  const expanded=[];
+  tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
+
+  const freqArray=["byte. 0"].concat(expanded.map(s=>s.frequency).reverse());
+  document.getElementById("frequencyTableLabel").textContent="Frequency Table: "+freqArray.join(", ");
+
+  const cvArray=["byte. 0"].concat(expanded.map(step=>{
+  const byte=((step.control&0x0F)<<4)|(step.volume&0x0F);
+    return "$"+byte.toString(16).padStart(2,"0").toUpperCase();
+  }).reverse());
+  document.getElementById("controlVolumeTableLabel").textContent="Control/Volume Table: "+cvArray.join(", ");
+
+// ✅ Check Atari limitation by total number of bytes
+  const totalBytes = expanded.length + 1; // +1 for the initial "byte. 0"
+  const maxBytes = 255;
+  if (totalBytes > maxBytes) {
+    showToast(`Warning: Total byte array exceeds Atari 2600 limitation! (${totalBytes}/${maxBytes} bytes)`);
+  }
+}
+
+//--------------------------------------------------------------------------------------------
+// Show Toast
+//--------------------------------------------------------------------------------------------
+function showToast(msg){
+  const toast=document.getElementById("toast");
+  toast.textContent=msg;
+  toast.className="show";
+  setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
+}
+
 </script>
 
 <script>
-const go=new Go();
-WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(result => { go.run(result.instance); });
+  const go=new Go();
+  WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(result => { go.run(result.instance); });
 </script>
 
 </body>
