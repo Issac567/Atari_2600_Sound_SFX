@@ -26,7 +26,7 @@ th { background-color:#3a3a3a; }
 #tonesTable select { width:250px; }
 #tonesTable input[type="number"] { width:80px; }
 
-#frequencyTableLabel, #controlVolumeTableLabel { margin-top:10px; text-align:center; color:#ffcc00; }
+#frequencyTableLabel, #controlVolumeTableLabel { margin-top:20px; text-align:center; color:#ffcc00; }
 
 button.playBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
 button.playBtn:hover { background-color:#45A049; }
@@ -45,7 +45,7 @@ button.deleteBtn:hover { background-color:#D32F2F; }
 
 #copyTablesPanel .uniformBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
 #copyTablesPanel .uniformBtn:hover { background-color:#616161; }
-#copyTablesPanel { width:260px; margin-top:10px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
+#copyTablesPanel { width:260px; margin-top:0px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
 
 #toast { visibility:hidden; min-width:200px; background-color:#333; color:#fff; text-align:center; border-radius:4px; padding:10px; position:fixed; z-index:100; left:50%; bottom:30px; transform:translateX(-50%); font-size:16px; }
 #toast.show { visibility:visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
@@ -62,15 +62,18 @@ tr.drag-over { border:2px dashed #ffcc00; }
 
 <h1>Atari 2600 SFX Editor with TIA Sound Generator</h1>
 
+<!-- This is a Step Parameters Panel -->
 <div class="panelContainer">
   <div class="panel" id="stepPanel">
     <h3>Step Parameters</h3>
     
+    <!-- This is a Frequency Textbox -->
     <div class="inputRow">
       <label for="freq">Frequency (1=high, 31=low):</label>
       <input id="freq" type="number" min="1" max="31" value="4">
     </div>
 
+    <!-- This is a Control Dropbox -->
     <div class="inputRow">
       <label for="ctl">Control:</label>
       <select id="ctl">
@@ -85,11 +88,13 @@ tr.drag-over { border:2px dashed #ffcc00; }
       </select>
     </div>
 
+    <!-- This is a Volume Textbox -->
     <div class="inputRow">
       <label for="vol">Volume (0=off, 15=high):</label>
       <input id="vol" type="number" min="0" max="15" value="10">
     </div>
 
+    <!-- This is a Repeat Textbox -->
     <div class="inputRow">
       <label for="repeat">Repeat (1-30):</label>
       <input id="repeat" type="number" min="1" max="30" value="1">
@@ -99,13 +104,17 @@ tr.drag-over { border:2px dashed #ffcc00; }
 
   </div>
 
+  <!-- This is a Playback Panel -->
   <div class="panel" id="playbackPanel">
     <h3>Playback</h3>
     
+    <!-- This is a Play All Button -->
     <button onclick="playallFromTable()" class="playBtn">Play All</button>
+
+    <!-- This is a Stop Button -->
     <button onclick="stopAudio()" class="uniformBtn">Stop</button>
     
-    <!-- Styled Play on Change Checkbox -->
+    <!-- This is a Styled Play on Change Checkbox -->
     <div class="playOnChangeRow">
       <label class="customCheckbox">
         <input type="checkbox" id="playOnChange" checked>
@@ -116,15 +125,23 @@ tr.drag-over { border:2px dashed #ffcc00; }
 
   </div>
 
+  <!-- This is a Table Management Panel -->
   <div class="panel" id="tableManagementPanel">
     <h3>Table Management</h3>
+
+    <!-- This is a New Table Button -->
     <button class="uniformBtn" onclick="newTable()">New Table</button>
+
+    <!-- This is a New Save Button -->
     <button class="uniformBtn" onclick="saveTable()">Save Table</button>
+
+    <!-- This is a Load Table Button -->
     <button class="uniformBtn" onclick="loadTable()">Load Table</button>
     <input type="file" id="loadFileInput" accept=".json" style="display:none" />
   </div>
 </div>
 
+<!-- This is a Table Headers -->
 <table id="tonesTable">
   <thead>
     <tr>
@@ -135,19 +152,27 @@ tr.drag-over { border:2px dashed #ffcc00; }
   <tbody></tbody>
 </table>
 
+<!-- This is a Frequency Label at bottom -->
 <div id="frequencyTableLabel">Frequency Table:</div>
+
+<!-- This is a Control/Volume Label at bottom -->
 <div id="controlVolumeTableLabel">Control/Volume Table:</div>
 
+<!-- This is a Copy Table Panel -->
 <div class="panelContainer" style="justify-content:center; margin-top:20px;">
   <div class="panel" id="copyTablesPanel">
     <h3>Copy Tables</h3>
+
+    <!-- This is a Copy Freq Button -->
     <button class="uniformBtn" onclick="copyFrequency()">Copy Frequency Table</button>
+
+    <!-- This is a Control/Vol Button -->
     <button class="uniformBtn" onclick="copyControlVolume()">Copy Control/Volume Table</button>
   </div>
 </div>
 
 <div id="toast"></div>
-<div id="versionLabel">Version 1.11</div>
+<div id="versionLabel">Version 1.12</div>
 
 <script src="wasm_exec.js"></script>
 <script>
@@ -289,21 +314,19 @@ function updateToneFromTableAndPlay(index) {
     // Update only this step
     tonesArray[index] = { frequency: freq, control: ctl, volume: vol, repeat };
 
-    // Update copy labels
     updateCopyLabels();
 
     // Check if "Play on Change" is enabled
     const playOnChange = document.getElementById("playOnChange").checked;
     if (playOnChange) {
-        // Stop any currently playing audio
-        //stopAudioFromGo();
+        // Stop any currently playing audio in playstep function
 
         // Play this step
         playStep(index);
     }
 }
 
-// This just adds the Tone Values into table
+// This just adds the Tone Values (frequency, Volume, Control and Repeat) into table
 function updateToneFromTable(){
   const tbody=document.querySelector("#tonesTable tbody");
   tonesArray=[];
@@ -318,6 +341,7 @@ function updateToneFromTable(){
   updateCopyLabels();
 }
 
+// The export SFX table bytes textboxes.  2 textboxes below will be updated with fresh data
 function updateCopyLabels(){
   const expanded=[];
   tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
@@ -330,8 +354,16 @@ function updateCopyLabels(){
     return "$"+byte.toString(16).padStart(2,"0").toUpperCase();
   }).reverse());
   document.getElementById("controlVolumeTableLabel").textContent="Control/Volume Table: "+cvArray.join(", ");
+
+// ✅ Check Atari limitation by total number of bytes
+  const totalBytes = expanded.length + 1; // +1 for the initial "byte. 0"
+  const maxBytes = 255;
+  if (totalBytes > maxBytes) {
+    showToast(`Warning: Total byte array exceeds Atari 2600 limitation! (${totalBytes}/${maxBytes} bytes)`);
+}
 }
 
+// This will play all steps in table in sequence
 function playallFromTable(){
   stopAudioFromGo();
   updateToneFromTable();
@@ -343,6 +375,7 @@ function playallFromTable(){
   }
 }
 
+// This will play the selected step only
 function playStep(index){
    stopAudioFromGo();
   const step=tonesArray[index];
@@ -355,16 +388,20 @@ function playStep(index){
   }
 }
 
+// Stop audio in Main.Go call
 function stopAudio(){ 
   stopAudioFromGo(); 
 }
 
+// This will clear all table
 function newTable(){ 
   if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ 
     tonesArray=[]; updateTable(); showToast("New table created"); 
   } 
 }
 
+// This will save tone values as Json (Frequency, COntrol, Volume and Repeat)
+// Remember Frequency, Control and Volume is only used to generate the tone
 function saveTable(){ 
   const dataStr=JSON.stringify(tonesArray,null,4); 
   const blob=new Blob([dataStr],{type:"application/json"}); 
@@ -377,10 +414,12 @@ function saveTable(){
   showToast("Table saved!"); 
 }
 
+// Load Json Table
 function loadTable(){ 
   document.getElementById("loadFileInput").click(); 
 }
 
+// Load file routine
 document.getElementById("loadFileInput").addEventListener("change", function(e){
     const file = e.target.files[0]; 
     if (!file) return;
@@ -403,12 +442,14 @@ document.getElementById("loadFileInput").addEventListener("change", function(e){
     reader.readAsText(file);
 });
 
+// Copy Frequency Table to Clipboard
 function copyFrequency(){ 
     const text = document.getElementById("frequencyTableLabel").textContent;
     const values = text.replace(/^Frequency Table:\s*/, "");
     navigator.clipboard.writeText(values).then(()=>showToast("Frequency Table copied!")); 
 }
 
+// Copy Control/Volume Table to Clipboard
 function copyControlVolume(){ 
     const text = document.getElementById("controlVolumeTableLabel").textContent;
     const values = text.replace(/^Control\/Volume Table:\s*/, "");
