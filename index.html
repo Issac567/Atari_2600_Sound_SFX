@@ -116,6 +116,27 @@ tr.drag-over { border:2px dashed #ffcc00; }
 /*================================================================================*/
 #versionLabel { text-align: center; margin: 20px 0; color: #888; font-size: 14px; font-style: italic; }
 
+
+
+
+
+/* Testing PHASE */
+/*================================================================================*/
+/* KEYBOARD: Styles for Keyboard Panel layout */
+/*================================================================================*/
+#keyboardPanel { width: 90%; height: 120px; margin: 20px auto 40px auto; /* top 20px, bottom 40px, left/right auto to center */ padding: 10px; }
+#keyboardKeys { display: flex; justify-content: center; gap: 2px; flex-wrap: wrap ;}
+#keyboardKeys button { flex: 1 0 calc(100% / 31 - 4px); height: 60px; margin: 2px 1px; border: 1px solid #555; border-radius: 4px; background: #eee; color: #111; font-weight: bold; cursor: pointer; user-select: none; }
+
+
+
+
+
+
+
+
+
+
 </style>
 </head>
 <body>
@@ -218,7 +239,16 @@ tr.drag-over { border:2px dashed #ffcc00; }
     </button>
 
     <input type="file" id="loadFileInput" accept=".json" style="display:none" />
+
   </div>
+</div>
+
+<!-- ======================================= -->
+<!-- This is a Keyboard -->
+<!-- ======================================= -->
+<div class="panel" id="keyboardPanel">
+  <h3>Keyboard (Hold Down)</h3>
+  <div id="keyboardKeys"></div>
 </div>
 
 <!-- ======================================= -->
@@ -272,11 +302,18 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 1.15</div>
+<div id="versionLabel">Version 2.01</div>
 
 <script src="wasm_exec.js"></script>
+
 <script>
+
+//--------------------------------------------------------------------------------------------
+// Initial entry in script
+//--------------------------------------------------------------------------------------------
 let tonesArray = [];
+let isHeldLoop = false;     // Used with Keyboard to detect button Hold down
+let timeoutId = null;       // Timeout in Keyboard
 
 const ctlOptions = [
   {v:1,l:"1 = Buzzy"}, {v:2,l:"2 = Distortion"}, {v:3,l:"3 = Flangy"},
@@ -286,8 +323,12 @@ const ctlOptions = [
   {v:13,l:"13 = Low Pure"}, {v:14,l:"14 = Electronic Low"}, {v:15,l:"15 = Electronic Low"}
 ];
 
-  // One time Setup call 
-  setupStepInputsListener();
+// One time Setup call 
+setupStepInputsListener();
+
+// Call this once after page loads
+setupPlayKeyButton("freq", "ctl", "vol");
+
 
 //--------------------------------------------------------------------------------------------
 // When "Add Steps at end" Button is pressed, Step Parameters inputs will load into table by Add Steps at end button
@@ -446,7 +487,9 @@ function playAllatTable(){
   }
 }
 
+//--------------------------------------------------------------------------------------------
 // This just adds the All Tone Values (frequency, Volume, Control and Repeat) all steps from table. Called by playallFromTable button
+//--------------------------------------------------------------------------------------------
 function updateToneFromTable(){
   const tbody=document.querySelector("#tonesTable tbody");
   tonesArray=[];
@@ -591,6 +634,69 @@ function showToast(msg){
   toast.className="show";
   setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
 }
+
+
+
+
+
+//TESTING PHASE.  Move above when good.
+//--------------------------------------------------------------------------------------------
+// Setup Keyboard listner and Do mouse functions
+//--------------------------------------------------------------------------------------------
+function setupPlayKeyButton(freqInputId, ctlInputId, volInputId) {
+    const ctlInput = document.getElementById(ctlInputId);
+    const volInput = document.getElementById(volInputId);
+    const keyboardDiv = document.getElementById("keyboardKeys");
+
+    let isHeld = false; // track key hold
+
+    for (let i = 1; i <= 31; i++) {
+        const key = document.createElement("button");
+        key.textContent = i;
+        key.className = "keyboardKey";
+
+        // Key down: start playing
+        key.addEventListener("mousedown", () => playTone(i));
+        key.addEventListener("touchstart", e => { e.preventDefault(); playTone(i); });
+
+        // Key up / leave: stop playing
+        key.addEventListener("mouseup", stopTone);
+        key.addEventListener("mouseleave", stopTone);
+        key.addEventListener("touchend", stopTone);
+
+        keyboardDiv.appendChild(key);
+    }
+
+    function playTone(keyNumber) {
+        if (isHeld) return;
+        isHeld = true;
+
+        const tone = {
+            frequency: keyNumber,
+            control: parseInt(ctlInput.value),
+            volume: parseInt(volInput.value)
+        };
+
+        // Generate buffer once (repeated small buffer for smoother sound)
+        const buffer = [];
+        for (let j = 0; j < 50; j++) buffer.push(tone);
+
+        if (typeof window.updateSamples2 === "function") {
+            window.updateSamples2(JSON.stringify(buffer));
+        }
+    }
+
+    function stopTone() {
+        if (!isHeld) return;
+        isHeld = false;
+
+        if (typeof window.stopAudioFromGo === "function") {
+            window.stopAudioFromGo();
+        }
+    }
+}
+
+
 
 </script>
 
