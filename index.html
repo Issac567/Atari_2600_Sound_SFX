@@ -124,12 +124,28 @@ tr.drag-over { border:2px dashed #ffcc00; }
 /*================================================================================*/
 /* KEYBOARD: Styles for Keyboard Panel layout */
 /*================================================================================*/
-#keyboardPanel { width: 90%; height: 120px; margin: 20px auto 40px auto; /* top 20px, bottom 40px, left/right auto to center */ padding: 10px; }
-#keyboardKeys { display: flex; justify-content: center; gap: 2px; flex-wrap: wrap ;}
-#keyboardKeys button { flex: 1 0 calc(100% / 31 - 4px); height: 60px; margin: 2px 1px; border: 1px solid #555; border-radius: 4px; background: #eee; color: #111; font-weight: bold; cursor: pointer; user-select: none; }
+#keyboardPanel { width: 90%; height: 120px; margin: 20px auto 40px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 
+/* Keyboard title */
+#keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 
+/* Keyboard keys container */
+#keyboardKeys { display: flex; justify-content: flex-start; gap: 2px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 2px; padding-right: 2px; }
 
+/* Optional: style scrollbar */
+#keyboardKeys::-webkit-scrollbar { height: 6px; }
+#keyboardKeys::-webkit-scrollbar-thumb { background: #aaa; border-radius: 3px; }
+
+/* Individual keys */
+#keyboardKeys button { flex: 1 1 0; min-width: 30px; height: 60px; margin: 2px 1px; border: 1px solid #555; border-radius: 4px; background: #eee; color: #111; font-weight: bold; cursor: pointer; user-select: none; text-align: center; transition: background 0.1s, transform 0.05s; }
+
+/* Key press / hover feedback */
+#keyboardKeys button:hover { background: #ddd; }
+#keyboardKeys button:active { background: #ccc; transform: scale(0.95); }
+
+/* Responsive adjustments */
+@media (max-width: 800px) { #keyboardKeys button { height: 50px; font-size: 0.9rem; } }
+@media (max-width: 500px) { #keyboardKeys button { height: 40px; font-size: 0.8rem; } }
 
 
 
@@ -302,7 +318,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 2.01</div>
+<div id="versionLabel">Version 2.02</div>
 
 <script src="wasm_exec.js"></script>
 
@@ -312,8 +328,6 @@ tr.drag-over { border:2px dashed #ffcc00; }
 // Initial entry in script
 //--------------------------------------------------------------------------------------------
 let tonesArray = [];
-let isHeldLoop = false;     // Used with Keyboard to detect button Hold down
-let timeoutId = null;       // Timeout in Keyboard
 
 const ctlOptions = [
   {v:1,l:"1 = Buzzy"}, {v:2,l:"2 = Distortion"}, {v:3,l:"3 = Flangy"},
@@ -552,6 +566,54 @@ function saveTable(){
 }
 
 //--------------------------------------------------------------------------------------------
+// Setup Keyboard listner and Do mouse functions
+//--------------------------------------------------------------------------------------------
+function setupPlayKeyButton(freqInputId, ctlInputId, volInputId) {
+    const ctlInput = document.getElementById(ctlInputId);
+    const volInput = document.getElementById(volInputId);
+    const keyboardDiv = document.getElementById("keyboardKeys");
+
+    for (let i = 1; i <= 31; i++) {
+        const key = document.createElement("button");
+        key.textContent = i;
+        key.className = "keyboardKey";
+
+        // Key down: start playing
+        key.addEventListener("mousedown", () => playTone(i));
+        key.addEventListener("touchstart", e => { e.preventDefault(); playTone(i); });
+
+        // Key up / leave: stop playing
+        key.addEventListener("mouseup", stopTone);
+        key.addEventListener("mouseleave", stopTone);
+        key.addEventListener("touchend", stopTone);
+
+        keyboardDiv.appendChild(key);
+    }
+
+    function playTone(keyNumber) {
+        const tone = {
+            frequency: keyNumber,
+            control: parseInt(ctlInput.value),
+            volume: parseInt(volInput.value)
+        };
+
+        // Generate buffer once (repeated small buffer for smoother sound)
+        const buffer = [];
+        for (let j = 0; j < 50; j++) buffer.push(tone);
+
+        if (typeof window.updateSamples2 === "function") {
+            window.updateSamples2(JSON.stringify(buffer));
+        }
+    }
+
+    function stopTone() {
+        if (typeof window.stopAudioFromGo === "function") {
+            window.stopAudioFromGo();
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------
 // Load Json Table
 //--------------------------------------------------------------------------------------------
 function loadTable(){ 
@@ -634,70 +696,6 @@ function showToast(msg){
   toast.className="show";
   setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
 }
-
-
-
-
-
-//TESTING PHASE.  Move above when good.
-//--------------------------------------------------------------------------------------------
-// Setup Keyboard listner and Do mouse functions
-//--------------------------------------------------------------------------------------------
-function setupPlayKeyButton(freqInputId, ctlInputId, volInputId) {
-    const ctlInput = document.getElementById(ctlInputId);
-    const volInput = document.getElementById(volInputId);
-    const keyboardDiv = document.getElementById("keyboardKeys");
-
-    let isHeld = false; // track key hold
-
-    for (let i = 1; i <= 31; i++) {
-        const key = document.createElement("button");
-        key.textContent = i;
-        key.className = "keyboardKey";
-
-        // Key down: start playing
-        key.addEventListener("mousedown", () => playTone(i));
-        key.addEventListener("touchstart", e => { e.preventDefault(); playTone(i); });
-
-        // Key up / leave: stop playing
-        key.addEventListener("mouseup", stopTone);
-        key.addEventListener("mouseleave", stopTone);
-        key.addEventListener("touchend", stopTone);
-
-        keyboardDiv.appendChild(key);
-    }
-
-    function playTone(keyNumber) {
-        if (isHeld) return;
-        isHeld = true;
-
-        const tone = {
-            frequency: keyNumber,
-            control: parseInt(ctlInput.value),
-            volume: parseInt(volInput.value)
-        };
-
-        // Generate buffer once (repeated small buffer for smoother sound)
-        const buffer = [];
-        for (let j = 0; j < 50; j++) buffer.push(tone);
-
-        if (typeof window.updateSamples2 === "function") {
-            window.updateSamples2(JSON.stringify(buffer));
-        }
-    }
-
-    function stopTone() {
-        if (!isHeld) return;
-        isHeld = false;
-
-        if (typeof window.stopAudioFromGo === "function") {
-            window.stopAudioFromGo();
-        }
-    }
-}
-
-
-
 </script>
 
 <script>
