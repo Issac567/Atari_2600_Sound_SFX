@@ -61,7 +61,7 @@ button.stopBtn:hover { background-color:#616161; }
 /*================================================================================*/
 /* TABLE: Styles for table layout */
 /*================================================================================*/
-table { border-collapse:collapse; margin:10px auto; width:95%; background-color:#2b2b2b; }
+table { border-collapse:collapse; margin:10px auto; width:97%; background-color:#2b2b2b; }
 th, td { border:1px solid #555; padding:5px 10px; text-align:center; }
 th { background-color:#3a3a3a; }
 
@@ -124,7 +124,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 /*================================================================================*/
 /* KEYBOARD: Styles for Keyboard Panel layout */
 /*================================================================================*/
-#keyboardPanel { width: 90%; height: 120px; margin: 20px auto 40px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+#keyboardPanel { width: 95%; height: 120px; margin: 20px auto 20px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 
 /* Keyboard title */
 #keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
@@ -149,6 +149,14 @@ tr.drag-over { border:2px dashed #ffcc00; }
 
 
 
+/*================================================================================*/
+/* PAYPAL: Styles for Pay Pal Panel layout */
+/*================================================================================*/
+#paypalDonatePanel { margin-top: 20px; text-align: center; }
+
+/* Styles for PayPal button */
+.paypalButton { display: inline-block; background-color: #0070BA; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s; }
+.paypalButton:hover { background-color: #005C99; /* Darker blue on hover */ }
 
 
 
@@ -315,10 +323,36 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <div id="toast"></div>
 
+
+
+
+
+
+
+<!-- Testing Phase -->
+<!-- ======================================= -->
+<!-- This is a Paypal Donation  -->
+<!-- ======================================= -->
+<div class="panelContainer">
+  <!-- PayPal Donate Panel -->
+  <div class="panel" id="paypalDonatePanel">
+    <h3>Support Atari 2600 SFX Editor</h3>
+    <p>Every little bit helps keep this project alive!</p>
+    <a href="https://www.paypal.com/donate/?business=TXDQNPWL3YQPE&no_recurring=1&item_name=Support+my+work+%E2%80%94+every+little+bit+helps&currency_code=USD" target="_blank" class="paypalButton">
+        Donate with PayPal
+    </a>
+  </div>
+</div>
+
+
+
+
+
+
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 2.02</div>
+<div id="versionLabel">Version 2.03</div>
 
 <script src="wasm_exec.js"></script>
 
