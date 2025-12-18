@@ -18,6 +18,32 @@ h1 { text-align: center; margin: 20px 0; }
 .panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
 
 /*================================================================================*/
+/* KEYBOARD: Styles for Keyboard Panel layout */
+/*================================================================================*/
+#keyboardPanel { width: 95%; height: 120px; margin: 20px auto 20px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+
+/* Keyboard title */
+#keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+
+/* Keyboard keys container */
+#keyboardKeys { display: flex; justify-content: flex-start; gap: 2px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 2px; padding-right: 2px; }
+
+/* Optional: style scrollbar */
+#keyboardKeys::-webkit-scrollbar { height: 6px; }
+#keyboardKeys::-webkit-scrollbar-thumb { background: #aaa; border-radius: 3px; }
+
+/* Individual keys */
+#keyboardKeys button { flex: 1 1 0; min-width: 30px; height: 60px; margin: 2px 1px; border: 1px solid #555; border-radius: 4px; background: #eee; color: #111; font-weight: bold; cursor: pointer; user-select: none; text-align: center; transition: background 0.1s, transform 0.05s; }
+
+/* Key press / hover feedback */
+#keyboardKeys button:hover { background: #ddd; }
+#keyboardKeys button:active { background: #ccc; transform: scale(0.95); }
+
+/* Responsive adjustments */
+@media (max-width: 800px) { #keyboardKeys button { height: 50px; font-size: 0.9rem; } }
+@media (max-width: 500px) { #keyboardKeys button { height: 40px; font-size: 0.8rem; } }
+
+/*================================================================================*/
 /* STEP PARAMETERS: Styles for Step Parameters Panel layout */
 /*================================================================================*/
 #stepPanel { width: 460px; height: 220px;}
@@ -112,44 +138,6 @@ button.insertBtn:hover { background-color:#1E88E5; }
 tr.drag-over { border:2px dashed #ffcc00; }
 
 /*================================================================================*/
-/* VERSION LABEL: Style for version label at the bottom of the editor */
-/*================================================================================*/
-#versionLabel { text-align: center; margin: 20px 0; color: #888; font-size: 14px; font-style: italic; }
-
-
-
-
-
-/* Testing PHASE */
-/*================================================================================*/
-/* KEYBOARD: Styles for Keyboard Panel layout */
-/*================================================================================*/
-#keyboardPanel { width: 95%; height: 120px; margin: 20px auto 20px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
-
-/* Keyboard title */
-#keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
-
-/* Keyboard keys container */
-#keyboardKeys { display: flex; justify-content: flex-start; gap: 2px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 2px; padding-right: 2px; }
-
-/* Optional: style scrollbar */
-#keyboardKeys::-webkit-scrollbar { height: 6px; }
-#keyboardKeys::-webkit-scrollbar-thumb { background: #aaa; border-radius: 3px; }
-
-/* Individual keys */
-#keyboardKeys button { flex: 1 1 0; min-width: 30px; height: 60px; margin: 2px 1px; border: 1px solid #555; border-radius: 4px; background: #eee; color: #111; font-weight: bold; cursor: pointer; user-select: none; text-align: center; transition: background 0.1s, transform 0.05s; }
-
-/* Key press / hover feedback */
-#keyboardKeys button:hover { background: #ddd; }
-#keyboardKeys button:active { background: #ccc; transform: scale(0.95); }
-
-/* Responsive adjustments */
-@media (max-width: 800px) { #keyboardKeys button { height: 50px; font-size: 0.9rem; } }
-@media (max-width: 500px) { #keyboardKeys button { height: 40px; font-size: 0.8rem; } }
-
-
-
-/*================================================================================*/
 /* PAYPAL: Styles for Pay Pal Panel layout */
 /*================================================================================*/
 #paypalDonatePanel { margin-top: 20px; text-align: center; }
@@ -158,14 +146,24 @@ tr.drag-over { border:2px dashed #ffcc00; }
 .paypalButton { display: inline-block; background-color: #0070BA; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s; }
 .paypalButton:hover { background-color: #005C99; /* Darker blue on hover */ }
 
-
-
+/*================================================================================*/
+/* VERSION LABEL: Style for version label at the bottom of the editor */
+/*================================================================================*/
+#versionLabel { text-align: center; margin: 20px 0; color: #888; font-size: 14px; font-style: italic; }
 
 </style>
 </head>
 <body>
 
 <h1>Atari 2600 SFX Editor with TIA Sound Generator</h1>
+
+<!-- ======================================= -->
+<!-- This is a Keyboard -->
+<!-- ======================================= -->
+<div class="panel" id="keyboardPanel">
+  <h3>Keyboard (Hold Down)</h3>
+  <div id="keyboardKeys"></div>
+</div>
 
 <!-- ======================================= -->
 <!-- This is a Step Parameters Panel -->
@@ -268,14 +266,6 @@ tr.drag-over { border:2px dashed #ffcc00; }
 </div>
 
 <!-- ======================================= -->
-<!-- This is a Keyboard -->
-<!-- ======================================= -->
-<div class="panel" id="keyboardPanel">
-  <h3>Keyboard (Hold Down)</h3>
-  <div id="keyboardKeys"></div>
-</div>
-
-<!-- ======================================= -->
 <!-- This is a Table Headers -->
 <!-- ======================================= -->
 <table id="tonesTable">
@@ -352,7 +342,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 2.03</div>
+<div id="versionLabel">Version 2.04</div>
 
 <script src="wasm_exec.js"></script>
 
@@ -377,6 +367,7 @@ setupStepInputsListener();
 // Call this once after page loads
 setupPlayKeyButton("freq", "ctl", "vol");
 
+ //console.log("Hello, world!");
 
 //--------------------------------------------------------------------------------------------
 // When "Add Steps at end" Button is pressed, Step Parameters inputs will load into table by Add Steps at end button
@@ -556,7 +547,7 @@ function updateToneFromTable(){
 // When "Play" button in Table is pressed, this will play the selected step
 //-------------------------------------------------------------------------------------------- 
 function playStep(index){
-   stopAudioFromGo();
+  stopAudioFromGo();
   const step=tonesArray[index];
   if(!step) return;
   const expanded=[];
@@ -600,7 +591,7 @@ function saveTable(){
 }
 
 //--------------------------------------------------------------------------------------------
-// Setup Keyboard listner and Do mouse functions
+// Setup Keyboard listener and Do mouse functions
 //--------------------------------------------------------------------------------------------
 function setupPlayKeyButton(freqInputId, ctlInputId, volInputId) {
     const ctlInput = document.getElementById(ctlInputId);
