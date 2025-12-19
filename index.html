@@ -312,14 +312,6 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- This is a toast -->
 <!-- ======================================= -->
 <div id="toast"></div>
-
-
-
-
-
-
-
-<!-- Testing Phase -->
 <!-- ======================================= -->
 <!-- This is a Paypal Donation  -->
 <!-- ======================================= -->
@@ -334,15 +326,10 @@ tr.drag-over { border:2px dashed #ffcc00; }
   </div>
 </div>
 
-
-
-
-
-
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 2.04</div>
+<div id="versionLabel">Version 2.05</div>
 
 <script src="wasm_exec.js"></script>
 
@@ -365,7 +352,7 @@ const ctlOptions = [
 setupStepInputsListener();
 
 // Call this once after page loads
-setupPlayKeyButton("freq", "ctl", "vol");
+setupKeyboardPlayListener();
 
  //console.log("Hello, world!");
 
@@ -501,8 +488,9 @@ function setupStepInputsListener() {
 
             // Only play if "Play on Change" is checked
             if(document.getElementById("playOnChange").checked){
-                stopAudioFromGo();
-
+                if (typeof window.stopAudio === "function") {
+                  window.stopAudio();
+                }
                 if(typeof window.updateSamples === "function"){
                     window.updateSamples(JSON.stringify(expanded, null, 4));
                     if(typeof window.playSample === "function") window.playSample(0);
@@ -513,10 +501,66 @@ function setupStepInputsListener() {
 }
 
 //--------------------------------------------------------------------------------------------
+// Setup Keyboard listener and Do mouse/touch functions.  Creates 31 Buttons, too
+//--------------------------------------------------------------------------------------------
+function setupKeyboardPlayListener() {
+    const keyboardDiv = document.getElementById("keyboardKeys");
+
+    for (let i = 1; i <= 31; i++) {
+        const key = document.createElement("button");
+        key.textContent = i;
+        key.className = "keyboardKey";
+
+        // Key down: start playing
+        key.addEventListener("mousedown", () => playTone(i));
+        key.addEventListener("touchstart", e => { e.preventDefault(); playTone(i); });
+
+        // Key up / leave: stop playing
+        key.addEventListener("mouseup", stopTone);
+        key.addEventListener("mouseleave", stopTone);
+        key.addEventListener("touchend", stopTone);
+
+        keyboardDiv.appendChild(key);
+    }
+
+    function playTone(keyNumber) {
+        const ctl  = parseInt(document.getElementById("ctl").value);
+        const vol  = parseInt(document.getElementById("vol").value);
+
+        const tone = {
+            frequency: keyNumber,
+            control: parseInt(ctl),
+            volume: parseInt(vol)
+        };
+
+        // Generate buffer once (repeated small buffer for smoother sound)
+        const buffer = [];
+        for (let j = 0; j < 50; j++) buffer.push(tone);
+        if (typeof window.stopAudio === "function") {
+          window.stopAudio();
+        }
+        if (typeof window.updateSamples === "function") {
+            window.updateSamples(JSON.stringify(buffer));
+        }
+        if (typeof window.playSample === "function") {
+            window.playSample(0);
+        }
+    }
+
+    function stopTone() {
+        if (typeof window.stopAudio === "function") {
+            window.stopAudio();
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------
 // When "Play All" Button is pressed, this will play all steps from table in sequence
 //--------------------------------------------------------------------------------------------
 function playAllatTable(){
-  stopAudioFromGo();
+  if (typeof window.stopAudio === "function") {
+     window.stopAudio();
+   }
   updateToneFromTable();
   if(typeof window.updateSamples==="function"){
     const expanded=[];
@@ -547,7 +591,9 @@ function updateToneFromTable(){
 // When "Play" button in Table is pressed, this will play the selected step
 //-------------------------------------------------------------------------------------------- 
 function playStep(index){
-  stopAudioFromGo();
+  if (typeof window.stopAudio === "function") {
+    window.stopAudio();
+  }
   const step=tonesArray[index];
   if(!step) return;
   const expanded=[];
@@ -562,7 +608,9 @@ function playStep(index){
 // Stop audio in Main.Go call
 //--------------------------------------------------------------------------------------------
 function stopAudio(){ 
-  stopAudioFromGo(); 
+  if (typeof window.stopAudio === "function") {
+     window.stopAudio();
+  }
 }
 
 //--------------------------------------------------------------------------------------------
@@ -588,54 +636,6 @@ function saveTable(){
   a.click(); 
   URL.revokeObjectURL(url); 
   showToast("Table saved!"); 
-}
-
-//--------------------------------------------------------------------------------------------
-// Setup Keyboard listener and Do mouse functions
-//--------------------------------------------------------------------------------------------
-function setupPlayKeyButton(freqInputId, ctlInputId, volInputId) {
-    const ctlInput = document.getElementById(ctlInputId);
-    const volInput = document.getElementById(volInputId);
-    const keyboardDiv = document.getElementById("keyboardKeys");
-
-    for (let i = 1; i <= 31; i++) {
-        const key = document.createElement("button");
-        key.textContent = i;
-        key.className = "keyboardKey";
-
-        // Key down: start playing
-        key.addEventListener("mousedown", () => playTone(i));
-        key.addEventListener("touchstart", e => { e.preventDefault(); playTone(i); });
-
-        // Key up / leave: stop playing
-        key.addEventListener("mouseup", stopTone);
-        key.addEventListener("mouseleave", stopTone);
-        key.addEventListener("touchend", stopTone);
-
-        keyboardDiv.appendChild(key);
-    }
-
-    function playTone(keyNumber) {
-        const tone = {
-            frequency: keyNumber,
-            control: parseInt(ctlInput.value),
-            volume: parseInt(volInput.value)
-        };
-
-        // Generate buffer once (repeated small buffer for smoother sound)
-        const buffer = [];
-        for (let j = 0; j < 50; j++) buffer.push(tone);
-
-        if (typeof window.updateSamples2 === "function") {
-            window.updateSamples2(JSON.stringify(buffer));
-        }
-    }
-
-    function stopTone() {
-        if (typeof window.stopAudioFromGo === "function") {
-            window.stopAudioFromGo();
-        }
-    }
 }
 
 //--------------------------------------------------------------------------------------------
