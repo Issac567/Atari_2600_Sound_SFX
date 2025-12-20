@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Atari 2600 SFX Editor</title>
+<style>
+
+/*================================================================================*/
+/* General body and header styles */
+/*================================================================================*/
+body { background-color: #1e1e1e; color: #f0f0f0; font-family: Arial, sans-serif; margin:0; padding:0; }
+h1 { text-align: center; margin: 20px 0; }
+
+/*================================================================================*/
+/* Styles for panel container and individual panels */
+/*================================================================================*/
+.panelContainer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
+.panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
+
+/*================================================================================*/
+/* KEYBOARD: Styles for Keyboard Panel layout */
+/*================================================================================*/
+#keyboardPanel { width: 95%; height: 120px; margin: 20px auto 20px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+
+/* Keyboard title */
+#keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+
+/* Keyboard keys container */
+#keyboardKeys { display: flex; justify-content: flex-start; gap: 2px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 2px; padding-right: 2px; }
+
+/* Optional: style scrollbar */
+#keyboardKeys::-webkit-scrollbar { height: 6px; }
+#keyboardKeys::-webkit-scrollbar-thumb { background: #aaa; border-radius: 3px; }
+
+/* Individual keys */
+#keyboardKeys button { flex: 1 1 0; min-width: 30px; height: 60px; margin: 2px 1px; border: 1px solid #555; border-radius: 4px; background: #eee; color: #111; font-weight: bold; cursor: pointer; user-select: none; text-align: center; transition: background 0.1s, transform 0.05s; }
+
+/* Key press / hover feedback */
+#keyboardKeys button:hover { background: #ddd; }
+#keyboardKeys button:active { background: #ccc; transform: scale(0.95); }
+
+/* Responsive adjustments */
+@media (max-width: 800px) { #keyboardKeys button { height: 50px; font-size: 0.9rem; } }
+@media (max-width: 500px) { #keyboardKeys button { height: 40px; font-size: 0.8rem; } }
+
+/*================================================================================*/
+/* STEP PARAMETERS: Styles for Step Parameters Panel layout */
+/*================================================================================*/
+#stepPanel { width: 460px; height: 220px;}
+
+/* Styles for headings, labels, textboxes and Dropdown */
+.panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
+.inputRow { display:flex; align-items:center; margin-bottom:10px; }
+.inputRow label { flex:0 0 220px; text-align:right; margin-right:10px; }
+.inputRow input[type="number"], .inputRow select { flex:1 1 auto; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; max-width:200px; }
+.inputRow select {max-width:210px; }
+
+/* Styles for "Add Steps at end" Button */
+button.addStepsBtn { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
+button.addStepsBtn:hover { background-color:#1E88E5; }
+
+/*================================================================================*/
+/* PLAYBACK: Styles for Playback Management Panel layout */
+/*================================================================================*/
+#playbackPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
+
+/* Styles for "Play All" Button */
+button.playAllBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
+button.playAllBtn:hover { background-color:#45A049; }
+
+/* Styles for "Stop" Button */
+button.stopBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
+button.stopBtn:hover { background-color:#616161; }
+
+/* Stlyes for "Play on Change" checkbox */
+.playOnChangeRow { width: 160px; display: flex; justify-content: center; margin-bottom: 15px; }
+
+/*================================================================================*/
+/* TABLE MANAGEMENT: Styles for Table Management Panel layout */
+/*================================================================================*/
+#tableManagementPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
+
+/* Styles for All 3 Buttons */
+#tableManagementPanel .uniformMangBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+#tableManagementPanel .uniformMangBtn:hover { background-color:#616161; }
+
+/*================================================================================*/
+/* TABLE: Styles for table layout */
+/*================================================================================*/
+table { border-collapse:collapse; margin:10px auto; width:97%; background-color:#2b2b2b; }
+th, td { border:1px solid #555; padding:5px 10px; text-align:center; }
+th { background-color:#3a3a3a; }
+
+/* Styles for Dropdown and Textboxes */
+#tonesTable select, #tonesTable input[type="number"] { background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; }
+#tonesTable select { width:230px; }
+#tonesTable input[type="number"] { width:80px; }
+
+/* Styles for the "Play" Button  */
+button.playBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
+button.playBtn:hover { background-color:#45A049; }
+
+/* Styles for the "Delete" Button  */
+button.deleteBtn { background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
+button.deleteBtn:hover { background-color:#D32F2F; }
+
+/* Styles for "Insert Before"  */
+button.insertBtn { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
+button.insertBtn:hover { background-color:#1E88E5; }
+
+/*================================================================================*/
+/* FREQ/VOL LABEL: Styles for Frequency and Volume label at bottom */
+/*================================================================================*/
+#frequencyTableLabel, #controlVolumeTableLabel { margin-top:20px; text-align:center; color:#ffcc00; }
+
+/*================================================================================*/
+/* COPY TABLE: Styles for Copy Management Panel layout */
+/*================================================================================*/
+#copyTablesPanel { width:260px; margin-top:0px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
+
+/* Styles for All 2 buttons  */
+#copyTablesPanel .uniformCopyBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+#copyTablesPanel .uniformCopyBtn:hover { background-color:#616161; }
+
+/*================================================================================*/
+/* TOAST: Styles for toast notifications */
+/*================================================================================*/
+#toast { visibility:hidden; min-width:200px; background-color:#333; color:#fff; text-align:center; border-radius:4px; padding:10px; position:fixed; z-index:100; left:50%; bottom:30px; transform:translateX(-50%); font-size:16px; }
+#toast.show { visibility:visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+/* Fade-in animation for toast */
+@keyframes fadein { from {bottom:0; opacity:0;} to {bottom:30px; opacity:1;} }
+/* Fade-out animation for toast */
+@keyframes fadeout { from {bottom:30px; opacity:1;} to {bottom:0; opacity:0;} }
+
+/*================================================================================*/
+/* DRAG OVER: Style for table row being dragged over */
+/*================================================================================*/
+tr.drag-over { border:2px dashed #ffcc00; }
+
+/*================================================================================*/
+/* PAYPAL: Styles for Pay Pal Panel layout */
+/*================================================================================*/
+#paypalDonatePanel { margin-top: 20px; text-align: center; }
+
+/* Styles for PayPal button */
+.paypalButton { display: inline-block; background-color: #0070BA; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s; }
+.paypalButton:hover { background-color: #005C99; /* Darker blue on hover */ }
+
+/*================================================================================*/
+/* VERSION LABEL: Style for version label at the bottom of the editor */
+/*================================================================================*/
+#versionLabel { text-align: center; margin: 20px 0; color: #888; font-size: 14px; font-style: italic; }
+
+</style>
+</head>
+<body>
+
+<h1>Atari 2600 SFX Editor with TIA Sound Generator</h1>
+
+<!-- ======================================= -->
+<!-- This is a Keyboard -->
+<!-- ======================================= -->
+<div class="panel" id="keyboardPanel">
+  <h3>Keyboard (Hold Down)</h3>
+  <div id="keyboardKeys"></div>
+</div>
+
+<!-- ======================================= -->
+<!-- This is a Step Parameters Panel -->
+<!-- ======================================= -->
+<div class="panelContainer">
+  <div class="panel" id="stepPanel">
+    <h3>Step Parameters</h3>
+  
+    <!-- This is a Control Dropbox -->
+    <div class="inputRow">
+      <label for="ctl">Control:</label>
+      <select id="ctl">
+        <option value="1">1 = Buzzy</option><option value="2">2 = Distortion</option>
+        <option value="3">3 = Flangy</option><option value="4">4 = Pure</option>
+        <option value="5">5 = Pure</option><option value="6" selected>6 = Between Pure/Buzzy</option>
+        <option value="7">7 = Reedy</option><option value="8">8 = White Noise</option>
+        <option value="9">9 = Reedy</option><option value="10">10 = Between Pure/Buzzy</option>
+        <option value="11">11 = Silent-ish</option><option value="12">12 = Low Pure</option>
+        <option value="13">13 = Low Pure</option><option value="14">14 = Electronic Low</option>
+        <option value="15">15 = Electronic Low</option>
+      </select>
+    </div>
+
+    <!-- This is a Frequency Textbox -->
+    <div class="inputRow">
+      <label for="freq">Frequency (1=high, 31=low):</label>
+      <input id="freq" type="number" min="1" max="31" value="4">
+    </div>
+
+    <!-- This is a Volume Textbox -->
+    <div class="inputRow">
+      <label for="vol">Volume (0=off, 15=high):</label>
+      <input id="vol" type="number" min="0" max="15" value="10">
+    </div>
+
+    <!-- This is a Repeat Textbox -->
+    <div class="inputRow">
+      <label for="repeat">Repeat (1-30):</label>
+      <input id="repeat" type="number" min="1" max="30" value="1">
+    </div>
+
+    <!-- This is a Add StepButton -->
+    <button id="addStepsBtn" onclick="btnAddStepEnd()" class="addStepsBtn">
+      Add Steps at End
+    </button>
+
+  </div>
+
+  <!-- ======================================= -->
+  <!-- This is a Playback Panel -->
+   <!-- ======================================= -->
+  <div class="panel" id="playbackPanel">
+    <h3>Playback</h3>
+    
+    <!-- This is a Play All Button -->
+    <button id="playAllBtn" onclick="btnplayAllSequence()" class="playAllBtn">
+      Play All
+    </button>
+
+    <!-- This is a Stop Button -->
+    <button id="stopBtn" onclick="stopAudio()" class="stopBtn">
+      Stop
+    </button>
+
+    <!-- This is a Checkbox Play on Change  -->
+    <div class="playOnChangeRow">
+      <label class="customCheckbox">
+        <input type="checkbox" id="playOnChange" checked>
+        <span class="checkmark"></span>
+        Play on Change
+      </label>
+    </div>
+
+  </div>
+
+  <!-- ======================================= -->
+  <!-- This is a Table Management Panel -->
+  <!-- ======================================= -->
+  <div class="panel" id="tableManagementPanel">
+    <h3>Table Management</h3>
+
+    <!-- This is a New Table Button -->
+    <button id="newTableBtn" class="uniformMangBtn" onclick="newTable()">
+      New Table
+    </button>
+
+    <!-- This is a New Save Button -->
+    <button id="saveTableBtn" class="uniformMangBtn" onclick="saveTable()">
+      Save Table
+    </button>
+
+    <!-- This is a Load Table Button -->
+    <button id="loadTableBtn" class="uniformMangBtn" onclick="loadTable()">
+      Load Table
+    </button>
+
+    <input type="file" id="loadFileInput" accept=".json" style="display:none" />
+
+  </div>
+</div>
+
+<!-- ======================================= -->
+<!-- This is a Table Headers -->
+<!-- ======================================= -->
+<table id="tonesTable">
+  <thead>
+    <tr>
+      <th>#</th><th>Control</th><th>Frequency</th><th>Volume</th>
+      <th>Repeat</th><th>Play</th><th>Delete</th><th>Insert Before</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- ======================================= -->
+<!-- This is a Frequency Label at bottom -->
+<!-- ======================================= -->
+<div id="frequencyTableLabel">Frequency Table:</div>
+
+<!-- ======================================= -->
+<!-- This is a Control/Volume Label at bottom -->
+<!-- ======================================= -->
+<div id="controlVolumeTableLabel">Control/Volume Table:</div>
+
+<!-- ======================================= -->
+<!-- This is a Copy Table Panel -->
+<!-- ======================================= -->
+<div class="panelContainer" style="justify-content:center; margin-top:20px;">
+  <div class="panel" id="copyTablesPanel">
+    <h3>Copy Tables</h3>
+
+    <!-- This is a Copy Freq Button -->
+    <button id="copyFreqBtn" class="uniformCopyBtn" onclick="copyFrequency()">
+      Copy Frequency Table
+    </button>
+
+    <!-- This is a Control/Vol Button -->
+    <button id="copyCtlVolBtn" class="uniformCopyBtn" onclick="copyControlVolume()">
+      Copy Control/Volume Table
+    </button>
+
+  </div>
+</div>
+
+<!-- ======================================= -->
+<!-- This is a toast -->
+<!-- ======================================= -->
+<div id="toast"></div>
+
+<!-- ======================================= -->
+<!-- This is a Paypal Donation  -->
+<!-- ======================================= -->
+<div class="panelContainer">
+  <!-- PayPal Donate Panel -->
+  <div class="panel" id="paypalDonatePanel">
+    <h3>Support Atari 2600 SFX Editor</h3>
+    <p>Every little bit helps keep this project alive!</p>
+    <a href="https://www.paypal.com/donate/?business=TXDQNPWL3YQPE&no_recurring=1&item_name=Support+my+work+%E2%80%94+every+little+bit+helps&currency_code=USD" target="_blank" class="paypalButton">
+        Donate with PayPal
+    </a>
+  </div>
+</div>
+
+<!-- ======================================= -->
+<!-- This is a Version label -->
+<!-- ======================================= -->
+<div id="versionLabel">Version 2.06</div>
+
+<script src="wasm_exec.js"></script>
+
+<script>
+
+//--------------------------------------------------------------------------------------------
+// Initial entry in script
+//--------------------------------------------------------------------------------------------
+let tonesArray = [];
+
+const ctlOptions = [
+  {v:1,l:"1 = Buzzy"}, {v:2,l:"2 = Distortion"}, {v:3,l:"3 = Flangy"},
+  {v:4,l:"4 = Pure"}, {v:5,l:"5 = Pure"}, {v:6,l:"6 = Between Pure/Buzzy"},
+  {v:7,l:"7 = Reedy"}, {v:8,l:"8 = White Noise"}, {v:9,l:"9 = Reedy"},
+  {v:10,l:"10 = Between Pure/Buzzy"}, {v:11,l:"11 = Silent-ish"}, {v:12,l:"12 = Low Pure"},
+  {v:13,l:"13 = Low Pure"}, {v:14,l:"14 = Electronic Low"}, {v:15,l:"15 = Electronic Low"}
+];
+
+// One time Setup call 
+setupStepPanelInputsListener();
+
+// One time Setup call 
+setupKeyboardButtonListener();
+
+ //console.log("Hello, world!");
+
+//--------------------------------------------------------------------------------------------
+// When "Add Steps at end" Button is pressed, Step Parameters inputs will load into table by Add Steps at end button
+//--------------------------------------------------------------------------------------------
+function btnAddStepEnd(){
+  const freq=parseInt(document.getElementById("freq").value);
+  const vol=parseInt(document.getElementById("vol").value);
+  const ctl=parseInt(document.getElementById("ctl").value);
+  const repeat=parseInt(document.getElementById("repeat").value)||1;
+  tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
+  updateTable();
+}
+
+//--------------------------------------------------------------------------------------------
+// This updates table with tones values
+//--------------------------------------------------------------------------------------------
+function updateTable(){
+  const tbody=document.querySelector("#tonesTable tbody");
+  tbody.innerHTML="";
+  tonesArray.forEach((tone,index)=>{
+    const row=tbody.insertRow();
+    row.setAttribute("draggable","true");
+    row.dataset.index=index;
+
+    row.addEventListener("dragstart",e=>{ e.dataTransfer.setData("text/plain",index); e.currentTarget.style.opacity="0.5"; });
+    row.addEventListener("dragend",e=>{ e.currentTarget.style.opacity="1"; });
+    row.addEventListener("dragover",e=>{ e.preventDefault(); row.classList.add("drag-over"); });
+    row.addEventListener("dragleave",e=>{ row.classList.remove("drag-over"); });
+    row.addEventListener("drop",e=>{
+      e.preventDefault(); row.classList.remove("drag-over");
+      const draggedIndex=parseInt(e.dataTransfer.getData("text/plain"));
+      const targetIndex=parseInt(row.dataset.index);
+      if(draggedIndex===targetIndex) return;
+      const draggedTone=tonesArray[draggedIndex];
+      tonesArray.splice(draggedIndex,1);
+      tonesArray.splice(targetIndex,0,draggedTone);
+      updateTable();
+    });
+
+    row.insertCell().textContent=index+1;
+
+    const ctlCell=row.insertCell();
+    const ctlSelect=document.createElement("select");
+    ctlOptions.forEach(opt=>{ const o=document.createElement("option"); o.value=opt.v; o.text=opt.l; if(opt.v===tone.control) o.selected=true; ctlSelect.appendChild(o); });
+    ctlCell.appendChild(ctlSelect);
+
+    const freqCell=row.insertCell();
+    const freqInput=document.createElement("input"); freqInput.type="number"; freqInput.min=1; freqInput.max=31; freqInput.value=tone.frequency; freqCell.appendChild(freqInput);
+
+    const volCell=row.insertCell();
+    const volInput=document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volCell.appendChild(volInput);
+
+    const repeatCell=row.insertCell();
+    const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=30; repeatInput.value=tone.repeat||1; repeatCell.appendChild(repeatInput);
+    
+    freqInput.onchange = () => updateToneTableAndPlay(index); ctlSelect.onchange = () => updateToneTableAndPlay(index); volInput.onchange = () => updateToneTableAndPlay(index); repeatInput.onchange = () => updateToneTableAndPlay(index);
+
+    const playCell=row.insertCell();
+    const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; 
+    playBtn.onclick=()=>playStep(index); 
+      playCell.appendChild(playBtn);
+
+    const delCell=row.insertCell();
+    const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="deleteBtn"; 
+    delBtn.onclick=()=>{ 
+      tonesArray.splice(index,1); 
+      updateTable(); 
+    }; 
+      delCell.appendChild(delBtn);
+
+    const insertCell=row.insertCell();
+    const insertBtn=document.createElement("button"); insertBtn.textContent="Insert Before"; insertBtn.className="insertBtn";
+    insertBtn.onclick=()=>{
+      const freq=parseInt(document.getElementById("freq").value);
+      const ctl=parseInt(document.getElementById("ctl").value);
+      const vol=parseInt(document.getElementById("vol").value);
+      const repeat=parseInt(document.getElementById("repeat").value)||1;
+      tonesArray.splice(index,0,{frequency:freq,control:ctl,volume:vol,repeat});
+      updateTable();
+    };
+      insertCell.appendChild(insertBtn);
+  });
+
+  Array.from(tbody.rows).forEach((row,idx)=>row.dataset.index=idx);
+  updateCopyLabels();
+}
+
+//--------------------------------------------------------------------------------------------
+// This plays the sound when Inputs values are changed in Table (.onchange event declared in updateTable)
+//--------------------------------------------------------------------------------------------
+function updateToneTableAndPlay(index) {
+    const row = document.querySelector("#tonesTable tbody").rows[index];
+    if (!row) return;
+
+    const ctl = parseInt(row.cells[1].querySelector("select").value);
+    const freq = parseInt(row.cells[2].querySelector("input").value);
+    const vol = parseInt(row.cells[3].querySelector("input").value);
+    const repeat = parseInt(row.cells[4].querySelector("input").value) || 1;
+
+    // Update only this step
+    tonesArray[index] = { frequency: freq, control: ctl, volume: vol, repeat };
+
+    updateCopyLabels();
+
+    // Check if "Play on Change" is enabled
+    const playOnChange = document.getElementById("playOnChange").checked;
+    if (playOnChange) {
+        playStep(index);
+    }
+}
+//--------------------------------------------------------------------------------------------
+// Setup Step Parameters Panel inputs listener and Updates Samples and Plays the sound when values are changed
+//--------------------------------------------------------------------------------------------
+function setupStepPanelInputsListener() {
+    const stepInputs = ["freq","ctl","vol","repeat"].map(id => document.getElementById(id));
+
+    stepInputs.forEach(input => {
+        input.addEventListener("change", () => {
+            const freq = parseInt(document.getElementById("freq").value);
+            const ctl  = parseInt(document.getElementById("ctl").value);
+            const vol  = parseInt(document.getElementById("vol").value);
+            const repeat = parseInt(document.getElementById("repeat").value) || 1;
+
+            const buffer = [];
+            for(let i = 0; i < repeat; i++) {
+                buffer.push({frequency: freq, control: ctl, volume: vol});
+            }
+
+            updateCopyLabels();
+
+            // Only play if "Play on Change" is checked
+            if(document.getElementById("playOnChange").checked){
+                if (typeof window.stopAudio === "function") {
+                  window.stopAudio();
+                }
+                if(typeof window.updateSamples === "function"){
+                    //window.updateSamples(JSON.stringify(buffer, null, 4));
+                    window.updateSamples(JSON.stringify(buffer));
+                    if(typeof window.playSample === "function") window.playSample(0);
+                }
+            }
+        });
+    });
+}
+
+//--------------------------------------------------------------------------------------------
+// Setup Keyboard buttons listener with mouse/touch functions.  Creates 31 Buttons, too
+//--------------------------------------------------------------------------------------------
+function setupKeyboardButtonListener() {
+    const keyboardDiv = document.getElementById("keyboardKeys");
+
+    for (let i = 1; i <= 31; i++) {
+        const key = document.createElement("button");
+        key.textContent = i;
+        key.className = "keyboardKey";
+
+        // Key down: start playing
+        key.addEventListener("mousedown", () => playTone(i));
+        key.addEventListener("touchstart", e => { e.preventDefault(); playTone(i); });
+
+        // Key up / leave: stop playing
+        key.addEventListener("mouseup", stopTone);
+        key.addEventListener("mouseleave", stopTone);
+        key.addEventListener("touchend", stopTone);
+
+        keyboardDiv.appendChild(key);
+    }
+
+    function playTone(keyNumber) {
+        const ctl  = parseInt(document.getElementById("ctl").value);
+        const vol  = parseInt(document.getElementById("vol").value);
+
+        const tone = {
+            frequency: keyNumber,
+            control: parseInt(ctl),
+            volume: parseInt(vol)
+        };
+
+        // Generate buffer once (repeated small buffer for smoother sound)
+        const buffer = [];
+        for (let j = 0; j < 50; j++) buffer.push(tone);
+        if (typeof window.stopAudio === "function") {
+          window.stopAudio();
+        }
+        if (typeof window.updateSamples === "function") {
+            window.updateSamples(JSON.stringify(buffer));
+        }
+        if (typeof window.playSample === "function") {
+            window.playSample(0);
+        }
+    }
+
+    function stopTone() {
+        if (typeof window.stopAudio === "function") {
+            window.stopAudio();
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------
+// When "Play All" Button is pressed, this will play all steps from table in sequence
+//--------------------------------------------------------------------------------------------
+function btnplayAllSequence(){
+  if (typeof window.stopAudio === "function") {
+     window.stopAudio();
+   }
+  updateToneFromTable();
+  if(typeof window.updateSamples==="function"){
+    const buffer=[];
+    tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) buffer.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
+    //window.updateSamples(JSON.stringify(buffer,null,4));
+    window.updateSamples(JSON.stringify(buffer));
+    if(typeof window.playSample==="function") window.playSample(0);
+  }
+}
+
+//--------------------------------------------------------------------------------------------
+// This just adds the All Step Tones Values from Table to tonersArray (frequency, Volume, Control and Repeat) 
+//--------------------------------------------------------------------------------------------
+function updateToneFromTable(){
+  const tbody=document.querySelector("#tonesTable tbody");
+  tonesArray=[];
+  for(let i=0;i<tbody.rows.length;i++){
+    const row=tbody.rows[i];
+    const ctl  = parseInt(row.cells[1].querySelector("select").value);
+    const freq = parseInt(row.cells[2].querySelector("input").value);
+    const vol=parseInt(row.cells[3].querySelector("input").value);
+    const repeat=parseInt(row.cells[4].querySelector("input").value)||1;
+    tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
+  }
+  updateCopyLabels();
+}
+
+//--------------------------------------------------------------------------------------------
+// When "Play" button in Table is pressed, this will play the selected step
+//-------------------------------------------------------------------------------------------- 
+function playStep(index){
+  if (typeof window.stopAudio === "function") {
+    window.stopAudio();
+  }
+  const step=tonesArray[index];
+  if(!step) return;
+  const buffer=[];
+  for(let i=0;i<(step.repeat||1);i++) buffer.push({frequency:step.frequency,control:step.control,volume:step.volume});
+  if(typeof window.updateSamples==="function"){
+    //window.updateSamples(JSON.stringify(buffer,null,4));
+    window.updateSamples(JSON.stringify(buffer));
+    if(typeof window.playSample==="function") window.playSample(0);
+  }
+}
+
+//--------------------------------------------------------------------------------------------
+// Stop audio in Main.Go call
+//--------------------------------------------------------------------------------------------
+function stopAudio(){ 
+  if (typeof window.stopAudio === "function") {
+     window.stopAudio();
+  }
+}
+
+//--------------------------------------------------------------------------------------------
+// This will clear all table
+//--------------------------------------------------------------------------------------------
+function newTable(){ 
+  if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ 
+    tonesArray=[]; updateTable(); showToast("New table created"); 
+  } 
+}
+
+//--------------------------------------------------------------------------------------------
+// This will save tone values as Json (Frequency, COntrol, Volume and Repeat)
+// Remember Frequency, Control and Volume is only used to generate the tone
+//--------------------------------------------------------------------------------------------
+function saveTable(){ 
+  const dataStr=JSON.stringify(tonesArray,null,4); 
+  const blob=new Blob([dataStr],{type:"application/json"}); 
+  const url=URL.createObjectURL(blob); 
+  const a=document.createElement("a"); 
+  a.href=url; 
+  a.download="tones.json"; 
+  a.click(); 
+  URL.revokeObjectURL(url); 
+  showToast("Table saved!"); 
+}
+
+//--------------------------------------------------------------------------------------------
+// Load Json Table
+//--------------------------------------------------------------------------------------------
+function loadTable(){ 
+  document.getElementById("loadFileInput").click(); 
+}
+
+//--------------------------------------------------------------------------------------------
+// Load file routine
+//--------------------------------------------------------------------------------------------
+document.getElementById("loadFileInput").addEventListener("change", function(e){
+    const file = e.target.files[0]; 
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(ev){
+        try {
+            const loadedTones = JSON.parse(ev.target.result);
+            if (!Array.isArray(loadedTones)) throw new Error("Invalid JSON format");
+            tonesArray = loadedTones;
+            updateTable(); // ensure table refresh
+            showToast("Table loaded!");
+        } catch(err) {
+            showToast("Failed to load table: " + err.message);
+        }
+
+        // Reset file input so the same file can be loaded again
+        e.target.value = "";
+    };
+    reader.readAsText(file);
+});
+
+//--------------------------------------------------------------------------------------------
+// Copy Frequency Table to Clipboard
+//--------------------------------------------------------------------------------------------
+function copyFrequency(){ 
+    const text = document.getElementById("frequencyTableLabel").textContent;
+    const values = text.replace(/^Frequency Table:\s*/, "");
+    navigator.clipboard.writeText(values).then(()=>showToast("Frequency Table copied!")); 
+}
+
+//--------------------------------------------------------------------------------------------
+// Copy Control/Volume Table to Clipboard
+//--------------------------------------------------------------------------------------------
+function copyControlVolume(){ 
+    const text = document.getElementById("controlVolumeTableLabel").textContent;
+    const values = text.replace(/^Control\/Volume Table:\s*/, "");
+    navigator.clipboard.writeText(values).then(()=>showToast("Control/Volume Table copied!")); 
+}
+
+//--------------------------------------------------------------------------------------------
+// The export SFX table bytes textboxes.  2 textboxes below will be updated with fresh data
+//--------------------------------------------------------------------------------------------
+function updateCopyLabels(){
+  const expanded=[];
+  tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
+
+  const freqArray=["byte. 0"].concat(expanded.map(s=>s.frequency).reverse());
+  document.getElementById("frequencyTableLabel").textContent="Frequency Table: "+freqArray.join(", ");
+
+  const cvArray=["byte. 0"].concat(expanded.map(step=>{
+  const byte=((step.control&0x0F)<<4)|(step.volume&0x0F);
+    return "$"+byte.toString(16).padStart(2,"0").toUpperCase();
+  }).reverse());
+  document.getElementById("controlVolumeTableLabel").textContent="Control/Volume Table: "+cvArray.join(", ");
+
+// ✅ Check Atari limitation by total number of bytes
+  const totalBytes = expanded.length + 1; // +1 for the initial "byte. 0"
+  const maxBytes = 255;
+  if (totalBytes > maxBytes) {
+    showToast(`Warning: Total byte array exceeds Atari 2600 limitation! (${totalBytes}/${maxBytes} bytes)`);
+  }
+}
+
+//--------------------------------------------------------------------------------------------
+// Show Toast
+//--------------------------------------------------------------------------------------------
+function showToast(msg){
+  const toast=document.getElementById("toast");
+  toast.textContent=msg;
+  toast.className="show";
+  setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
+}
+</script>
+
+<script>
+  const go=new Go();
+  WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(result => { go.run(result.instance); });
+</script>
+
+</body>
+</html>
+
+
