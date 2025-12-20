@@ -20,7 +20,7 @@ h1 { text-align: center; margin: 20px 0; }
 /*================================================================================*/
 /* KEYBOARD: Styles for Keyboard Panel layout */
 /*================================================================================*/
-#keyboardPanel { width: 95%; height: 120px; margin: 20px auto 20px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+#keyboardPanel { width: 95%; height: 160px; margin: 20px auto 20px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 
 /* Keyboard title */
 #keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
@@ -42,6 +42,13 @@ h1 { text-align: center; margin: 20px 0; }
 /* Responsive adjustments */
 @media (max-width: 800px) { #keyboardKeys button { height: 50px; font-size: 0.9rem; } }
 @media (max-width: 500px) { #keyboardKeys button { height: 40px; font-size: 0.8rem; } }
+
+/* Keyboard Export/Import Layout Buttons */
+#keyboardFileButtons { display: flex; justify-content: center; gap: 16px; width: 100%; padding: 8px 0; margin-top: 10px; border-top: none; align-items: center; }
+
+/* Styles for "Import/Export Buttons"  */
+#keyboardFileButtons .uniformLoadSaveBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:4px; cursor:pointer; padding:6px 14px; cursor: pointer; text-align: center; transition: background 0.2s; width:140px; }
+#keyboardFileButtons .uniformLoadSaveBtn:hover { background-color: #616161; }
 
 /*================================================================================*/
 /* STEP PARAMETERS: Styles for Step Parameters Panel layout */
@@ -108,6 +115,9 @@ button.deleteBtn:hover { background-color:#D32F2F; }
 button.insertBtn { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
 button.insertBtn:hover { background-color:#1E88E5; }
 
+/* DRAG OVER: Style for table row being dragged over */
+tr.drag-over { border:2px dashed #ffcc00; }
+
 /*================================================================================*/
 /* FREQ/VOL LABEL: Styles for Frequency and Volume label at bottom */
 /*================================================================================*/
@@ -132,10 +142,6 @@ button.insertBtn:hover { background-color:#1E88E5; }
 /* Fade-out animation for toast */
 @keyframes fadeout { from {bottom:30px; opacity:1;} to {bottom:0; opacity:0;} }
 
-/*================================================================================*/
-/* DRAG OVER: Style for table row being dragged over */
-/*================================================================================*/
-tr.drag-over { border:2px dashed #ffcc00; }
 
 /*================================================================================*/
 /* PAYPAL: Styles for Pay Pal Panel layout */
@@ -161,8 +167,16 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- This is a Keyboard -->
 <!-- ======================================= -->
 <div class="panel" id="keyboardPanel">
-  <h3>Keyboard (Hold Down)</h3>
+  <h3>Keyboard (Hold Down Play + Draggable)</h3>
+
   <div id="keyboardKeys"></div>
+
+  <!-- Export / Import buttons INSIDE keyboard panel -->
+  <div id="keyboardFileButtons">
+      <button id="exportLayoutBtn" class="uniformLoadSaveBtn">Export Layout</button>
+      <button id="importLayoutBtn" class="uniformLoadSaveBtn">Import Layout</button>
+      <input type="file" id="importLayoutFile" accept=".json" hidden>
+  </div>
 </div>
 
 <!-- ======================================= -->
@@ -330,7 +344,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 2.06</div>
+<div id="versionLabel">Version 2.08</div>
 
 <script src="wasm_exec.js"></script>
 
@@ -467,7 +481,7 @@ function updateToneTableAndPlay(index) {
     }
 }
 //--------------------------------------------------------------------------------------------
-// Setup Step Parameters Panel inputs listener and Updates Samples and Plays the sound when values are changed
+// Setup Step Parameters Panel inputs listener and Plays the sound when values are changed
 //--------------------------------------------------------------------------------------------
 function setupStepPanelInputsListener() {
     const stepInputs = ["freq","ctl","vol","repeat"].map(id => document.getElementById(id));
@@ -501,59 +515,158 @@ function setupStepPanelInputsListener() {
     });
 }
 
+
 //--------------------------------------------------------------------------------------------
-// Setup Keyboard buttons listener with mouse/touch functions.  Creates 31 Buttons, too
+// Setup Keyboard buttons listener with mouse/touch/drag functions.  Creates 31 Buttons, too
 //--------------------------------------------------------------------------------------------
 function setupKeyboardButtonListener() {
     const keyboardDiv = document.getElementById("keyboardKeys");
 
+    const exportBtn = document.getElementById("exportLayoutBtn");
+    const importBtn = document.getElementById("importLayoutBtn");
+    const importFile = document.getElementById("importLayoutFile");
+
+    let draggedKey = null;
+
+    // Create 31 keyboard buttons
     for (let i = 1; i <= 31; i++) {
         const key = document.createElement("button");
         key.textContent = i;
-        key.className = "keyboardKey";
+        key.draggable = true;
 
-        // Key down: start playing
+        // --- Play tone ---
         key.addEventListener("mousedown", () => playTone(i));
-        key.addEventListener("touchstart", e => { e.preventDefault(); playTone(i); });
+        key.addEventListener("touchstart", e => {
+            e.preventDefault();
+            playTone(i);
+        });
 
-        // Key up / leave: stop playing
+        // --- Stop tone ---
         key.addEventListener("mouseup", stopTone);
         key.addEventListener("mouseleave", stopTone);
         key.addEventListener("touchend", stopTone);
 
+        // --- Drag logic ---
+        key.addEventListener("dragstart", e => {
+            draggedKey = key;
+            key.style.opacity = "0.5";
+        });
+
+        key.addEventListener("dragend", () => {
+            draggedKey = null;
+            key.style.opacity = "1";
+        });
+
+        key.addEventListener("dragover", e => e.preventDefault());
+
+        key.addEventListener("drop", e => {
+            e.preventDefault();
+            if (!draggedKey || draggedKey === key) return;
+
+            const keys = Array.from(keyboardDiv.children);
+            const draggedIndex = keys.indexOf(draggedKey);
+            const targetIndex = keys.indexOf(key);
+
+            if (draggedIndex < targetIndex) {
+                keyboardDiv.insertBefore(draggedKey, key.nextSibling);
+            } else {
+                keyboardDiv.insertBefore(draggedKey, key);
+            }
+        });
+
         keyboardDiv.appendChild(key);
     }
 
-    function playTone(keyNumber) {
-        const ctl  = parseInt(document.getElementById("ctl").value);
-        const vol  = parseInt(document.getElementById("vol").value);
+    // Export keyboard layout to file
+    exportBtn.addEventListener("click", () => {
+        const order = Array.from(keyboardDiv.children)
+            .map(btn => btn.textContent);
 
-        const tone = {
-            frequency: keyNumber,
-            control: parseInt(ctl),
-            volume: parseInt(vol)
-        };
+        const blob = new Blob(
+            [JSON.stringify(order, null, 2)],
+            { type: "application/json" }
+        );
 
-        // Generate buffer once (repeated small buffer for smoother sound)
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "keyboard-layout.json";
+        a.click();
+        URL.revokeObjectURL(url);
+
+         // Display toast message for saved layout
+        showToast("Keyboard layout saved!");
+    });
+
+    // Import keyboard layout from file
+    importBtn.addEventListener("click", () => {
+        importFile.click();
+    });
+
+    importFile.addEventListener("change", e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+          try {
+              const layout = JSON.parse(reader.result);
+
+              if (!Array.isArray(layout)) throw new Error("Invalid keyboard layout format");
+
+              // Get all buttons in keyboardDiv
+              const buttons = Array.from(keyboardDiv.children);
+
+              // Validate layout first
+              const newOrder = layout.map((numStr, idx) => {
+                const num = Number(numStr);
+                if (isNaN(num) || num < 1 || num > 31) {
+                    throw new Error(`Invalid keyboard button number at index ${idx}`);
+                }
+                const btn = buttons.find(b => Number(b.textContent) === num);
+                if (!btn) throw new Error(`Button ${num} not found`);
+                return btn;
+              });
+
+              // Clear and append in new order **only after validation**
+              keyboardDiv.innerHTML = "";
+              newOrder.forEach(btn => keyboardDiv.appendChild(btn));
+
+              showToast("Keyboard layout loaded!");
+          } catch (err) {
+              alert("Invalid keyboard layout file: " + err.message);
+              // No keys were removed, original keyboard stays intact
+          }
+      };
+      reader.readAsText(file);
+      e.target.value = "";
+    });
+
+
+    // Local helpers
+    function playTone(freq) {
+        const ctl = parseInt(document.getElementById("ctl").value);
+        const vol = parseInt(document.getElementById("vol").value);
+
         const buffer = [];
-        for (let j = 0; j < 50; j++) buffer.push(tone);
-        if (typeof window.stopAudio === "function") {
-          window.stopAudio();
+        for (let i = 0; i < 50; i++) {
+            buffer.push({ frequency: freq, control: ctl, volume: vol });
         }
-        if (typeof window.updateSamples === "function") {
-            window.updateSamples(JSON.stringify(buffer));
-        }
-        if (typeof window.playSample === "function") {
-            window.playSample(0);
-        }
+
+        if (window.stopAudio) window.stopAudio();
+        if (window.updateSamples) window.updateSamples(JSON.stringify(buffer));
+        if (window.playSample) window.playSample(0);
     }
 
     function stopTone() {
-        if (typeof window.stopAudio === "function") {
-            window.stopAudio();
-        }
+        if (window.stopAudio) window.stopAudio();
     }
+
+    // --- Assign dataset.index for all buttons initially --- NOT NEEDED
+   // Array.from(keyboardDiv.querySelectorAll("button")).forEach((b, i) => b.dataset.index = i);
+
 }
+
 
 //--------------------------------------------------------------------------------------------
 // When "Play All" Button is pressed, this will play all steps from table in sequence
@@ -573,7 +686,7 @@ function btnplayAllSequence(){
 }
 
 //--------------------------------------------------------------------------------------------
-// This just adds the All Step Tones Values from Table to tonersArray (frequency, Volume, Control and Repeat) 
+// This adds the All Step Tones Values from Table to tonersArray (frequency, Volume, Control and Repeat) 
 //--------------------------------------------------------------------------------------------
 function updateToneFromTable(){
   const tbody=document.querySelector("#tonesTable tbody");
@@ -642,15 +755,13 @@ function saveTable(){
 }
 
 //--------------------------------------------------------------------------------------------
-// Load Json Table
+// Load Json Data for Table
 //--------------------------------------------------------------------------------------------
 function loadTable(){ 
   document.getElementById("loadFileInput").click(); 
 }
 
-//--------------------------------------------------------------------------------------------
 // Load file routine
-//--------------------------------------------------------------------------------------------
 document.getElementById("loadFileInput").addEventListener("change", function(e){
     const file = e.target.files[0]; 
     if (!file) return;
@@ -660,11 +771,24 @@ document.getElementById("loadFileInput").addEventListener("change", function(e){
         try {
             const loadedTones = JSON.parse(ev.target.result);
             if (!Array.isArray(loadedTones)) throw new Error("Invalid JSON format");
+            for (let i = 0; i < loadedTones.length; i++) {
+              const step = loadedTones[i];
+              if (typeof step !== 'object' || step === null) 
+                throw new Error(`Step ${i} is not an object`);
+              if (typeof step.frequency !== 'number' || step.frequency < 1 || step.frequency > 31)
+                throw new Error(`Step ${i}: Invalid frequency`);
+              if (typeof step.control !== 'number' || step.control < 1 || step.control > 15)
+                throw new Error(`Step ${i}: Invalid control`);
+              if (typeof step.volume !== 'number' || step.volume < 0 || step.volume > 15)
+                throw new Error(`Step ${i}: Invalid volume`);
+              if (typeof step.repeat !== 'number' || step.repeat < 1 || step.repeat > 30)
+                throw new Error(`Step ${i}: Invalid repeat`);
+            }
             tonesArray = loadedTones;
             updateTable(); // ensure table refresh
             showToast("Table loaded!");
         } catch(err) {
-            showToast("Failed to load table: " + err.message);
+            alert("Failed to load table: " + err.message);
         }
 
         // Reset file input so the same file can be loaded again
@@ -692,7 +816,7 @@ function copyControlVolume(){
 }
 
 //--------------------------------------------------------------------------------------------
-// The export SFX table bytes textboxes.  2 textboxes below will be updated with fresh data
+// The clipboard SFX table bytes from 2 labels (Frequency Table: and Control/Volume Table:)
 //--------------------------------------------------------------------------------------------
 function updateCopyLabels(){
   const expanded=[];
@@ -724,11 +848,14 @@ function showToast(msg){
   toast.className="show";
   setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
 }
+
 </script>
 
-<script>
+<script> 
+
   const go=new Go();
   WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(result => { go.run(result.instance); });
+
 </script>
 
 </body>
