@@ -206,7 +206,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
     </div>
 
     <!-- This is a Add StepButton -->
-    <button id="addStepsBtn" onclick="btnAddtoStepEnd()" class="addStepsBtn">
+    <button id="addStepsBtn" onclick="btnAddStepEnd()" class="addStepsBtn">
       Add Steps at End
     </button>
 
@@ -219,7 +219,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
     <h3>Playback</h3>
     
     <!-- This is a Play All Button -->
-    <button id="playAllBtn" onclick="playAllatTable()" class="playAllBtn">
+    <button id="playAllBtn" onclick="btnplayAllSequence()" class="playAllBtn">
       Play All
     </button>
 
@@ -312,6 +312,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- This is a toast -->
 <!-- ======================================= -->
 <div id="toast"></div>
+
 <!-- ======================================= -->
 <!-- This is a Paypal Donation  -->
 <!-- ======================================= -->
@@ -329,7 +330,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 2.05</div>
+<div id="versionLabel">Version 2.06</div>
 
 <script src="wasm_exec.js"></script>
 
@@ -349,17 +350,17 @@ const ctlOptions = [
 ];
 
 // One time Setup call 
-setupStepInputsListener();
+setupStepPanelInputsListener();
 
-// Call this once after page loads
-setupKeyboardPlayListener();
+// One time Setup call 
+setupKeyboardButtonListener();
 
  //console.log("Hello, world!");
 
 //--------------------------------------------------------------------------------------------
 // When "Add Steps at end" Button is pressed, Step Parameters inputs will load into table by Add Steps at end button
 //--------------------------------------------------------------------------------------------
-function btnAddtoStepEnd(){
+function btnAddStepEnd(){
   const freq=parseInt(document.getElementById("freq").value);
   const vol=parseInt(document.getElementById("vol").value);
   const ctl=parseInt(document.getElementById("ctl").value);
@@ -410,7 +411,7 @@ function updateTable(){
     const repeatCell=row.insertCell();
     const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=30; repeatInput.value=tone.repeat||1; repeatCell.appendChild(repeatInput);
     
-    freqInput.onchange = () => updateToneFromTableAndPlay(index); ctlSelect.onchange = () => updateToneFromTableAndPlay(index); volInput.onchange = () => updateToneFromTableAndPlay(index); repeatInput.onchange = () => updateToneFromTableAndPlay(index);
+    freqInput.onchange = () => updateToneTableAndPlay(index); ctlSelect.onchange = () => updateToneTableAndPlay(index); volInput.onchange = () => updateToneTableAndPlay(index); repeatInput.onchange = () => updateToneTableAndPlay(index);
 
     const playCell=row.insertCell();
     const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; 
@@ -443,9 +444,9 @@ function updateTable(){
 }
 
 //--------------------------------------------------------------------------------------------
-// This plays the sound when values are changed at Table
+// This plays the sound when Inputs values are changed in Table (.onchange event declared in updateTable)
 //--------------------------------------------------------------------------------------------
-function updateToneFromTableAndPlay(index) {
+function updateToneTableAndPlay(index) {
     const row = document.querySelector("#tonesTable tbody").rows[index];
     if (!row) return;
 
@@ -462,14 +463,13 @@ function updateToneFromTableAndPlay(index) {
     // Check if "Play on Change" is enabled
     const playOnChange = document.getElementById("playOnChange").checked;
     if (playOnChange) {
-        // Stop any currently playing audio in playstep function
         playStep(index);
     }
 }
 //--------------------------------------------------------------------------------------------
-// This plays the sound when values are changed in Step Parameters Panel (Function works as Listener)
+// Setup Step Parameters Panel inputs listener and Updates Samples and Plays the sound when values are changed
 //--------------------------------------------------------------------------------------------
-function setupStepInputsListener() {
+function setupStepPanelInputsListener() {
     const stepInputs = ["freq","ctl","vol","repeat"].map(id => document.getElementById(id));
 
     stepInputs.forEach(input => {
@@ -479,9 +479,9 @@ function setupStepInputsListener() {
             const vol  = parseInt(document.getElementById("vol").value);
             const repeat = parseInt(document.getElementById("repeat").value) || 1;
 
-            const expanded = [];
+            const buffer = [];
             for(let i = 0; i < repeat; i++) {
-                expanded.push({frequency: freq, control: ctl, volume: vol});
+                buffer.push({frequency: freq, control: ctl, volume: vol});
             }
 
             updateCopyLabels();
@@ -492,7 +492,8 @@ function setupStepInputsListener() {
                   window.stopAudio();
                 }
                 if(typeof window.updateSamples === "function"){
-                    window.updateSamples(JSON.stringify(expanded, null, 4));
+                    //window.updateSamples(JSON.stringify(buffer, null, 4));
+                    window.updateSamples(JSON.stringify(buffer));
                     if(typeof window.playSample === "function") window.playSample(0);
                 }
             }
@@ -501,9 +502,9 @@ function setupStepInputsListener() {
 }
 
 //--------------------------------------------------------------------------------------------
-// Setup Keyboard listener and Do mouse/touch functions.  Creates 31 Buttons, too
+// Setup Keyboard buttons listener with mouse/touch functions.  Creates 31 Buttons, too
 //--------------------------------------------------------------------------------------------
-function setupKeyboardPlayListener() {
+function setupKeyboardButtonListener() {
     const keyboardDiv = document.getElementById("keyboardKeys");
 
     for (let i = 1; i <= 31; i++) {
@@ -557,21 +558,22 @@ function setupKeyboardPlayListener() {
 //--------------------------------------------------------------------------------------------
 // When "Play All" Button is pressed, this will play all steps from table in sequence
 //--------------------------------------------------------------------------------------------
-function playAllatTable(){
+function btnplayAllSequence(){
   if (typeof window.stopAudio === "function") {
      window.stopAudio();
    }
   updateToneFromTable();
   if(typeof window.updateSamples==="function"){
-    const expanded=[];
-    tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
-    window.updateSamples(JSON.stringify(expanded,null,4));
+    const buffer=[];
+    tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) buffer.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
+    //window.updateSamples(JSON.stringify(buffer,null,4));
+    window.updateSamples(JSON.stringify(buffer));
     if(typeof window.playSample==="function") window.playSample(0);
   }
 }
 
 //--------------------------------------------------------------------------------------------
-// This just adds the All Tone Values (frequency, Volume, Control and Repeat) all steps from table. Called by playallFromTable button
+// This just adds the All Step Tones Values from Table to tonersArray (frequency, Volume, Control and Repeat) 
 //--------------------------------------------------------------------------------------------
 function updateToneFromTable(){
   const tbody=document.querySelector("#tonesTable tbody");
@@ -596,10 +598,11 @@ function playStep(index){
   }
   const step=tonesArray[index];
   if(!step) return;
-  const expanded=[];
-  for(let i=0;i<(step.repeat||1);i++) expanded.push({frequency:step.frequency,control:step.control,volume:step.volume});
+  const buffer=[];
+  for(let i=0;i<(step.repeat||1);i++) buffer.push({frequency:step.frequency,control:step.control,volume:step.volume});
   if(typeof window.updateSamples==="function"){
-    window.updateSamples(JSON.stringify(expanded,null,4));
+    //window.updateSamples(JSON.stringify(buffer,null,4));
+    window.updateSamples(JSON.stringify(buffer));
     if(typeof window.playSample==="function") window.playSample(0);
   }
 }
