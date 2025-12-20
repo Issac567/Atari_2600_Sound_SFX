@@ -22,6 +22,8 @@ var audioData []uint
 var tonesData []Tone
 var sampleRate float32
 
+var lastEmulationTime float64 // in milliseconds
+
 // Global AudioContext — only one instance for the entire app
 var audioContext js.Value
 
@@ -41,6 +43,11 @@ func main() {
 	js.Global().Set("updateSamples", js.FuncOf(updateSamples)) // first updateSamples = call from JS, second updateSamples = call in here
 	js.Global().Set("stopAudio", js.FuncOf(stopAudio))
 	js.Global().Set("playSample", js.FuncOf(playSample))
+
+	js.Global().Set("getEmulationTime", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		return lastEmulationTime
+	}))
+
 	audioContext = js.Global().Get("AudioContext").New()
 	select {}
 }
@@ -91,6 +98,9 @@ func updateSamples(this js.Value, args []js.Value) interface{} {
 
 	// Generate audioData
 	audioData = generateAudio(tonesData)
+
+	// Save emulation time in milliseconds
+	lastEmulationTime = float64(time.Since(startTime).Milliseconds())
 
 	log.Printf("tiaAudio: emulation time %s", time.Since(startTime))
 	log.Printf("tiaAudio: number of tones: %d", len(tonesData))

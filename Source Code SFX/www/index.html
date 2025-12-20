@@ -50,6 +50,9 @@ h1 { text-align: center; margin: 20px 0; }
 #keyboardFileButtons .uniformLoadSaveBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:4px; cursor:pointer; padding:6px 14px; cursor: pointer; text-align: center; transition: background 0.2s; width:140px; }
 #keyboardFileButtons .uniformLoadSaveBtn:hover { background-color: #616161; }
 
+/* Stlyes for "Auto Add Tones" checkbox */
+.addKeyboardTone { width: 240px; display: flex; }
+
 /*================================================================================*/
 /* STEP PARAMETERS: Styles for Step Parameters Panel layout */
 /*================================================================================*/
@@ -176,6 +179,14 @@ tr.drag-over { border:2px dashed #ffcc00; }
       <button id="exportLayoutBtn" class="uniformLoadSaveBtn">Export Layout</button>
       <button id="importLayoutBtn" class="uniformLoadSaveBtn">Import Layout</button>
       <input type="file" id="importLayoutFile" accept=".json" hidden>
+
+      <div class="addKeyboardTone">
+        <label class="customCheckbox">
+          <input type="checkbox" id="chkAutoAddTone">
+          <span class="checkmark"></span>
+          Auto Add Played Tone
+        </label>
+      </div>
   </div>
 </div>
 
@@ -245,7 +256,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
     <!-- This is a Checkbox Play on Change  -->
     <div class="playOnChangeRow">
       <label class="customCheckbox">
-        <input type="checkbox" id="playOnChange" checked>
+        <input type="checkbox" id="chkPlayOnChange" checked>
         <span class="checkmark"></span>
         Play on Change
       </label>
@@ -344,7 +355,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 2.08</div>
+<div id="versionLabel">Version 2.10</div>
 
 <script src="wasm_exec.js"></script>
 
@@ -354,6 +365,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 // Initial entry in script
 //--------------------------------------------------------------------------------------------
 let tonesArray = [];
+
 
 const ctlOptions = [
   {v:1,l:"1 = Buzzy"}, {v:2,l:"2 = Distortion"}, {v:3,l:"3 = Flangy"},
@@ -475,7 +487,7 @@ function updateToneTableAndPlay(index) {
     updateCopyLabels();
 
     // Check if "Play on Change" is enabled
-    const playOnChange = document.getElementById("playOnChange").checked;
+    const playOnChange = document.getElementById("chkPlayOnChange").checked;
     if (playOnChange) {
         playStep(index);
     }
@@ -501,7 +513,7 @@ function setupStepPanelInputsListener() {
             updateCopyLabels();
 
             // Only play if "Play on Change" is checked
-            if(document.getElementById("playOnChange").checked){
+            if(document.getElementById("chkPlayOnChange").checked){
                 if (typeof window.stopAudio === "function") {
                   window.stopAudio();
                 }
@@ -515,7 +527,6 @@ function setupStepPanelInputsListener() {
     });
 }
 
-
 //--------------------------------------------------------------------------------------------
 // Setup Keyboard buttons listener with mouse/touch/drag functions.  Creates 31 Buttons, too
 //--------------------------------------------------------------------------------------------
@@ -528,7 +539,9 @@ function setupKeyboardButtonListener() {
 
     let draggedKey = null;
 
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     // Create 31 keyboard buttons
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     for (let i = 1; i <= 31; i++) {
         const key = document.createElement("button");
         key.textContent = i;
@@ -542,9 +555,8 @@ function setupKeyboardButtonListener() {
         });
 
         // --- Stop tone ---
-        key.addEventListener("mouseup", stopTone);
-        key.addEventListener("mouseleave", stopTone);
-        key.addEventListener("touchend", stopTone);
+        key.addEventListener("mouseup", () => stopTone(i));
+        key.addEventListener("touchend", () => stopTone(i));
 
         // --- Drag logic ---
         key.addEventListener("dragstart", e => {
@@ -577,7 +589,9 @@ function setupKeyboardButtonListener() {
         keyboardDiv.appendChild(key);
     }
 
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     // Export keyboard layout to file
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     exportBtn.addEventListener("click", () => {
         const order = Array.from(keyboardDiv.children)
             .map(btn => btn.textContent);
@@ -598,7 +612,9 @@ function setupKeyboardButtonListener() {
         showToast("Keyboard layout saved!");
     });
 
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     // Import keyboard layout from file
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     importBtn.addEventListener("click", () => {
         importFile.click();
     });
@@ -635,15 +651,17 @@ function setupKeyboardButtonListener() {
               showToast("Keyboard layout loaded!");
           } catch (err) {
               alert("Invalid keyboard layout file: " + err.message);
-              // No keys were removed, original keyboard stays intact
           }
       };
       reader.readAsText(file);
       e.target.value = "";
     });
 
+    let toneStartTime = 0; // to track start time
 
-    // Local helpers
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    // Play Tone when button pressed
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     function playTone(freq) {
         const ctl = parseInt(document.getElementById("ctl").value);
         const vol = parseInt(document.getElementById("vol").value);
@@ -653,20 +671,71 @@ function setupKeyboardButtonListener() {
             buffer.push({ frequency: freq, control: ctl, volume: vol });
         }
 
+        // Record start time
+        toneStartTime = performance.now();
+
         if (window.stopAudio) window.stopAudio();
         if (window.updateSamples) window.updateSamples(JSON.stringify(buffer));
         if (window.playSample) window.playSample(0);
     }
 
-    function stopTone() {
-        if (window.stopAudio) window.stopAudio();
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    // Stop tone when button released
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    function stopTone(freq) {
+      console.log("FREQ:" + freq)
+
+      if (window.stopAudio) window.stopAudio();
+
+        if (toneStartTime > 0) {
+        // Real elapsed time
+        const elapsed = performance.now() - toneStartTime;
+
+        // WASM emulation time
+        let emuTime = 0;
+        if (window.getEmulationTime) emuTime = window.getEmulationTime();
+
+        // Subtract emulation latency
+        const adjusted = Math.max(0, elapsed - emuTime);
+
+        // Calculate repeat
+        const repeat = calculateRepeat(adjusted);
+
+       // Use the freq passed to stopTone
+        const newTone = {
+            frequency: freq,
+            control: parseInt(document.getElementById("ctl").value),
+            volume: parseInt(document.getElementById("vol").value),
+            repeat: repeat
+        };
+
+        // Only add to table if checkbox is checked
+        if (document.getElementById("chkAutoAddTone").checked) {
+          tonesArray.push(newTone);
+          updateTable();
+          console.log("Tone table entry added:", tonesArray[tonesArray.length - 1]);
+        }
+
+        console.log("Tone duration (ms):", elapsed.toFixed(2));
+        console.log("Emulation time (ms):", emuTime.toFixed(2));
+        console.log("Adjusted time (ms):", adjusted.toFixed(2));
+        console.log("Total Repeat:", repeat);
+
+        // Reset
+        toneStartTime = 0;
+        //currentTone = null;
+      }
     }
 
-    // --- Assign dataset.index for all buttons initially --- NOT NEEDED
-   // Array.from(keyboardDiv.querySelectorAll("button")).forEach((b, i) => b.dataset.index = i);
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    // Calculate Repeat value based on toneStartTime value
+    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    function calculateRepeat(toneStartTime) {
+      const stepMs = 15; // example: each buffer element = 10ms
+      return Math.max(1, Math.round(toneStartTime / stepMs));
+    }
 
 }
-
 
 //--------------------------------------------------------------------------------------------
 // When "Play All" Button is pressed, this will play all steps from table in sequence
