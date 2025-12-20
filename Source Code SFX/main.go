@@ -71,7 +71,7 @@ func parseJson(jsonFile []byte) ([]Tone, error) {
 }
 
 // ======================================================================
-// Generate Audio Buffer and Playback
+// Generate Audio Buffer in audioData
 // ======================================================================
 func updateSamples(this js.Value, args []js.Value) interface{} {
 	if len(args) < 1 {
