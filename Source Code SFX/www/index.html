@@ -145,7 +145,6 @@ tr.drag-over { border:2px dashed #ffcc00; }
 /* Fade-out animation for toast */
 @keyframes fadeout { from {bottom:30px; opacity:1;} to {bottom:0; opacity:0;} }
 
-
 /*================================================================================*/
 /* PAYPAL: Styles for Pay Pal Panel layout */
 /*================================================================================*/
@@ -164,22 +163,30 @@ tr.drag-over { border:2px dashed #ffcc00; }
 </head>
 <body>
 
+<!-- This is a header -->
 <h1>Atari 2600 SFX Editor with TIA Sound Generator</h1>
 
 <!-- ======================================= -->
 <!-- This is a Keyboard -->
 <!-- ======================================= -->
 <div class="panel" id="keyboardPanel">
+  <!-- This is a header -->
   <h3>Keyboard (Hold Down Play + Draggable)</h3>
 
   <div id="keyboardKeys"></div>
 
   <!-- Export / Import buttons INSIDE keyboard panel -->
   <div id="keyboardFileButtons">
+      <!-- This is a Export button -->
       <button id="exportLayoutBtn" class="uniformLoadSaveBtn" onclick="btnExportKeyboardLayout()">Export Layout</button>
+      
+      <!-- This is a Import button -->
       <button id="importLayoutBtn" class="uniformLoadSaveBtn" onclick="triggerImportLayout()">Import Layout</button>
+      
+      <!-- File input for importing keyboard layout (JSON format) -->
       <input type="file" id="importKeyboardLayoutFile" accept=".json" hidden onchange="btnImportKeyboardLayout(event)">
 
+      <!-- This is a Auto Add Checkbox   -->
       <div class="addKeyboardTone">
         <label class="customCheckbox">
           <input type="checkbox" id="chkAutoAddTone">
@@ -195,6 +202,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <div class="panelContainer">
   <div class="panel" id="stepPanel">
+    <!-- This is a header -->
     <h3>Step Parameters</h3>
   
     <!-- This is a Control Dropbox -->
@@ -230,7 +238,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
       <input id="repeat" type="number" min="1" max="100" value="1">
     </div>
 
-    <!-- This is a Add StepButton -->
+    <!-- This is a Add Step to end Button -->
     <button id="addStepsBtn" onclick="btnAddStepEnd()" class="addStepsBtn">
       Add Steps at End
     </button>
@@ -241,19 +249,16 @@ tr.drag-over { border:2px dashed #ffcc00; }
   <!-- This is a Playback Panel -->
    <!-- ======================================= -->
   <div class="panel" id="playbackPanel">
+    <!-- This is a header -->
     <h3>Playback</h3>
     
     <!-- This is a Play All Button -->
-    <button id="playAllBtn" onclick="btnplayAllSequence()" class="playAllBtn">
-      Play All
-    </button>
+    <button id="playAllBtn" onclick="btnplayAllSequence()" class="playAllBtn">Play All</button>
 
     <!-- This is a Stop Button -->
-    <button id="stopBtn" onclick="stopAudio()" class="stopBtn">
-      Stop
-    </button>
+    <button id="stopBtn" onclick="stopAudio()" class="stopBtn">Stop</button>
 
-    <!-- This is a Checkbox Play on Change  -->
+    <!-- This is a Play on change Checkbox  -->
     <div class="playOnChangeRow">
       <label class="customCheckbox">
         <input type="checkbox" id="PlayOnChangechk" checked>
@@ -268,6 +273,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
   <!-- This is a Table Management Panel -->
   <!-- ======================================= -->
   <div class="panel" id="tableManagementPanel">
+    <!-- This is a header -->
     <h3>Table Management</h3>
 
     <!-- This is a New Table Button -->
@@ -279,6 +285,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
     <!-- This is a Load Table Button -->
     <button id="loadTableBtn" class="uniformMangBtn" onclick="btnLoadTable()">Load Table</button>
 
+    <!-- File input for importing table layout (JSON format) -->
     <input type="file" id="importTableFileInput" accept=".json" hidden onchange="btnImportTableLayout(event)">
 
   </div>
@@ -312,6 +319,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <div class="panelContainer" style="justify-content:center; margin-top:20px;">
   <div class="panel" id="copyTablesPanel">
+    <!-- This is a header -->
     <h3>Copy Tables</h3>
 
     <!-- This is a Copy Freq Button -->
@@ -345,7 +353,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 2.12</div>
+<div id="versionLabel">Version 2.13</div>
 
 <script src="wasm_exec.js"></script>
 
@@ -355,7 +363,6 @@ tr.drag-over { border:2px dashed #ffcc00; }
 // Initial entry in script
 //-------------------------------------------------------------------------------------------------------------------
 let tonesArray = [];
-
 
 const ctlOptions = [
   {v:1,l:"1 = Buzzy"}, {v:2,l:"2 = Distortion"}, {v:3,l:"3 = Flangy"},
@@ -375,87 +382,86 @@ setupKeyboardButtonListener();
 // When "Add Steps at end" Button is pressed, Step Parameters inputs will load into table by Add Steps at end button
 //-------------------------------------------------------------------------------------------------------------------
 function btnAddStepEnd(){
-  const freq=parseInt(document.getElementById("freq").value);
-  const vol=parseInt(document.getElementById("vol").value);
-  const ctl=parseInt(document.getElementById("ctl").value);
-  const repeat=parseInt(document.getElementById("repeat").value)||1;
-  tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
-  updateTable();
+    const freq=parseInt(document.getElementById("freq").value);
+    const vol=parseInt(document.getElementById("vol").value);
+    const ctl=parseInt(document.getElementById("ctl").value);
+    const repeat=parseInt(document.getElementById("repeat").value)||1;
+    tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
+    updateTable();
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 // This updates table with tones values from (Step Parameters input or Keyboard Buttons)
 //-------------------------------------------------------------------------------------------------------------------
 function updateTable(){
-  const tbody=document.querySelector("#tonesTable tbody");
-  tbody.innerHTML="";
-  tonesArray.forEach((tone,index)=>{
-    const row=tbody.insertRow();
-    row.setAttribute("draggable","true");
-    row.dataset.index=index;
+    const tbody=document.querySelector("#tonesTable tbody");
+    tbody.innerHTML="";
+    tonesArray.forEach((tone,index)=>{
+        const row=tbody.insertRow();
+        row.setAttribute("draggable","true");
+        row.dataset.index=index;
 
-    row.addEventListener("dragstart",e=>{ e.dataTransfer.setData("text/plain",index); e.currentTarget.style.opacity="0.5"; });
-    row.addEventListener("dragend",e=>{ e.currentTarget.style.opacity="1"; });
-    row.addEventListener("dragover",e=>{ e.preventDefault(); row.classList.add("drag-over"); });
-    row.addEventListener("dragleave",e=>{ row.classList.remove("drag-over"); });
-    row.addEventListener("drop",e=>{
-      e.preventDefault(); row.classList.remove("drag-over");
-      const draggedIndex=parseInt(e.dataTransfer.getData("text/plain"));
-      const targetIndex=parseInt(row.dataset.index);
-      if(draggedIndex===targetIndex) return;
-      const draggedTone=tonesArray[draggedIndex];
-      tonesArray.splice(draggedIndex,1);
-      tonesArray.splice(targetIndex,0,draggedTone);
-      updateTable();
+        row.addEventListener("dragstart",e=>{ e.dataTransfer.setData("text/plain",index); e.currentTarget.style.opacity="0.5"; });
+        row.addEventListener("dragend",e=>{ e.currentTarget.style.opacity="1"; });
+        row.addEventListener("dragover",e=>{ e.preventDefault(); row.classList.add("drag-over"); });
+        row.addEventListener("dragleave",e=>{ row.classList.remove("drag-over"); });
+        row.addEventListener("drop",e=>{
+            e.preventDefault(); row.classList.remove("drag-over");
+            const draggedIndex=parseInt(e.dataTransfer.getData("text/plain"));
+            const targetIndex=parseInt(row.dataset.index);
+            if(draggedIndex===targetIndex) return;
+            const draggedTone=tonesArray[draggedIndex];
+            tonesArray.splice(draggedIndex,1);
+            tonesArray.splice(targetIndex,0,draggedTone);
+            updateTable();
+        });
+
+        row.insertCell().textContent=index+1;
+
+        const ctlCell=row.insertCell();
+        const ctlSelect=document.createElement("select");
+        ctlOptions.forEach(opt=>{ const o=document.createElement("option"); o.value=opt.v; o.text=opt.l; if(opt.v===tone.control) o.selected=true; ctlSelect.appendChild(o); });
+        ctlCell.appendChild(ctlSelect);
+
+        const freqCell=row.insertCell();
+        const freqInput=document.createElement("input"); freqInput.type="number"; freqInput.min=1; freqInput.max=31; freqInput.value=tone.frequency; freqCell.appendChild(freqInput);
+
+        const volCell=row.insertCell();
+        const volInput=document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volCell.appendChild(volInput);
+
+        const repeatCell=row.insertCell();
+        const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=100; repeatInput.value=tone.repeat||1; repeatCell.appendChild(repeatInput);
+    
+        freqInput.onchange = () => updateToneTableAndPlay(index); ctlSelect.onchange = () => updateToneTableAndPlay(index); volInput.onchange = () => updateToneTableAndPlay(index); repeatInput.onchange = () => updateToneTableAndPlay(index);
+
+        const playCell=row.insertCell();
+        const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; 
+        playCell.appendChild(playBtn);
+        playBtn.onclick=()=>playStep(index); 
+
+        const delCell=row.insertCell();
+        const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="deleteBtn"; 
+        delCell.appendChild(delBtn);
+        delBtn.onclick=()=>{ 
+            tonesArray.splice(index,1); 
+            updateTable(); 
+        }; 
+
+        const insertCell=row.insertCell();
+        const insertBtn=document.createElement("button"); insertBtn.textContent="Insert Before"; insertBtn.className="insertBtn";
+        insertCell.appendChild(insertBtn);
+        insertBtn.onclick=()=>{
+            const freq=parseInt(document.getElementById("freq").value);
+            const ctl=parseInt(document.getElementById("ctl").value);
+            const vol=parseInt(document.getElementById("vol").value);
+            const repeat=parseInt(document.getElementById("repeat").value)||1;
+            tonesArray.splice(index,0,{frequency:freq,control:ctl,volume:vol,repeat});
+            updateTable();
+        };
+    
     });
-
-    row.insertCell().textContent=index+1;
-
-    const ctlCell=row.insertCell();
-    const ctlSelect=document.createElement("select");
-    ctlOptions.forEach(opt=>{ const o=document.createElement("option"); o.value=opt.v; o.text=opt.l; if(opt.v===tone.control) o.selected=true; ctlSelect.appendChild(o); });
-    ctlCell.appendChild(ctlSelect);
-
-    const freqCell=row.insertCell();
-    const freqInput=document.createElement("input"); freqInput.type="number"; freqInput.min=1; freqInput.max=31; freqInput.value=tone.frequency; freqCell.appendChild(freqInput);
-
-    const volCell=row.insertCell();
-    const volInput=document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volCell.appendChild(volInput);
-
-    const repeatCell=row.insertCell();
-    const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=100; repeatInput.value=tone.repeat||1; repeatCell.appendChild(repeatInput);
-    
-    freqInput.onchange = () => updateToneTableAndPlay(index); ctlSelect.onchange = () => updateToneTableAndPlay(index); volInput.onchange = () => updateToneTableAndPlay(index); repeatInput.onchange = () => updateToneTableAndPlay(index);
-
-    const playCell=row.insertCell();
-    const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; 
-    playCell.appendChild(playBtn);
-    playBtn.onclick=()=>playStep(index); 
-
-    const delCell=row.insertCell();
-    const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="deleteBtn"; 
-    delCell.appendChild(delBtn);
-    delBtn.onclick=()=>{ 
-      tonesArray.splice(index,1); 
-      updateTable(); 
-    }; 
-
-    const insertCell=row.insertCell();
-    const insertBtn=document.createElement("button"); insertBtn.textContent="Insert Before"; insertBtn.className="insertBtn";
-    insertCell.appendChild(insertBtn);
-    insertBtn.onclick=()=>{
-      const freq=parseInt(document.getElementById("freq").value);
-      const ctl=parseInt(document.getElementById("ctl").value);
-      const vol=parseInt(document.getElementById("vol").value);
-      const repeat=parseInt(document.getElementById("repeat").value)||1;
-      tonesArray.splice(index,0,{frequency:freq,control:ctl,volume:vol,repeat});
-      updateTable();
-    };
-    
-  });
-
-  Array.from(tbody.rows).forEach((row,idx)=>row.dataset.index=idx);
-  updateCopyLabels();
+    Array.from(tbody.rows).forEach((row,idx)=>row.dataset.index=idx);
+    updateCopyLabels();
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -523,9 +529,9 @@ function setupKeyboardButtonListener() {
 
     let draggedKey = null;
 
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    //*******************************************************************
     // Create 31 keyboard buttons
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    //*******************************************************************
     for (let i = 1; i <= 31; i++) {
         const key = document.createElement("button");
         key.textContent = i;
@@ -574,9 +580,9 @@ function setupKeyboardButtonListener() {
         keyboardDiv.appendChild(key);
     }
 
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    //*******************************************************************
     // Play Tone when button pressed
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    //*******************************************************************
     let toneStartTime = 0; // to track start time
 
     function playTone(freq) {
@@ -596,60 +602,60 @@ function setupKeyboardButtonListener() {
         if (window.playSample) window.playSample(0);
     }
 
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    //*******************************************************************
     // Stop tone when button released
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    //*******************************************************************
     function stopTone(freq) {
+        console.log("StopTONEEEEEEEEEEEEEEEEEEEEEE")
+        if (window.stopAudio) window.stopAudio();
 
-      if (window.stopAudio) window.stopAudio();
+          if (toneStartTime > 0) {            // on mousemove it will always be 0.  good!
+              console.log("FREQ:" + freq)
 
-        if (toneStartTime > 0) {            // on mousemove it will always be 0.  good!
-          console.log("FREQ:" + freq)
+              // Real elapsed time
+              const elapsed = performance.now() - toneStartTime;
 
-          // Real elapsed time
-          const elapsed = performance.now() - toneStartTime;
+              // WASM emulation time
+              let emuTime = 0;
+              if (window.getEmulationTime) emuTime = window.getEmulationTime();
 
-          // WASM emulation time
-          let emuTime = 0;
-          if (window.getEmulationTime) emuTime = window.getEmulationTime();
+              // Subtract emulation latency
+              const adjusted = Math.max(0, elapsed - emuTime);
 
-          // Subtract emulation latency
-          const adjusted = Math.max(0, elapsed - emuTime);
+              // Calculate repeat
+              const repeat = calculateRepeat(adjusted);
 
-          // Calculate repeat
-          const repeat = calculateRepeat(adjusted);
+              // Use the freq passed to stopTone
+              const newTone = {
+                  frequency: freq,
+                  control: parseInt(document.getElementById("ctl").value),
+                  volume: parseInt(document.getElementById("vol").value),
+                  repeat: repeat
+              };
 
-          // Use the freq passed to stopTone
-          const newTone = {
-            frequency: freq,
-            control: parseInt(document.getElementById("ctl").value),
-            volume: parseInt(document.getElementById("vol").value),
-            repeat: repeat
-          };
+              // Only add to table if checkbox is checked
+              if (document.getElementById("chkAutoAddTone").checked) {
+                  tonesArray.push(newTone);
+                  updateTable();
+                  console.log("Tone table entry added:", tonesArray[tonesArray.length - 1]);
+              }
 
-          // Only add to table if checkbox is checked
-          if (document.getElementById("chkAutoAddTone").checked) {
-            tonesArray.push(newTone);
-            updateTable();
-            console.log("Tone table entry added:", tonesArray[tonesArray.length - 1]);
+              console.log("Tone duration (ms):", elapsed.toFixed(2));
+              console.log("Emulation time (ms):", emuTime.toFixed(2));
+              console.log("Adjusted time (ms):", adjusted.toFixed(2));
+              console.log("Total Repeat:", repeat);
+
+              // Reset
+              toneStartTime = 0;
           }
-
-          console.log("Tone duration (ms):", elapsed.toFixed(2));
-          console.log("Emulation time (ms):", emuTime.toFixed(2));
-          console.log("Adjusted time (ms):", adjusted.toFixed(2));
-          console.log("Total Repeat:", repeat);
-
-          // Reset
-          toneStartTime = 0;
-      }
     }
 
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    //*******************************************************************
     // Calculate Repeat value based on toneStartTime value
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    //*******************************************************************
     function calculateRepeat(durationMs) {
-      const stepMs = 15; // example: each buffer element = 15ms
-      return Math.max(1, Math.round(durationMs / stepMs));
+        const stepMs = 15; // example: each buffer element = 15ms
+        return Math.max(1, Math.round(durationMs / stepMs));
     }
 }
 
@@ -719,7 +725,6 @@ function btnImportKeyboardLayout(e) {
             alert("Invalid keyboard layout file: " + err.message);
         }
     };
-
     reader.readAsText(file);
     e.target.value = ""; // reset input
 }
@@ -728,68 +733,68 @@ function btnImportKeyboardLayout(e) {
 // When "Play All" Button is pressed, this will play all steps from table in sequence
 //-------------------------------------------------------------------------------------------------------------------
 function btnplayAllSequence(){
-  if (typeof window.stopAudio === "function") {
-     window.stopAudio();
-   }
-  updateToneFromTable();
-  if(typeof window.updateSamples==="function"){
-    const buffer=[];
-    tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) buffer.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
-    window.updateSamples(JSON.stringify(buffer));
-    if(typeof window.playSample==="function") window.playSample(0);
-  }
+    if (typeof window.stopAudio === "function") {
+        window.stopAudio();
+    }
+    updateToneFromTable();
+    if(typeof window.updateSamples==="function"){
+        const buffer=[];
+        tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) buffer.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
+        window.updateSamples(JSON.stringify(buffer));
+        if(typeof window.playSample==="function") window.playSample(0);
+    }
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 // This adds the All Step Tones Values from Table to tonersArray (frequency, Volume, Control and Repeat) 
 //-------------------------------------------------------------------------------------------------------------------
 function updateToneFromTable(){
-  const tbody=document.querySelector("#tonesTable tbody");
-  tonesArray=[];
-  for(let i=0;i<tbody.rows.length;i++){
-    const row=tbody.rows[i];
-    const ctl  = parseInt(row.cells[1].querySelector("select").value);
-    const freq = parseInt(row.cells[2].querySelector("input").value);
-    const vol=parseInt(row.cells[3].querySelector("input").value);
-    const repeat=parseInt(row.cells[4].querySelector("input").value)||1;
-    tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
-  }
-  updateCopyLabels();
+    const tbody=document.querySelector("#tonesTable tbody");
+    tonesArray=[];
+    for(let i=0;i<tbody.rows.length;i++){
+        const row=tbody.rows[i];
+        const ctl  = parseInt(row.cells[1].querySelector("select").value);
+        const freq = parseInt(row.cells[2].querySelector("input").value);
+        const vol=parseInt(row.cells[3].querySelector("input").value);
+        const repeat=parseInt(row.cells[4].querySelector("input").value)||1;
+        tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
+    }
+    updateCopyLabels();
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 // When "Play" button in Table is pressed, this will play the selected step
 //-------------------------------------------------------------------------------------------------------------------
 function playStep(index){
-  if (typeof window.stopAudio === "function") {
-    window.stopAudio();
-  }
-  const step=tonesArray[index];
-  if(!step) return;
-  const buffer=[];
-  for(let i=0;i<(step.repeat||1);i++) buffer.push({frequency:step.frequency,control:step.control,volume:step.volume});
-  if(typeof window.updateSamples==="function"){
-    window.updateSamples(JSON.stringify(buffer));
-    if(typeof window.playSample==="function") window.playSample(0);
-  }
+    if (typeof window.stopAudio === "function") {
+        window.stopAudio();
+    }
+    const step=tonesArray[index];
+    if(!step) return;
+    const buffer=[];
+    for(let i=0;i<(step.repeat||1);i++) buffer.push({frequency:step.frequency,control:step.control,volume:step.volume});
+    if(typeof window.updateSamples==="function"){
+        window.updateSamples(JSON.stringify(buffer));
+        if(typeof window.playSample==="function") window.playSample(0);
+    }
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 // Stop audio in Main.Go call
 //-------------------------------------------------------------------------------------------------------------------
 function stopAudio(){ 
-  if (typeof window.stopAudio === "function") {
-     window.stopAudio();
-  }
+    if (typeof window.stopAudio === "function") {
+        window.stopAudio();
+    }
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 // This will clear all table
 //-------------------------------------------------------------------------------------------------------------------
 function btnNewTable(){ 
-  if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ 
-    tonesArray=[]; updateTable(); showToast("New table created"); 
-  } 
+    if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ 
+        tonesArray=[]; updateTable(); showToast("New table created"); 
+    } 
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -797,15 +802,15 @@ function btnNewTable(){
 // Remember Frequency, Control and Volume is only used to generate the tone
 //-------------------------------------------------------------------------------------------------------------------
 function btnSaveTable(){ 
-  const dataStr=JSON.stringify(tonesArray,null,4); 
-  const blob=new Blob([dataStr],{type:"application/json"}); 
-  const url=URL.createObjectURL(blob); 
-  const a=document.createElement("a"); 
-  a.href=url; 
-  a.download="tones.json"; 
-  a.click(); 
-  URL.revokeObjectURL(url); 
-  showToast("Table saved!"); 
+    const dataStr=JSON.stringify(tonesArray,null,4); 
+    const blob=new Blob([dataStr],{type:"application/json"}); 
+    const url=URL.createObjectURL(blob); 
+    const a=document.createElement("a"); 
+    a.href=url; 
+    a.download="tones.json"; 
+    a.click(); 
+    URL.revokeObjectURL(url); 
+    showToast("Table saved!"); 
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -866,34 +871,34 @@ function btnCopyControlVolume(){
 // The clipboard SFX table bytes from 2 labels (Frequency Table: and Control/Volume Table:)
 //-------------------------------------------------------------------------------------------------------------------
 function updateCopyLabels(){
-  const expanded=[];
-  tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
+    const expanded=[];
+    tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
 
-  const freqArray=["byte. 0"].concat(expanded.map(s=>s.frequency).reverse());
-  document.getElementById("frequencyTableLabel").textContent="Frequency Table: "+freqArray.join(", ");
+    const freqArray=["byte. 0"].concat(expanded.map(s=>s.frequency).reverse());
+    document.getElementById("frequencyTableLabel").textContent="Frequency Table: "+freqArray.join(", ");
 
-  const cvArray=["byte. 0"].concat(expanded.map(step=>{
-  const byte=((step.control&0x0F)<<4)|(step.volume&0x0F);
-    return "$"+byte.toString(16).padStart(2,"0").toUpperCase();
-  }).reverse());
-  document.getElementById("controlVolumeTableLabel").textContent="Control/Volume Table: "+cvArray.join(", ");
+    const cvArray=["byte. 0"].concat(expanded.map(step=>{
+        const byte=((step.control&0x0F)<<4)|(step.volume&0x0F);
+        return "$"+byte.toString(16).padStart(2,"0").toUpperCase();
+    }).reverse());
+    document.getElementById("controlVolumeTableLabel").textContent="Control/Volume Table: "+cvArray.join(", ");
 
-// ✅ Check Atari limitation by total number of bytes
-  const totalBytes = expanded.length + 1; // +1 for the initial "byte. 0"
-  const maxBytes = 255;
-  if (totalBytes > maxBytes) {
-    showToast(`Warning: Total byte array exceeds Atari 2600 limitation! (${totalBytes}/${maxBytes} bytes)`);
-  }
+    // ✅ Check Atari limitation by total number of bytes
+    const totalBytes = expanded.length + 1; // +1 for the initial "byte. 0"
+    const maxBytes = 255;
+    if (totalBytes > maxBytes) {
+        showToast(`Warning: Total byte array exceeds Atari 2600 limitation! (${totalBytes}/${maxBytes} bytes)`);
+    }
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 // Show Toast
 //-------------------------------------------------------------------------------------------------------------------
 function showToast(msg){
-  const toast=document.getElementById("toast");
-  toast.textContent=msg;
-  toast.className="show";
-  setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
+    const toast=document.getElementById("toast");
+    toast.textContent=msg;
+    toast.className="show";
+    setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
 }
 
 </script>
