@@ -175,16 +175,16 @@ tr.drag-over { border:2px dashed #ffcc00; }
 
   <div id="keyboardKeys"></div>
 
-  <!-- Export / Import buttons INSIDE keyboard panel -->
+  <!-- Save / Load buttons INSIDE keyboard panel -->
   <div id="keyboardFileButtons">
-      <!-- This is a Export button -->
-      <button id="exportLayoutBtn" class="uniformLoadSaveBtn" onclick="btnExportKeyboardLayout()">Export Layout</button>
+      <!-- This is a Save button -->
+      <button id="loadLayoutBtn" class="uniformLoadSaveBtn" onclick="btnSaveKeyboardLayout()">Save Layout</button>
       
-      <!-- This is a Import button -->
-      <button id="importLayoutBtn" class="uniformLoadSaveBtn" onclick="triggerImportLayout()">Import Layout</button>
+      <!-- This is a Load button -->
+      <button id="saveLayoutBtn" class="uniformLoadSaveBtn" onclick="triggerLoadLayout()">Load Layout</button>
       
-      <!-- File input for importing keyboard layout (JSON format) -->
-      <input type="file" id="importKeyboardLayoutFile" accept=".json" hidden onchange="btnImportKeyboardLayout(event)">
+      <!-- File input for loading keyboard layout (JSON format) -->
+      <input type="file" id="loadKeyboardLayoutFile" accept=".json" hidden onchange="btnLoadKeyboardLayout(event)">
 
       <!-- This is a Auto Add Checkbox   -->
       <div class="addKeyboardTone">
@@ -223,7 +223,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
     <!-- This is a Frequency Textbox -->
     <div class="inputRow">
       <label for="freq">Frequency (1=high, 31=low):</label>
-      <input id="freq" type="number" min="1" max="31" value="4">
+      <input id="freq" type="number" min="0" max="31" value="4">
     </div>
 
     <!-- This is a Volume Textbox -->
@@ -285,8 +285,8 @@ tr.drag-over { border:2px dashed #ffcc00; }
     <!-- This is a Load Table Button -->
     <button id="loadTableBtn" class="uniformMangBtn" onclick="btnLoadTable()">Load Table</button>
 
-    <!-- File input for importing table layout (JSON format) -->
-    <input type="file" id="importTableFileInput" accept=".json" hidden onchange="btnImportTableLayout(event)">
+    <!-- File input for loading table layout (JSON format) -->
+    <input type="file" id="loadTableFileInput" accept=".json" hidden onchange="btnLoadTableLayout(event)">
 
   </div>
 </div>
@@ -353,7 +353,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 2.13</div>
+<div id="versionLabel">Version 2.14</div>
 
 <script src="wasm_exec.js"></script>
 
@@ -362,6 +362,9 @@ tr.drag-over { border:2px dashed #ffcc00; }
 //-------------------------------------------------------------------------------------------------------------------
 // Initial entry in script
 //-------------------------------------------------------------------------------------------------------------------
+const KEY_PRESS_BUFFER = 50      // the higher the longer tone can be used and also more latency. 50 = 125ms latency
+const STEP_MS = 15               // part of equation to match step played gain to keyboard key down gain.  15ms matches very close.  Lower value = longer repeat values (more gain) 
+
 let tonesArray = [];
 
 const ctlOptions = [
@@ -377,6 +380,47 @@ setupStepPanelInputsListener();
 
 // One time Setup call 
 setupKeyboardButtonListener();
+
+let jsonData = `[
+    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 1, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 1, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 1, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 1, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 1, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 2, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 2, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 3, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 3, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 4, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 4, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 4, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 4, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 5, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 5, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 6, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 7, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 7, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 7, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 8, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 9, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 10, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 11, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 12, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 13, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 14, "repeat": 1 },
+    { "control": 3, "volume": 15, "frequency": 15, "repeat": 1 }
+]`;
+
+
+// Load default screech shoot json on startup
+loadTonesFromJsonString(jsonData);
 
 //-------------------------------------------------------------------------------------------------------------------
 // When "Add Steps at end" Button is pressed, Step Parameters inputs will load into table by Add Steps at end button
@@ -424,7 +468,7 @@ function updateTable(){
         ctlCell.appendChild(ctlSelect);
 
         const freqCell=row.insertCell();
-        const freqInput=document.createElement("input"); freqInput.type="number"; freqInput.min=1; freqInput.max=31; freqInput.value=tone.frequency; freqCell.appendChild(freqInput);
+        const freqInput=document.createElement("input"); freqInput.type="number"; freqInput.min=0; freqInput.max=31; freqInput.value=tone.frequency; freqCell.appendChild(freqInput);
 
         const volCell=row.insertCell();
         const volInput=document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volCell.appendChild(volInput);
@@ -530,9 +574,9 @@ function setupKeyboardButtonListener() {
     let draggedKey = null;
 
     //*******************************************************************
-    // Create 31 keyboard buttons
+    // Create 32 keyboard buttons
     //*******************************************************************
-    for (let i = 1; i <= 31; i++) {
+    for (let i = 0; i <= 31; i++) {
         const key = document.createElement("button");
         key.textContent = i;
         key.draggable = true;
@@ -590,7 +634,7 @@ function setupKeyboardButtonListener() {
         const vol = parseInt(document.getElementById("vol").value);
 
         const buffer = [];
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < KEY_PRESS_BUFFER; i++) {
             buffer.push({ frequency: freq, control: ctl, volume: vol });
         }
 
@@ -606,7 +650,6 @@ function setupKeyboardButtonListener() {
     // Stop tone when button released
     //*******************************************************************
     function stopTone(freq) {
-        console.log("StopTONEEEEEEEEEEEEEEEEEEEEEE")
         if (window.stopAudio) window.stopAudio();
 
           if (toneStartTime > 0) {            // on mousemove it will always be 0.  good!
@@ -651,18 +694,18 @@ function setupKeyboardButtonListener() {
     }
 
     //*******************************************************************
-    // Calculate Repeat value based on toneStartTime value
+    // Calculate Repeat value based on adjusted value
     //*******************************************************************
     function calculateRepeat(durationMs) {
-        const stepMs = 15; // example: each buffer element = 15ms
-        return Math.max(1, Math.round(durationMs / stepMs));
+        //const stepMs = 15; // example: each buffer element = 15ms
+        return Math.max(1, Math.round(durationMs / STEP_MS));
     }
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 // Export keyboard layout to file
 //-------------------------------------------------------------------------------------------------------------------
-function btnExportKeyboardLayout() {
+function btnSaveKeyboardLayout() {
     const keyboardDiv = document.getElementById("keyboardKeys");
     const order = Array.from(keyboardDiv.children)
         .map(btn => btn.textContent);
@@ -684,16 +727,16 @@ function btnExportKeyboardLayout() {
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// Function to trigger file input click for btnImportKeyboardLayout
+// Function to trigger file input click for btnLoadKeyboardLayout
 //-------------------------------------------------------------------------------------------------------------------
-function triggerImportLayout() {
-    document.getElementById("importKeyboardLayoutFile").click();
+function triggerLoadLayout() {
+    document.getElementById("loadKeyboardLayoutFile").click();
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 // Import keyboard layout from file
 //-------------------------------------------------------------------------------------------------------------------
-function btnImportKeyboardLayout(e) {
+function btnLoadKeyboardLayout(e) {
     const keyboardDiv = document.getElementById("keyboardKeys");
     const file = e.target.files[0];
     if (!file) return;
@@ -709,7 +752,7 @@ function btnImportKeyboardLayout(e) {
 
             const newOrder = layout.map((numStr, idx) => {
                 const num = Number(numStr);
-                if (isNaN(num) || num < 1 || num > 31) {
+                if (isNaN(num) || num < 0 || num > 31) {
                     throw new Error(`Invalid keyboard button number at index ${idx}`);
                 }
                 const btn = buttons.find(b => Number(b.textContent) === num);
@@ -814,16 +857,16 @@ function btnSaveTable(){
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// Function to trigger file input click for btnImportTableLayout
+// Function to trigger file input click for btnLoadTableLayout
 //-------------------------------------------------------------------------------------------------------------------
 function btnLoadTable() {
-    document.getElementById("importTableFileInput").click();
+    document.getElementById("loadTableFileInput").click();
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 // Load Json Data for Table
 //-------------------------------------------------------------------------------------------------------------------
-function btnImportTableLayout(event) {
+function btnLoadTableLayout(event) {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -900,6 +943,34 @@ function showToast(msg){
     toast.className="show";
     setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
 }
+
+//-------------------------------------------------------------------------------------------------------------------
+// Screech Shoot Sample loaded at first startup
+//-------------------------------------------------------------------------------------------------------------------
+function loadTonesFromJsonString(jsonData) {
+    let loadedTones;
+
+    try {
+        loadedTones = JSON.parse(jsonData);
+
+        if (!Array.isArray(loadedTones)) {
+            throw new Error("Invalid JSON: not an array");
+        }
+
+        loadedTones.forEach((step, i) => {
+            if (!step || typeof step !== "object") {
+                throw new Error(`Step ${i} not object`);
+            }
+        });
+
+        tonesArray = loadedTones;
+        updateTable();
+
+    } catch (err) {
+        console.error("Failed to load tones:", err.message);
+    }
+}
+
 
 </script>
 
