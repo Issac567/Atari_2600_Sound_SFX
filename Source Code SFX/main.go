@@ -64,7 +64,7 @@ func parseJson(jsonFile []byte) ([]Tone, error) {
 
 	// Validate ranges
 	for _, t := range tones {
-		if t.Frequency < 1 || t.Frequency > 31 {
+		if t.Frequency < 0 || t.Frequency > 31 {
 			return nil, errors.New("frequency out of range")
 		}
 		if t.Volume < 0 || t.Volume > 15 {

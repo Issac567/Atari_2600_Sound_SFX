@@ -1,6 +1,6 @@
 # Atari 2600 SFX Editor
 
-**Version:** 2.13
+**Version:** 2.14
 
 A web-based Atari 2600 sound effects editor using TIA sound generation, implemented with Go and WebAssembly.
 
@@ -67,8 +67,7 @@ A web-based Atari 2600 sound effects editor using TIA sound generation, implemen
 ---
 
 ## Notes
-- Any updated source code must be shared and uploaded to me.
+
 - The editor automatically loads `main.wasm` and `wasm_exec.js` for WebAssembly audio.  
 - Mobile browsers may have inconsistent audio playback; desktop recommended.   
 - `build.bat` uses Go modules (`go.mod` and `go.sum`) to automatically manage dependencies.
-
