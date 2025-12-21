@@ -178,7 +178,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
   <div id="keyboardFileButtons">
       <button id="exportLayoutBtn" class="uniformLoadSaveBtn" onclick="btnExportKeyboardLayout()">Export Layout</button>
       <button id="importLayoutBtn" class="uniformLoadSaveBtn" onclick="triggerImportLayout()">Import Layout</button>
-      <input type="file" id="importLayoutFile" accept=".json" hidden onchange="btnImportKeyboardLayout(event)">
+      <input type="file" id="importKeyboardLayoutFile" accept=".json" hidden onchange="btnImportKeyboardLayout(event)">
 
       <div class="addKeyboardTone">
         <label class="customCheckbox">
@@ -271,21 +271,15 @@ tr.drag-over { border:2px dashed #ffcc00; }
     <h3>Table Management</h3>
 
     <!-- This is a New Table Button -->
-    <button id="newTableBtn" class="uniformMangBtn" onclick="btnNewTable()">
-      New Table
-    </button>
+    <button id="newTableBtn" class="uniformMangBtn" onclick="btnNewTable()">New Table</button>
 
     <!-- This is a New Save Button -->
-    <button id="saveTableBtn" class="uniformMangBtn" onclick="btnSaveTable()">
-      Save Table
-    </button>
+    <button id="saveTableBtn" class="uniformMangBtn" onclick="btnSaveTable()">Save Table</button>
 
     <!-- This is a Load Table Button -->
-    <button id="loadTableBtn" class="uniformMangBtn" onclick="btnLoadTable()">
-      Load Table
-    </button>
+    <button id="loadTableBtn" class="uniformMangBtn" onclick="btnLoadTable()">Load Table</button>
 
-    <input type="file" id="loadFileInput" accept=".json" style="display:none" />
+    <input type="file" id="importTableFileInput" accept=".json" hidden onchange="btnImportTableLayout(event)">
 
   </div>
 </div>
@@ -321,14 +315,10 @@ tr.drag-over { border:2px dashed #ffcc00; }
     <h3>Copy Tables</h3>
 
     <!-- This is a Copy Freq Button -->
-    <button id="copyFreqBtn" class="uniformCopyBtn" onclick="btnCopyFrequency()">
-      Copy Frequency Table
-    </button>
+    <button id="copyFreqBtn" class="uniformCopyBtn" onclick="btnCopyFrequency()">Copy Frequency Table</button>
 
     <!-- This is a Control/Vol Button -->
-    <button id="copyCtlVolBtn" class="uniformCopyBtn" onclick="btnCopyControlVolume()">
-      Copy Control/Volume Table
-    </button>
+    <button id="copyCtlVolBtn" class="uniformCopyBtn" onclick="btnCopyControlVolume()">Copy Control/Volume Table</button>
 
   </div>
 </div>
@@ -355,7 +345,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 2.11</div>
+<div id="versionLabel">Version 2.12</div>
 
 <script src="wasm_exec.js"></script>
 
@@ -550,7 +540,7 @@ function setupKeyboardButtonListener() {
 
         // --- Stop tone ---
         key.addEventListener("mouseup", () => stopTone(i));
-        key.addEventListener("mousemove", () => stopTone(i));
+        //key.addEventListener("mousemove", () => stopTone(i));  // dont like this one.  mouse down then mouse move causes issues
         key.addEventListener("touchend", () => stopTone(i));
 
         // --- Drag logic ---
@@ -584,11 +574,11 @@ function setupKeyboardButtonListener() {
         keyboardDiv.appendChild(key);
     }
 
-    let toneStartTime = 0; // to track start time
-
     //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     // Play Tone when button pressed
     //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    let toneStartTime = 0; // to track start time
+
     function playTone(freq) {
         const ctl = parseInt(document.getElementById("ctl").value);
         const vol = parseInt(document.getElementById("vol").value);
@@ -691,7 +681,7 @@ function btnExportKeyboardLayout() {
 // Function to trigger file input click for btnImportKeyboardLayout
 //-------------------------------------------------------------------------------------------------------------------
 function triggerImportLayout() {
-    document.getElementById("importLayoutFile").click();
+    document.getElementById("importKeyboardLayoutFile").click();
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -819,48 +809,40 @@ function btnSaveTable(){
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// Load Json Data for Table
+// Function to trigger file input click for btnImportTableLayout
 //-------------------------------------------------------------------------------------------------------------------
-function btnLoadTable(){ 
-  document.getElementById("loadFileInput").click(); 
+function btnLoadTable() {
+    document.getElementById("importTableFileInput").click();
 }
 
-// Load file routine
-document.getElementById("loadFileInput").addEventListener("change", function(e){
-    const file = e.target.files[0]; 
+//-------------------------------------------------------------------------------------------------------------------
+// Load Json Data for Table
+//-------------------------------------------------------------------------------------------------------------------
+function btnImportTableLayout(event) {
+    const file = event.target.files[0];
     if (!file) return;
-    
+
     const reader = new FileReader();
-    reader.onload = function(ev){
-        // Check for proper file type
+    reader.onload = function(ev) {
         try {
             const loadedTones = JSON.parse(ev.target.result);
-            if (!Array.isArray(loadedTones)) throw new Error("Invalid JSON format");
-            for (let i = 0; i < loadedTones.length; i++) {
-              const step = loadedTones[i];
-              if (typeof step !== 'object' || step === null) 
-                throw new Error(`Step ${i} is not an object`);
-              if (typeof step.frequency !== 'number' || step.frequency < 1 || step.frequency > 31)
-                throw new Error(`Step ${i}: Invalid frequency`);
-              if (typeof step.control !== 'number' || step.control < 1 || step.control > 15)
-                throw new Error(`Step ${i}: Invalid control`);
-              if (typeof step.volume !== 'number' || step.volume < 0 || step.volume > 15)
-                throw new Error(`Step ${i}: Invalid volume`);
-              if (typeof step.repeat !== 'number' || step.repeat < 1)
-                throw new Error(`Step ${i}: Invalid repeat`);
-            }
+            if (!Array.isArray(loadedTones)) throw new Error("Invalid JSON");
+
+            loadedTones.forEach((step, i) => {
+                if (!step || typeof step !== "object") throw new Error(`Step ${i} not object`);
+            });
+
             tonesArray = loadedTones;
-            updateTable(); // ensure table refresh
+            updateTable();
             showToast("Table loaded!");
-        } catch(err) {
+        } catch (err) {
             alert("Failed to load table: " + err.message);
         }
 
-        // Reset file input so the same file can be loaded again
-        e.target.value = "";
+        event.target.value = ""; // reset
     };
     reader.readAsText(file);
-});
+}
 
 //-------------------------------------------------------------------------------------------------------------------
 // Copy Frequency Table to Clipboard

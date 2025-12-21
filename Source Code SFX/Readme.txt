@@ -1,6 +1,6 @@
 # Atari 2600 SFX Editor
 
-**Version:** 2.11
+**Version:** 2.12
 
 A web-based Atari 2600 sound effects editor using TIA sound generation, implemented with Go and WebAssembly.
 
