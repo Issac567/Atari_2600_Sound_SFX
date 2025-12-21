@@ -353,7 +353,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 2.14</div>
+<div id="versionLabel">Version 2.15</div>
 
 <script src="wasm_exec.js"></script>
 
@@ -381,46 +381,8 @@ setupStepPanelInputsListener();
 // One time Setup call 
 setupKeyboardButtonListener();
 
-let jsonData = `[
-    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 0, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 1, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 1, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 1, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 1, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 1, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 2, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 2, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 3, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 3, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 4, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 4, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 4, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 4, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 5, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 5, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 6, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 7, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 7, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 7, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 8, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 9, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 10, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 11, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 12, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 13, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 14, "repeat": 1 },
-    { "control": 3, "volume": 15, "frequency": 15, "repeat": 1 }
-]`;
-
-
 // Load default screech shoot json on startup
-loadTonesFromJsonString(jsonData);
+loadDefaultScreechShootTable();
 
 //-------------------------------------------------------------------------------------------------------------------
 // When "Add Steps at end" Button is pressed, Step Parameters inputs will load into table by Add Steps at end button
@@ -947,13 +909,14 @@ function showToast(msg){
 //-------------------------------------------------------------------------------------------------------------------
 // Screech Shoot Sample loaded at first startup
 //-------------------------------------------------------------------------------------------------------------------
-function loadTonesFromJsonString(jsonData) {
+function loadDefaultScreechShootTable() {
+    let jsonData = `[{"control":3,"volume":15,"frequency":0,"repeat":7},{"control":3,"volume":15,"frequency":1,"repeat":5},{"control":3,"volume":15,"frequency":2,"repeat":2},{"control":3,"volume":15,"frequency":3,"repeat":2},{"control":3,"volume":15,"frequency":4,"repeat":4},{"control":3,"volume":15,"frequency":5,"repeat":2},{"control":3,"volume":15,"frequency":6,"repeat":1},{"control":3,"volume":15,"frequency":7,"repeat":3},{"control":3,"volume":15,"frequency":8,"repeat":1},{"control":3,"volume":15,"frequency":9,"repeat":1},{"control":3,"volume":15,"frequency":10,"repeat":1},{"control":3,"volume":15,"frequency":11,"repeat":1},{"control":3,"volume":15,"frequency":12,"repeat":1},{"control":3,"volume":15,"frequency":13,"repeat":1},{"control":3,"volume":15,"frequency":14,"repeat":1},{"control":3,"volume":15,"frequency":15,"repeat":1}]`;
     let loadedTones;
 
     try {
         loadedTones = JSON.parse(jsonData);
 
-        if (!Array.isArray(loadedTones)) {
+        /*if (!Array.isArray(loadedTones)) {
             throw new Error("Invalid JSON: not an array");
         }
 
@@ -961,13 +924,13 @@ function loadTonesFromJsonString(jsonData) {
             if (!step || typeof step !== "object") {
                 throw new Error(`Step ${i} not object`);
             }
-        });
+        });*/
 
         tonesArray = loadedTones;
         updateTable();
 
     } catch (err) {
-        console.error("Failed to load tones:", err.message);
+        console.error("Failed to load screech shoot tones:", err.message);
     }
 }
 
