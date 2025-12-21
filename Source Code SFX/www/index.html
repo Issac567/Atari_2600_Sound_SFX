@@ -176,9 +176,9 @@ tr.drag-over { border:2px dashed #ffcc00; }
 
   <!-- Export / Import buttons INSIDE keyboard panel -->
   <div id="keyboardFileButtons">
-      <button id="exportLayoutBtn" class="uniformLoadSaveBtn">Export Layout</button>
-      <button id="importLayoutBtn" class="uniformLoadSaveBtn">Import Layout</button>
-      <input type="file" id="importLayoutFile" accept=".json" hidden>
+      <button id="exportLayoutBtn" class="uniformLoadSaveBtn" onclick="btnExportKeyboardLayout()">Export Layout</button>
+      <button id="importLayoutBtn" class="uniformLoadSaveBtn" onclick="triggerImportLayout()">Import Layout</button>
+      <input type="file" id="importLayoutFile" accept=".json" hidden onchange="btnImportKeyboardLayout(event)">
 
       <div class="addKeyboardTone">
         <label class="customCheckbox">
@@ -226,8 +226,8 @@ tr.drag-over { border:2px dashed #ffcc00; }
 
     <!-- This is a Repeat Textbox -->
     <div class="inputRow">
-      <label for="repeat">Repeat (1-30):</label>
-      <input id="repeat" type="number" min="1" max="30" value="1">
+      <label for="repeat">Repeat (1-100):</label>
+      <input id="repeat" type="number" min="1" max="100" value="1">
     </div>
 
     <!-- This is a Add StepButton -->
@@ -256,7 +256,7 @@ tr.drag-over { border:2px dashed #ffcc00; }
     <!-- This is a Checkbox Play on Change  -->
     <div class="playOnChangeRow">
       <label class="customCheckbox">
-        <input type="checkbox" id="chkPlayOnChange" checked>
+        <input type="checkbox" id="PlayOnChangechk" checked>
         <span class="checkmark"></span>
         Play on Change
       </label>
@@ -271,17 +271,17 @@ tr.drag-over { border:2px dashed #ffcc00; }
     <h3>Table Management</h3>
 
     <!-- This is a New Table Button -->
-    <button id="newTableBtn" class="uniformMangBtn" onclick="newTable()">
+    <button id="newTableBtn" class="uniformMangBtn" onclick="btnNewTable()">
       New Table
     </button>
 
     <!-- This is a New Save Button -->
-    <button id="saveTableBtn" class="uniformMangBtn" onclick="saveTable()">
+    <button id="saveTableBtn" class="uniformMangBtn" onclick="btnSaveTable()">
       Save Table
     </button>
 
     <!-- This is a Load Table Button -->
-    <button id="loadTableBtn" class="uniformMangBtn" onclick="loadTable()">
+    <button id="loadTableBtn" class="uniformMangBtn" onclick="btnLoadTable()">
       Load Table
     </button>
 
@@ -321,12 +321,12 @@ tr.drag-over { border:2px dashed #ffcc00; }
     <h3>Copy Tables</h3>
 
     <!-- This is a Copy Freq Button -->
-    <button id="copyFreqBtn" class="uniformCopyBtn" onclick="copyFrequency()">
+    <button id="copyFreqBtn" class="uniformCopyBtn" onclick="btnCopyFrequency()">
       Copy Frequency Table
     </button>
 
     <!-- This is a Control/Vol Button -->
-    <button id="copyCtlVolBtn" class="uniformCopyBtn" onclick="copyControlVolume()">
+    <button id="copyCtlVolBtn" class="uniformCopyBtn" onclick="btnCopyControlVolume()">
       Copy Control/Volume Table
     </button>
 
@@ -355,15 +355,15 @@ tr.drag-over { border:2px dashed #ffcc00; }
 <!-- ======================================= -->
 <!-- This is a Version label -->
 <!-- ======================================= -->
-<div id="versionLabel">Version 2.10</div>
+<div id="versionLabel">Version 2.11</div>
 
 <script src="wasm_exec.js"></script>
 
 <script>
 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 // Initial entry in script
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 let tonesArray = [];
 
 
@@ -381,11 +381,9 @@ setupStepPanelInputsListener();
 // One time Setup call 
 setupKeyboardButtonListener();
 
- //console.log("Hello, world!");
-
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 // When "Add Steps at end" Button is pressed, Step Parameters inputs will load into table by Add Steps at end button
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 function btnAddStepEnd(){
   const freq=parseInt(document.getElementById("freq").value);
   const vol=parseInt(document.getElementById("vol").value);
@@ -395,9 +393,9 @@ function btnAddStepEnd(){
   updateTable();
 }
 
-//--------------------------------------------------------------------------------------------
-// This updates table with tones values
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
+// This updates table with tones values from (Step Parameters input or Keyboard Buttons)
+//-------------------------------------------------------------------------------------------------------------------
 function updateTable(){
   const tbody=document.querySelector("#tonesTable tbody");
   tbody.innerHTML="";
@@ -435,25 +433,26 @@ function updateTable(){
     const volInput=document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volCell.appendChild(volInput);
 
     const repeatCell=row.insertCell();
-    const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=30; repeatInput.value=tone.repeat||1; repeatCell.appendChild(repeatInput);
+    const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=100; repeatInput.value=tone.repeat||1; repeatCell.appendChild(repeatInput);
     
     freqInput.onchange = () => updateToneTableAndPlay(index); ctlSelect.onchange = () => updateToneTableAndPlay(index); volInput.onchange = () => updateToneTableAndPlay(index); repeatInput.onchange = () => updateToneTableAndPlay(index);
 
     const playCell=row.insertCell();
     const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; 
+    playCell.appendChild(playBtn);
     playBtn.onclick=()=>playStep(index); 
-      playCell.appendChild(playBtn);
 
     const delCell=row.insertCell();
     const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="deleteBtn"; 
+    delCell.appendChild(delBtn);
     delBtn.onclick=()=>{ 
       tonesArray.splice(index,1); 
       updateTable(); 
     }; 
-      delCell.appendChild(delBtn);
 
     const insertCell=row.insertCell();
     const insertBtn=document.createElement("button"); insertBtn.textContent="Insert Before"; insertBtn.className="insertBtn";
+    insertCell.appendChild(insertBtn);
     insertBtn.onclick=()=>{
       const freq=parseInt(document.getElementById("freq").value);
       const ctl=parseInt(document.getElementById("ctl").value);
@@ -462,16 +461,16 @@ function updateTable(){
       tonesArray.splice(index,0,{frequency:freq,control:ctl,volume:vol,repeat});
       updateTable();
     };
-      insertCell.appendChild(insertBtn);
+    
   });
 
   Array.from(tbody.rows).forEach((row,idx)=>row.dataset.index=idx);
   updateCopyLabels();
 }
 
-//--------------------------------------------------------------------------------------------
-// This plays the sound when Inputs values are changed in Table (.onchange event declared in updateTable)
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
+// This plays the sound when inputs values are changed in Table (.onchange event declared in updateTable)
+//-------------------------------------------------------------------------------------------------------------------
 function updateToneTableAndPlay(index) {
     const row = document.querySelector("#tonesTable tbody").rows[index];
     if (!row) return;
@@ -487,14 +486,14 @@ function updateToneTableAndPlay(index) {
     updateCopyLabels();
 
     // Check if "Play on Change" is enabled
-    const playOnChange = document.getElementById("chkPlayOnChange").checked;
+    const playOnChange = document.getElementById("PlayOnChangechk").checked;
     if (playOnChange) {
         playStep(index);
     }
 }
-//--------------------------------------------------------------------------------------------
-// Setup Step Parameters Panel inputs listener and Plays the sound when values are changed
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
+// Setup Step Parameters Panel inputs listener and plays the sound when values are changed
+//-------------------------------------------------------------------------------------------------------------------
 function setupStepPanelInputsListener() {
     const stepInputs = ["freq","ctl","vol","repeat"].map(id => document.getElementById(id));
 
@@ -513,12 +512,11 @@ function setupStepPanelInputsListener() {
             updateCopyLabels();
 
             // Only play if "Play on Change" is checked
-            if(document.getElementById("chkPlayOnChange").checked){
+            if(document.getElementById("PlayOnChangechk").checked){
                 if (typeof window.stopAudio === "function") {
                   window.stopAudio();
                 }
                 if(typeof window.updateSamples === "function"){
-                    //window.updateSamples(JSON.stringify(buffer, null, 4));
                     window.updateSamples(JSON.stringify(buffer));
                     if(typeof window.playSample === "function") window.playSample(0);
                 }
@@ -527,15 +525,11 @@ function setupStepPanelInputsListener() {
     });
 }
 
-//--------------------------------------------------------------------------------------------
-// Setup Keyboard buttons listener with mouse/touch/drag functions.  Creates 31 Buttons, too
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
+// Setup Keyboard buttons listener with mouse/touch/drag functions.  Creates 31 Buttons.  Export/Import buttons click
+//-------------------------------------------------------------------------------------------------------------------
 function setupKeyboardButtonListener() {
     const keyboardDiv = document.getElementById("keyboardKeys");
-
-    const exportBtn = document.getElementById("exportLayoutBtn");
-    const importBtn = document.getElementById("importLayoutBtn");
-    const importFile = document.getElementById("importLayoutFile");
 
     let draggedKey = null;
 
@@ -556,6 +550,7 @@ function setupKeyboardButtonListener() {
 
         // --- Stop tone ---
         key.addEventListener("mouseup", () => stopTone(i));
+        key.addEventListener("mousemove", () => stopTone(i));
         key.addEventListener("touchend", () => stopTone(i));
 
         // --- Drag logic ---
@@ -589,74 +584,6 @@ function setupKeyboardButtonListener() {
         keyboardDiv.appendChild(key);
     }
 
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    // Export keyboard layout to file
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    exportBtn.addEventListener("click", () => {
-        const order = Array.from(keyboardDiv.children)
-            .map(btn => btn.textContent);
-
-        const blob = new Blob(
-            [JSON.stringify(order, null, 2)],
-            { type: "application/json" }
-        );
-
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "keyboard-layout.json";
-        a.click();
-        URL.revokeObjectURL(url);
-
-         // Display toast message for saved layout
-        showToast("Keyboard layout saved!");
-    });
-
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    // Import keyboard layout from file
-    //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    importBtn.addEventListener("click", () => {
-        importFile.click();
-    });
-
-    importFile.addEventListener("change", e => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = () => {
-          try {
-              const layout = JSON.parse(reader.result);
-
-              if (!Array.isArray(layout)) throw new Error("Invalid keyboard layout format");
-
-              // Get all buttons in keyboardDiv
-              const buttons = Array.from(keyboardDiv.children);
-
-              // Validate layout first
-              const newOrder = layout.map((numStr, idx) => {
-                const num = Number(numStr);
-                if (isNaN(num) || num < 1 || num > 31) {
-                    throw new Error(`Invalid keyboard button number at index ${idx}`);
-                }
-                const btn = buttons.find(b => Number(b.textContent) === num);
-                if (!btn) throw new Error(`Button ${num} not found`);
-                return btn;
-              });
-
-              // Clear and append in new order **only after validation**
-              keyboardDiv.innerHTML = "";
-              newOrder.forEach(btn => keyboardDiv.appendChild(btn));
-
-              showToast("Keyboard layout loaded!");
-          } catch (err) {
-              alert("Invalid keyboard layout file: " + err.message);
-          }
-      };
-      reader.readAsText(file);
-      e.target.value = "";
-    });
-
     let toneStartTime = 0; // to track start time
 
     //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -683,63 +610,133 @@ function setupKeyboardButtonListener() {
     // Stop tone when button released
     //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     function stopTone(freq) {
-      console.log("FREQ:" + freq)
 
       if (window.stopAudio) window.stopAudio();
 
-        if (toneStartTime > 0) {
-        // Real elapsed time
-        const elapsed = performance.now() - toneStartTime;
+        if (toneStartTime > 0) {            // on mousemove it will always be 0.  good!
+          console.log("FREQ:" + freq)
 
-        // WASM emulation time
-        let emuTime = 0;
-        if (window.getEmulationTime) emuTime = window.getEmulationTime();
+          // Real elapsed time
+          const elapsed = performance.now() - toneStartTime;
 
-        // Subtract emulation latency
-        const adjusted = Math.max(0, elapsed - emuTime);
+          // WASM emulation time
+          let emuTime = 0;
+          if (window.getEmulationTime) emuTime = window.getEmulationTime();
 
-        // Calculate repeat
-        const repeat = calculateRepeat(adjusted);
+          // Subtract emulation latency
+          const adjusted = Math.max(0, elapsed - emuTime);
 
-       // Use the freq passed to stopTone
-        const newTone = {
+          // Calculate repeat
+          const repeat = calculateRepeat(adjusted);
+
+          // Use the freq passed to stopTone
+          const newTone = {
             frequency: freq,
             control: parseInt(document.getElementById("ctl").value),
             volume: parseInt(document.getElementById("vol").value),
             repeat: repeat
-        };
+          };
 
-        // Only add to table if checkbox is checked
-        if (document.getElementById("chkAutoAddTone").checked) {
-          tonesArray.push(newTone);
-          updateTable();
-          console.log("Tone table entry added:", tonesArray[tonesArray.length - 1]);
-        }
+          // Only add to table if checkbox is checked
+          if (document.getElementById("chkAutoAddTone").checked) {
+            tonesArray.push(newTone);
+            updateTable();
+            console.log("Tone table entry added:", tonesArray[tonesArray.length - 1]);
+          }
 
-        console.log("Tone duration (ms):", elapsed.toFixed(2));
-        console.log("Emulation time (ms):", emuTime.toFixed(2));
-        console.log("Adjusted time (ms):", adjusted.toFixed(2));
-        console.log("Total Repeat:", repeat);
+          console.log("Tone duration (ms):", elapsed.toFixed(2));
+          console.log("Emulation time (ms):", emuTime.toFixed(2));
+          console.log("Adjusted time (ms):", adjusted.toFixed(2));
+          console.log("Total Repeat:", repeat);
 
-        // Reset
-        toneStartTime = 0;
-        //currentTone = null;
+          // Reset
+          toneStartTime = 0;
       }
     }
 
     //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     // Calculate Repeat value based on toneStartTime value
     //''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    function calculateRepeat(toneStartTime) {
-      const stepMs = 15; // example: each buffer element = 10ms
-      return Math.max(1, Math.round(toneStartTime / stepMs));
+    function calculateRepeat(durationMs) {
+      const stepMs = 15; // example: each buffer element = 15ms
+      return Math.max(1, Math.round(durationMs / stepMs));
     }
-
 }
 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
+// Export keyboard layout to file
+//-------------------------------------------------------------------------------------------------------------------
+function btnExportKeyboardLayout() {
+    const keyboardDiv = document.getElementById("keyboardKeys");
+    const order = Array.from(keyboardDiv.children)
+        .map(btn => btn.textContent);
+
+    const blob = new Blob(
+        [JSON.stringify(order, null, 2)],
+        { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "keyboard-layout.json";
+    a.click();
+    URL.revokeObjectURL(url);
+
+    // Display toast message
+    showToast("Keyboard layout saved!");
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+// Function to trigger file input click for btnImportKeyboardLayout
+//-------------------------------------------------------------------------------------------------------------------
+function triggerImportLayout() {
+    document.getElementById("importLayoutFile").click();
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+// Import keyboard layout from file
+//-------------------------------------------------------------------------------------------------------------------
+function btnImportKeyboardLayout(e) {
+    const keyboardDiv = document.getElementById("keyboardKeys");
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+        try {
+            const layout = JSON.parse(reader.result);
+
+            if (!Array.isArray(layout)) throw new Error("Invalid keyboard layout format");
+
+            const buttons = Array.from(keyboardDiv.children);
+
+            const newOrder = layout.map((numStr, idx) => {
+                const num = Number(numStr);
+                if (isNaN(num) || num < 1 || num > 31) {
+                    throw new Error(`Invalid keyboard button number at index ${idx}`);
+                }
+                const btn = buttons.find(b => Number(b.textContent) === num);
+                if (!btn) throw new Error(`Button ${num} not found`);
+                return btn;
+            });
+
+            keyboardDiv.innerHTML = "";
+            newOrder.forEach(btn => keyboardDiv.appendChild(btn));
+
+            showToast("Keyboard layout loaded!");
+        } catch (err) {
+            alert("Invalid keyboard layout file: " + err.message);
+        }
+    };
+
+    reader.readAsText(file);
+    e.target.value = ""; // reset input
+}
+
+//-------------------------------------------------------------------------------------------------------------------
 // When "Play All" Button is pressed, this will play all steps from table in sequence
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 function btnplayAllSequence(){
   if (typeof window.stopAudio === "function") {
      window.stopAudio();
@@ -748,15 +745,14 @@ function btnplayAllSequence(){
   if(typeof window.updateSamples==="function"){
     const buffer=[];
     tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) buffer.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
-    //window.updateSamples(JSON.stringify(buffer,null,4));
     window.updateSamples(JSON.stringify(buffer));
     if(typeof window.playSample==="function") window.playSample(0);
   }
 }
 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 // This adds the All Step Tones Values from Table to tonersArray (frequency, Volume, Control and Repeat) 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 function updateToneFromTable(){
   const tbody=document.querySelector("#tonesTable tbody");
   tonesArray=[];
@@ -771,9 +767,9 @@ function updateToneFromTable(){
   updateCopyLabels();
 }
 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 // When "Play" button in Table is pressed, this will play the selected step
-//-------------------------------------------------------------------------------------------- 
+//-------------------------------------------------------------------------------------------------------------------
 function playStep(index){
   if (typeof window.stopAudio === "function") {
     window.stopAudio();
@@ -783,35 +779,34 @@ function playStep(index){
   const buffer=[];
   for(let i=0;i<(step.repeat||1);i++) buffer.push({frequency:step.frequency,control:step.control,volume:step.volume});
   if(typeof window.updateSamples==="function"){
-    //window.updateSamples(JSON.stringify(buffer,null,4));
     window.updateSamples(JSON.stringify(buffer));
     if(typeof window.playSample==="function") window.playSample(0);
   }
 }
 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 // Stop audio in Main.Go call
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 function stopAudio(){ 
   if (typeof window.stopAudio === "function") {
      window.stopAudio();
   }
 }
 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 // This will clear all table
-//--------------------------------------------------------------------------------------------
-function newTable(){ 
+//-------------------------------------------------------------------------------------------------------------------
+function btnNewTable(){ 
   if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ 
     tonesArray=[]; updateTable(); showToast("New table created"); 
   } 
 }
 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 // This will save tone values as Json (Frequency, COntrol, Volume and Repeat)
 // Remember Frequency, Control and Volume is only used to generate the tone
-//--------------------------------------------------------------------------------------------
-function saveTable(){ 
+//-------------------------------------------------------------------------------------------------------------------
+function btnSaveTable(){ 
   const dataStr=JSON.stringify(tonesArray,null,4); 
   const blob=new Blob([dataStr],{type:"application/json"}); 
   const url=URL.createObjectURL(blob); 
@@ -823,10 +818,10 @@ function saveTable(){
   showToast("Table saved!"); 
 }
 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 // Load Json Data for Table
-//--------------------------------------------------------------------------------------------
-function loadTable(){ 
+//-------------------------------------------------------------------------------------------------------------------
+function btnLoadTable(){ 
   document.getElementById("loadFileInput").click(); 
 }
 
@@ -837,6 +832,7 @@ document.getElementById("loadFileInput").addEventListener("change", function(e){
     
     const reader = new FileReader();
     reader.onload = function(ev){
+        // Check for proper file type
         try {
             const loadedTones = JSON.parse(ev.target.result);
             if (!Array.isArray(loadedTones)) throw new Error("Invalid JSON format");
@@ -850,7 +846,7 @@ document.getElementById("loadFileInput").addEventListener("change", function(e){
                 throw new Error(`Step ${i}: Invalid control`);
               if (typeof step.volume !== 'number' || step.volume < 0 || step.volume > 15)
                 throw new Error(`Step ${i}: Invalid volume`);
-              if (typeof step.repeat !== 'number' || step.repeat < 1 || step.repeat > 30)
+              if (typeof step.repeat !== 'number' || step.repeat < 1)
                 throw new Error(`Step ${i}: Invalid repeat`);
             }
             tonesArray = loadedTones;
@@ -866,27 +862,27 @@ document.getElementById("loadFileInput").addEventListener("change", function(e){
     reader.readAsText(file);
 });
 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 // Copy Frequency Table to Clipboard
-//--------------------------------------------------------------------------------------------
-function copyFrequency(){ 
+//-------------------------------------------------------------------------------------------------------------------
+function btnCopyFrequency(){ 
     const text = document.getElementById("frequencyTableLabel").textContent;
     const values = text.replace(/^Frequency Table:\s*/, "");
     navigator.clipboard.writeText(values).then(()=>showToast("Frequency Table copied!")); 
 }
 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 // Copy Control/Volume Table to Clipboard
-//--------------------------------------------------------------------------------------------
-function copyControlVolume(){ 
+//-------------------------------------------------------------------------------------------------------------------
+function btnCopyControlVolume(){ 
     const text = document.getElementById("controlVolumeTableLabel").textContent;
     const values = text.replace(/^Control\/Volume Table:\s*/, "");
     navigator.clipboard.writeText(values).then(()=>showToast("Control/Volume Table copied!")); 
 }
 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 // The clipboard SFX table bytes from 2 labels (Frequency Table: and Control/Volume Table:)
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 function updateCopyLabels(){
   const expanded=[];
   tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
@@ -908,9 +904,9 @@ function updateCopyLabels(){
   }
 }
 
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 // Show Toast
-//--------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 function showToast(msg){
   const toast=document.getElementById("toast");
   toast.textContent=msg;
