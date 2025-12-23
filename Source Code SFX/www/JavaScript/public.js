@@ -33,5 +33,4 @@ function loadJSONScreechShootTable() {
 
     tonesArray = JSON.parse(jsonData);
     updateTable();
-
 }
