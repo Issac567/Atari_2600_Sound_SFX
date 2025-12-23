@@ -91,7 +91,7 @@ function setupKeyboardButtonListener() {
 
             const newTone = {
                 frequency: 1,
-                control: 1,
+                control: 4,
                 volume: 0,
                 repeat: repeat
             };
@@ -263,4 +263,5 @@ function btnLoadKeyboardLayout(e) {
     };
     reader.readAsText(file);
     e.target.value = ""; // reset input
+
 }
