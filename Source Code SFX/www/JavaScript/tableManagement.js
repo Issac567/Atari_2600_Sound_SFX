@@ -4,6 +4,8 @@
 function btnNewTable(){ 
     if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ 
         tonesArray=[]; updateTable(); showToast("New table created"); 
+        const title = document.getElementById('tonesTableTitle');
+        title.textContent = "Untitled";
     } 
 }
 
@@ -12,15 +14,30 @@ function btnNewTable(){
 // Remember Frequency, Control and Volume is only used to generate the tone
 //-------------------------------------------------------------------------------------------------------------------
 function btnSaveTable(){ 
-    const dataStr=JSON.stringify(tonesArray,null,4); 
-    const blob=new Blob([dataStr],{type:"application/json"}); 
-    const url=URL.createObjectURL(blob); 
-    const a=document.createElement("a"); 
-    a.href=url; 
-    a.download="tones.json"; 
+    const dataStr = JSON.stringify(tonesArray, null, 4); 
+    const blob = new Blob([dataStr], { type: "application/json" }); 
+    const url = URL.createObjectURL(blob); 
+
+    // Ask user for filename
+    let filename = prompt("Enter filename:", document.getElementById('tonesTableTitle').textContent);
+    if (!filename) { 
+        URL.revokeObjectURL(url);
+        return; // user canceled
+    }
+
+    // Remove invalid filename characters
+    filename = filename.replace(/[\/\\?%*:|"<>]/g, "");
+
+    const a = document.createElement("a"); 
+    a.href = url; 
+    a.download = filename + ".json"; 
     a.click(); 
     URL.revokeObjectURL(url); 
-    showToast("Table saved!"); 
+
+    // Update table title to match saved name
+    document.getElementById('tonesTableTitle').textContent = filename;
+
+    showToast("Table saved as " + filename + ".json!");
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -46,6 +63,10 @@ function btnLoadTableLayout(event) {
             loadedTones.forEach((step, i) => {
                 if (!step || typeof step !== "object") throw new Error(`Step ${i} not object`);
             });
+
+            const title = document.getElementById('tonesTableTitle');
+            // Remove invalid filename characters
+            title.textContent = file.name.replace(/\.[^/.]+$/, "");
 
             tonesArray = loadedTones;
             updateTable();

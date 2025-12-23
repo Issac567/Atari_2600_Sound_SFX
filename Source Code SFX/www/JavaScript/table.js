@@ -9,6 +9,7 @@ function updateTable(){
         row.setAttribute("draggable","true");
         row.dataset.index=index;
 
+        // Add drag listener for Table
         row.addEventListener("dragstart",e=>{ e.dataTransfer.setData("text/plain",index); e.currentTarget.style.opacity="0.5"; });
         row.addEventListener("dragend",e=>{ e.currentTarget.style.opacity="1"; });
         row.addEventListener("dragover",e=>{ e.preventDefault(); row.classList.add("drag-over"); });
@@ -24,6 +25,7 @@ function updateTable(){
             updateTable();
         });
 
+        // Spinner (Select) list
         const ctlOptions = [
             {v:1,l:"1 = Buzzy"}, {v:2,l:"2 = Distortion"}, {v:3,l:"3 = Flangy"},
             {v:4,l:"4 = Pure"}, {v:5,l:"5 = Pure"}, {v:6,l:"6 = Between Pure/Buzzy"},
@@ -32,29 +34,37 @@ function updateTable(){
             {v:13,l:"13 = Low Pure"}, {v:14,l:"14 = Electronic Low"}, {v:15,l:"15 = Electronic Low"}
         ];
 
+        // Add Step #
         row.insertCell().textContent=index+1;
 
+        // Add Spinner (Select)
         const ctlCell=row.insertCell();
         const ctlSelect=document.createElement("select");
         ctlOptions.forEach(opt=>{ const o=document.createElement("option"); o.value=opt.v; o.text=opt.l; if(opt.v===tone.control) o.selected=true; ctlSelect.appendChild(o); });
         ctlCell.appendChild(ctlSelect);
 
+        // Add Frequency Textbox
         const freqCell=row.insertCell();
         const freqInput=document.createElement("input"); freqInput.type="number"; freqInput.min=0; freqInput.max=31; freqInput.value=tone.frequency; freqCell.appendChild(freqInput);
 
+        // Add Volume Textbox
         const volCell=row.insertCell();
         const volInput=document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volCell.appendChild(volInput);
 
+        // Add Repeat Textbox
         const repeatCell=row.insertCell();
         const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=100; repeatInput.value=tone.repeat||1; repeatCell.appendChild(repeatInput);
     
+        // Onchange events for Freq, Vol, Repeat and Control inputs
         freqInput.onchange = () => updateToneTableAndPlay(index); ctlSelect.onchange = () => updateToneTableAndPlay(index); volInput.onchange = () => updateToneTableAndPlay(index); repeatInput.onchange = () => updateToneTableAndPlay(index);
 
+        // Add Play Button and Click function
         const playCell=row.insertCell();
         const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; 
         playCell.appendChild(playBtn);
         playBtn.onclick=()=>playStep(index); 
 
+        // Add Delete Button and Click function
         const delCell=row.insertCell();
         const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="deleteBtn"; 
         delCell.appendChild(delBtn);
@@ -63,6 +73,7 @@ function updateTable(){
             updateTable(); 
         }; 
 
+        // Add Insert Before Button and Click function
         const insertCell=row.insertCell();
         const insertBtn=document.createElement("button"); insertBtn.textContent="Insert Before"; insertBtn.className="insertBtn";
         insertCell.appendChild(insertBtn);

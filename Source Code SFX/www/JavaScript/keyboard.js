@@ -67,8 +67,8 @@ function setupKeyboardButtonListener() {
         const vol = parseInt(document.getElementById("vol").value);
 
         const buffer = [];
-            // the higher the longer sustain tone can be pressed and also more latency. 50 = 125ms latency
-        for (let i = 0; i < 50; i++) {                                     
+           
+        for (let i = 0; i < KEY_BUFFER_SAMPLE; i++) {                                     
             buffer.push({ frequency: freq, control: ctl, volume: vol });
         }
 
@@ -132,9 +132,8 @@ function setupKeyboardButtonListener() {
     //*******************************************************************
     // Calculate Repeat value based on adjusted value
     //*******************************************************************
-    function calculateRepeat(durationMs) {
-            // part of equation to match step played gain to keyboard key down gain.  18ms matches very close.  Lower value = longer repeat values (more gain) 
-        return Math.max(1, Math.round(durationMs / 18));
+    function calculateRepeat(durationMs) { 
+        return Math.max(1, Math.round(durationMs / STEP_MS));
     }
 }
 
@@ -154,13 +153,24 @@ function btnSaveKeyboardLayout() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "keyboard-layout.json";
+
+    // Ask user for filename
+    let filename = prompt("Enter filename for keyboard layout:", "keyboard-layout");
+    if (!filename) { 
+        URL.revokeObjectURL(url);
+        return; // user canceled
+    }
+
+    // Remove invalid filename characters
+    filename = filename.replace(/[\/\\?%*:|"<>]/g, "");
+
+    a.download = filename + ".json";
     a.click();
     URL.revokeObjectURL(url);
 
-    // Display toast message
-    showToast("Keyboard layout saved!");
+    showToast("Keyboard layout saved as " + filename + ".json!");
 }
+
 
 //-------------------------------------------------------------------------------------------------------------------
 // KEYBOARD: Function to trigger file input click for btnLoadKeyboardLayout (Load Keyboard Layout)

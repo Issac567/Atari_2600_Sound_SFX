@@ -35,7 +35,7 @@ function updateToneFromTable(){
 //-------------------------------------------------------------------------------------------------------------------
 // PLAYBACK: "Stop" button pressed - Stop Audio Main.Go call
 //-------------------------------------------------------------------------------------------------------------------
-function stopAudio(){ 
+function btnStopAudio(){ 
     if (typeof window.stopAudio === "function") {
         window.stopAudio();
     }
