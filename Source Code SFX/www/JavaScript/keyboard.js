@@ -60,9 +60,8 @@ function setupKeyboardButtonListener() {
     //*******************************************************************
     // Play Tone when button pressed
     //*******************************************************************
-    let toneStartTime = 0; // to track start time (On duration)
-    let toneStopTime = 0  // to track stop time (Off duration: Silence Gap)
-    let emuTime = 0;
+    let toneStartTime = 0;  // to track start time (On duration)
+    let emuTime = 0;        // emulation time to process the tonesArray data
 
     function playTone(freq) {
         const ctl = parseInt(document.getElementById("ctl").value);
@@ -83,12 +82,14 @@ function setupKeyboardButtonListener() {
             if (DEBUG) console.log("---------------------------------------");
         } else {
 
-            // Add emulation latency for silence. cause playsample has latency.
+            // Add emulation latency for elapsedStop. cause playsample has latency.
             const adjusted = elapsedStop + emuTime;
 
-            // Valid KeyUp duration → add to table / use it
+
+            // Calculate repeat
             const repeat = calculateRepeat(adjusted);
 
+            // Get the object values put in newTone
             const newTone = {
                 frequency: 1,
                 control: 4,
@@ -96,8 +97,9 @@ function setupKeyboardButtonListener() {
                 repeat: repeat
             };
  
-            // Only add to table if checkbox is checked
+            // Only add to table if "Add Played Tone" checkbox is checked
             if (document.getElementById("chkAutoAddTone").checked) {
+                // and if "Add Silence Gap" checkbox is checked
                 if (document.getElementById("chkAddSilenceTone").checked) {
                     tonesArray.push(newTone);
                     updateTable();
@@ -145,7 +147,7 @@ function setupKeyboardButtonListener() {
             // Calculate repeat
             const repeat = calculateRepeat(adjusted);
 
-            // Use the freq passed to stopTone
+            // Get the object values put in newTone
             const newTone = {
                 frequency: freq,
                 control: parseInt(document.getElementById("ctl").value),
@@ -153,7 +155,7 @@ function setupKeyboardButtonListener() {
                 repeat: repeat
             };
 
-            // Only add to table if checkbox is checked
+            // Only add to table if "Add Played Tone" checkbox is checked
             if (document.getElementById("chkAutoAddTone").checked) {
                 tonesArray.push(newTone);
                 updateTable();
@@ -263,5 +265,4 @@ function btnLoadKeyboardLayout(e) {
     };
     reader.readAsText(file);
     e.target.value = ""; // reset input
-
 }
