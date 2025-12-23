@@ -62,6 +62,7 @@ function setupKeyboardButtonListener() {
     //*******************************************************************
     let toneStartTime = 0; // to track start time (On duration)
     let toneStopTime = 0  // to track stop time (Off duration: Silence Gap)
+    let emuTime = 0;
 
     function playTone(freq) {
         const ctl = parseInt(document.getElementById("ctl").value);
@@ -82,8 +83,8 @@ function setupKeyboardButtonListener() {
             if (DEBUG) console.log("---------------------------------------");
         } else {
 
-            // Add compensate for silence
-            const adjusted = elapsedStop + COMP_LATENCY_MS;
+            // Add emulation latency for silence. cause playsample has latency.
+            const adjusted = elapsedStop + emuTime;
 
             // Valid KeyUp duration → add to table / use it
             const repeat = calculateRepeat(adjusted);
@@ -104,7 +105,8 @@ function setupKeyboardButtonListener() {
                     if (DEBUG) console.log("Tone table entry added SILENCE:", tonesArray[tonesArray.length - 1]);
                 }
             }
-
+            
+            if (DEBUG) console.log("emul Time: " + emuTime);
             if (DEBUG) console.log("Repeat Unpressed: " + repeat);
             if (DEBUG) console.log("Tone duration off:" +  elapsedStop.toFixed(2));
             if (DEBUG) console.log("Adjusted time (ms):", adjusted.toFixed(2));
@@ -133,7 +135,6 @@ function setupKeyboardButtonListener() {
             const elapsedStart = performance.now() - toneStartTime;
 
             // WASM emulation time
-            let emuTime = 0;
             if (typeof window.getEmulationTime === "function") {
                 emuTime = window.getEmulationTime();
             }
