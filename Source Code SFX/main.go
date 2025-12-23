@@ -102,8 +102,8 @@ func updateSamples(this js.Value, args []js.Value) interface{} {
 	// Save emulation time in milliseconds
 	lastEmulationTime = float64(time.Since(startTime).Milliseconds())
 
-	log.Printf("tiaAudio: emulation time %s", time.Since(startTime))
-	log.Printf("tiaAudio: number of tones: %d", len(tonesData))
+	//log.Printf("tiaAudio: emulation time %s", time.Since(startTime))
+	//log.Printf("tiaAudio: number of tones: %d", len(tonesData))
 
 	return nil
 }

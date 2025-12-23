@@ -60,21 +60,60 @@ function setupKeyboardButtonListener() {
     //*******************************************************************
     // Play Tone when button pressed
     //*******************************************************************
-    let toneStartTime = 0; // to track start time
+    let toneStartTime = 0; // to track start time (On duration)
+    let toneStopTime = 0  // to track stop time (Off duration: Silence Gap)
 
     function playTone(freq) {
         const ctl = parseInt(document.getElementById("ctl").value);
         const vol = parseInt(document.getElementById("vol").value);
 
-        const buffer = [];
-           
+        const buffer = []; 
         for (let i = 0; i < KEY_BUFFER_SAMPLE; i++) {                                     
             buffer.push({ frequency: freq, control: ctl, volume: vol });
         }
 
-        // Record start time
+         // Real elapsed time (duration off)
+        let elapsedStop = performance.now() - toneStopTime;
+        if (elapsedStop > KEY_SILENCE_MAX) {
+            // If KeyUp is more than 5 seconds, don't add to table
+            elapsedStop = 0;
+            if (DEBUG) console.log("---------------------------------------");
+            if (DEBUG) console.log("Tone off RESET over limit");
+            if (DEBUG) console.log("---------------------------------------");
+        } else {
+
+            // Add compensate for silence
+            const adjusted = elapsedStop + COMP_LATENCY_MS;
+
+            // Valid KeyUp duration → add to table / use it
+            const repeat = calculateRepeat(adjusted);
+
+            const newTone = {
+                frequency: 1,
+                control: 1,
+                volume: 0,
+                repeat: repeat
+            };
+ 
+            // Only add to table if checkbox is checked
+            if (document.getElementById("chkAutoAddTone").checked) {
+                if (document.getElementById("chkAddSilenceTone").checked) {
+                    tonesArray.push(newTone);
+                    updateTable();
+                    if (DEBUG) console.log("---------------------------------------");
+                    if (DEBUG) console.log("Tone table entry added SILENCE:", tonesArray[tonesArray.length - 1]);
+                }
+            }
+
+            if (DEBUG) console.log("Repeat Unpressed: " + repeat);
+            if (DEBUG) console.log("Tone duration off:" +  elapsedStop.toFixed(2));
+            if (DEBUG) console.log("Adjusted time (ms):", adjusted.toFixed(2));
+            if (DEBUG) console.log("---------------------------------------");
+        }
+       
+        // Record start time for toneStartTime
         toneStartTime = performance.now();
-        
+
         if(typeof window.stopAudio ==="function") window.stopAudio();
         if(typeof window.updateSamples ==="function") window.updateSamples(JSON.stringify(buffer));
         if(typeof window.playSample ==="function") window.playSample(0);
@@ -86,11 +125,12 @@ function setupKeyboardButtonListener() {
     function stopTone(freq) {
         if(typeof window.stopAudio ==="function") window.stopAudio();
 
-        if (toneStartTime > 0) {            
-            console.log("FREQ:" + freq)
+        // Record start time for toneStopTime
+        toneStopTime = performance.now();
 
-            // Real elapsed time
-            const elapsed = performance.now() - toneStartTime;
+        if (toneStartTime > 0) {            
+            // Real elapsed time (duration on)
+            const elapsedStart = performance.now() - toneStartTime;
 
             // WASM emulation time
             let emuTime = 0;
@@ -99,7 +139,7 @@ function setupKeyboardButtonListener() {
             }
 
             // Subtract emulation latency
-            const adjusted = Math.max(0, elapsed - emuTime);
+            const adjusted = Math.max(0, elapsedStart - emuTime);
 
             // Calculate repeat
             const repeat = calculateRepeat(adjusted);
@@ -116,13 +156,19 @@ function setupKeyboardButtonListener() {
             if (document.getElementById("chkAutoAddTone").checked) {
                 tonesArray.push(newTone);
                 updateTable();
-                console.log("Tone table entry added:", tonesArray[tonesArray.length - 1]);
+                if (DEBUG) console.log(" ")
+                if (DEBUG) console.log("---------------------------------------");
+                if (DEBUG) console.log("Tone table entry added:", tonesArray[tonesArray.length - 1]);
             }
 
-            console.log("Tone duration (ms):", elapsed.toFixed(2));
-            console.log("Emulation time (ms):", emuTime.toFixed(2));
-            console.log("Adjusted time (ms):", adjusted.toFixed(2));
-            console.log("Total Repeat:", repeat);
+            if (DEBUG) console.log(" ")
+            if (DEBUG) console.log("FREQ:" + freq)
+            if (DEBUG) console.log("Repeat Pressed:", repeat);
+            if (DEBUG) console.log("Tone duration on (ms):", elapsedStart.toFixed(2));
+            if (DEBUG) console.log("Emulation time (ms):", emuTime.toFixed(2));
+            if (DEBUG) console.log("Adjusted time (ms):", adjusted.toFixed(2));
+            if (DEBUG) console.log("---------------------------------------");
+            if (DEBUG) console.log(" ")
 
             // Reset
             toneStartTime = 0;
