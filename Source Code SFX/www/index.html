@@ -59,14 +59,14 @@
 
             /* Styles for headings, labels, textboxes and Dropdown */
             .panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
-            .inputRow { display:flex; align-items:center; margin-bottom:10px; }
-            .inputRow label { flex:0 0 220px; text-align:right; margin-right:10px; }
-            .inputRow input[type="number"], .inputRow select { flex:1 1 auto; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; max-width:200px; }
-            .inputRow select {max-width:210px; }
+            #stepPanel .inputRow { display:flex; align-items:center; margin-bottom:10px; }
+            #stepPanel .inputRow label { flex:0 0 220px; text-align:right; margin-right:10px; }
+            #stepPanel .inputRow input[type="number"], .inputRow select { flex:1 1 auto; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; max-width:200px; }
+            #stepPanel .inputRow select {text-align:left; max-width:210px;}
 
             /* Styles for "Add Steps at end" Button */
-            button.addStepsBtn { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
-            button.addStepsBtn:hover { background-color:#1E88E5; }
+            #stepPanel button.addStepsBtn { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
+            #stepPanel button.addStepsBtn:hover { background-color:#1E88E5; }
 
             /*================================================================================*/
             /* PLAYBACK: Styles for Playback Management Panel layout */
@@ -74,15 +74,15 @@
             #playbackPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
 
             /* Styles for "Play All" Button */
-            button.playAllBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
-            button.playAllBtn:hover { background-color:#45A049; }
+            #playbackPanel button.playAllBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
+            #playbackPanel button.playAllBtn:hover { background-color:#45A049; }
 
             /* Styles for "Stop" Button */
-            button.stopBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
-            button.stopBtn:hover { background-color:#616161; }
+            #playbackPanel button.stopBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
+            #playbackPanel button.stopBtn:hover { background-color:#616161; }
 
             /* Stlyes for "Play on Change" checkbox */
-            .playOnChangeRow { width: 160px; display: flex; justify-content: center; margin-bottom: 15px; }
+            #playbackPanel .playOnChangeRow { width: 160px; display: flex; justify-content: center; margin-bottom: 15px; }
 
             /*================================================================================*/
             /* TABLE MANAGEMENT: Styles for Table Management Panel layout */
@@ -106,20 +106,20 @@
 
             /* Styles for Dropdown and Textboxes */
             #tonesTable select, #tonesTable input[type="number"] { background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; }
-            #tonesTable select { width:230px; }
+            #tonesTable select { width:210px; text-align:left;}
             #tonesTable input[type="number"] { width:80px; }
 
             /* Styles for the "Play" Button  */
-            button.playBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
-            button.playBtn:hover { background-color:#45A049; }
+            #tonesTable button.playBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:110px; }
+            #tonesTable button.playBtn:hover { background-color:#45A049; }
 
             /* Styles for the "Delete" Button  */
-            button.deleteBtn { background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
-            button.deleteBtn:hover { background-color:#D32F2F; }
+            #tonesTable button.deleteBtn { background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
+            #tonesTable button.deleteBtn:hover { background-color:#D32F2F; }
 
             /* Styles for "Insert Before"  */
-            button.insertBtn { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
-            button.insertBtn:hover { background-color:#1E88E5; }
+            #tonesTable button.insertBtn { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:110px; }
+            #tonesTable button.insertBtn:hover { background-color:#1E88E5; }
 
             /* DRAG OVER: Style for table row being dragged over */
             tr.drag-over { border:2px dashed #ffcc00; }
@@ -157,8 +157,8 @@
             #paypalDonatePanel { margin-top: 20px; text-align: center; }
 
             /* Styles for PayPal button */
-            .paypalButton { display: inline-block; background-color: #0070BA; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s; }
-            .paypalButton:hover { background-color: #005C99; /* Darker blue on hover */ }
+            #paypalDonatePanel .paypalButton { display: inline-block; background-color: #0070BA; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s; }
+            #paypalDonatePanel .paypalButton:hover { background-color: #005C99; /* Darker blue on hover */ }
 
             /*================================================================================*/
             /* VERSION LABEL: Style for version label at the bottom of the editor */
@@ -369,7 +369,7 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="versionLabel">Version 2.68</div>
+        <div id="versionLabel">Version 2.70</div>
 
 <!-- #endregion -->
 

@@ -60,6 +60,13 @@ function setupKeyboardButtonListener() {
     //*******************************************************************
     // Play Tone when button pressed
     //*******************************************************************
+    // Add Silence Gap is not efficient at all.  Ill fix it in future.
+    // toneStopTime is public.  I need to reset it when new table or load table
+    // Prevents Silence Gap Tone being added to table at initial key press. 
+    // But currently issues with user not use keyboard key, then recommended to wait 5 seconds
+    // on first key press.  When you complete the pattern key pressed, appending more
+    // requires a wait of 5 seconds.  In future i will add stop and start button.
+
     let toneStartTime = 0;  // to track start time (On duration)
     let emuTime = 0;        // emulation time to process the tonesArray data
 
