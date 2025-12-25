@@ -69,7 +69,7 @@ function updateTable(){
         playBtn.onclick=()=>playStep(index); 
 
         // After creating volInput and playBtn Set Play button according to vol input
-        function updatePlayBtnColor() {
+        /*function updatePlayBtnColor() {
             if (parseInt(volInput.value) === 0) {
                 // Disable effect
                 playBtn.onmouseenter = () => playBtn.style.backgroundColor = "#616161"
@@ -81,6 +81,13 @@ function updateTable(){
                 playBtn.onmouseleave = () => playBtn.style.backgroundColor = "#4CAF50";
                 playBtn.style.backgroundColor = "#4CAF50";
             }
+        }*/
+                       
+        function updatePlayBtnColor() {
+            const isMuted = parseInt(volInput.value) === 0;
+
+            // Volume 0 → hide button, else → show button
+            playBtn.style.visibility = isMuted ? "hidden" : "visible";
         }
         
         // Add Delete Button and Click function
@@ -154,4 +161,5 @@ function playStep(index){
         window.updateSamples(JSON.stringify(buffer));
         if(typeof window.playSample ==="function") window.playSample(0);
     }
+
 }
