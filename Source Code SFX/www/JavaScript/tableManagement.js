@@ -3,7 +3,7 @@
 //-------------------------------------------------------------------------------------------------------------------
 function btnNewTable(){ 
     if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ 
-        toneStopTime = 0; // for keyboard Resets and prevents Silence Gap tone being added
+        toneStopTime = 0;  // for keyboard Resets and prevents Silence Gap tone being added at inital press
         tonesArray=[]; updateTable(); showToast("New table created"); 
         const title = document.getElementById('tonesTableTitle');
         title.textContent = "Untitled";
@@ -52,7 +52,7 @@ function triggerLoadTable() {
 // TABLE MANAGEMENT: "Load Table" Button get JSON data for Table
 //-------------------------------------------------------------------------------------------------------------------
 function btnLoadTableLayout(event) {
-    toneStopTime = 0; // for keyboard Resets and prevents Silence Gap tone being added
+    toneStopTime = 0; // for keyboard Resets and prevents Silence Gap tone being added at inital press
     
     const file = event.target.files[0];
     if (!file) return;

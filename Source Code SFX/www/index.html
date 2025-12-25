@@ -35,8 +35,8 @@
             #keyboardKeys button { flex: 1 1 0; min-width: 30px; height: 60px; margin: 2px 1px; border: 1px solid #555; border-radius: 4px; background: #eee; color: #111; font-weight: bold; cursor: pointer; user-select: none; text-align: center; transition: background 0.1s, transform 0.05s; }
 
             /* Key press / hover feedback */
-            #keyboardKeys button:hover { background: #ddd; }
-            #keyboardKeys button:active { background: #ccc; transform: scale(0.95); }
+            #keyboardKeys :hover { background: #716767; }
+            #keyboardKeys :active { background: #CCC; transform: scale(0.95); }
 
             /* Responsive adjustments */
             @media (max-width: 800px) { #keyboardKeys button { height: 50px; font-size: 0.9rem; } }
@@ -50,7 +50,7 @@
             #keyboardFileButtons .uniformLoadSaveBtn:hover { background-color: #616161; }
 
             /* Stlyes for "Add Played Tones" and Silence Gap checkbox */
-            #keyboardFileButtons .addKeyboardTone, .addKeyboardSilenceTone { display: flex; }
+            #keyboardFileButtons .addKeyboardTone, #keyboardFileButtons .addKeyboardSilenceTone { width: 160px; display: flex; }
 
             /*================================================================================*/
             /* STEP PARAMETERS: Styles for Step Parameters Panel layout */
@@ -62,11 +62,13 @@
             #stepPanel .inputRow { display:flex; align-items:center; margin-bottom:10px; }
             #stepPanel .inputRow label { flex:0 0 220px; text-align:right; margin-right:10px; }
             #stepPanel .inputRow input[type="number"], .inputRow select { flex:1 1 auto; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; max-width:200px; }
+            #stepPanel .inputRow input:hover { border-color: #888;}
             #stepPanel .inputRow select {text-align:left; max-width:210px;}
+            #stepPanel .inputRow select:hover { border-color: #888;}
 
             /* Styles for "Add Steps at end" Button */
-            #stepPanel button.addStepsBtn { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
-            #stepPanel button.addStepsBtn:hover { background-color:#1E88E5; }
+            #stepPanel .addStepsBtn { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
+            #stepPanel .addStepsBtn:hover { background-color:#1568B0; }
 
             /*================================================================================*/
             /* PLAYBACK: Styles for Playback Management Panel layout */
@@ -74,12 +76,12 @@
             #playbackPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
 
             /* Styles for "Play All" Button */
-            #playbackPanel button.playAllBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
-            #playbackPanel button.playAllBtn:hover { background-color:#45A049; }
+            #playbackPanel .playAllBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
+            #playbackPanel .playAllBtn:hover { background-color: #29832C; }
 
             /* Styles for "Stop" Button */
-            #playbackPanel button.stopBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
-            #playbackPanel button.stopBtn:hover { background-color:#616161; }
+            #playbackPanel .stopBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
+            #playbackPanel .stopBtn:hover { background-color:#616161; }
 
             /* Stlyes for "Play on Change" checkbox */
             #playbackPanel .playOnChangeRow { width: 160px; display: flex; justify-content: center; margin-bottom: 15px; }
@@ -107,19 +109,21 @@
             /* Styles for Dropdown and Textboxes */
             #tonesTable select, #tonesTable input[type="number"] { background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; }
             #tonesTable select { width:210px; text-align:left;}
+            #tonesTable select:hover { border-color: #888;}
             #tonesTable input[type="number"] { width:80px; }
+            #tonesTable input:hover { border-color: #888;}
 
             /* Styles for the "Play" Button  */
-            #tonesTable button.playBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:110px; }
-            #tonesTable button.playBtn:hover { background-color:#45A049; }
+            #tonesTable .playBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:110px; }
+            #tonesTable .playBtn:hover { background-color:#29832C; }
 
             /* Styles for the "Delete" Button  */
-            #tonesTable button.deleteBtn { background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
-            #tonesTable button.deleteBtn:hover { background-color:#D32F2F; }
+            #tonesTable .deleteBtn { background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
+            #tonesTable .deleteBtn:hover { background-color:#9F1919; }
 
             /* Styles for "Insert Before"  */
-            #tonesTable button.insertBtn { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:110px; }
-            #tonesTable button.insertBtn:hover { background-color:#1E88E5; }
+            #tonesTable .insertBtn { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:110px; }
+            #tonesTable .insertBtn:hover { background-color:#1568B0; }
 
             /* DRAG OVER: Style for table row being dragged over */
             tr.drag-over { border:2px dashed #ffcc00; }
@@ -132,7 +136,7 @@
             /*================================================================================*/
             /* COPY TABLE: Styles for Copy Management Panel layout */
             /*================================================================================*/
-            #copyTablesPanel { width:260px; margin-top:0px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
+            #copyTablesPanel { width:200px; height: 170px; margin-top:0px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
 
             /* Styles for All 2 buttons  */
             #copyTablesPanel .uniformCopyBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
@@ -369,7 +373,7 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="versionLabel">Version 2.70</div>
+        <div id="versionLabel">Version 2.71</div>
 
 <!-- #endregion -->
 

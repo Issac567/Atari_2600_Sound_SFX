@@ -25,7 +25,7 @@ function updateTable(){
             updateTable();
         });
 
-        // Spinner (Select) list
+        // Dropdown (Select) list
         const ctlOptions = [
             {v:1,l:"1 = Buzzy"}, {v:2,l:"2 = Distortion"}, {v:3,l:"3 = Flangy"},
             {v:4,l:"4 = Pure"}, {v:5,l:"5 = Pure"}, {v:6,l:"6 = Between Pure/Buzzy"},
@@ -37,7 +37,7 @@ function updateTable(){
         // Add Step #
         row.insertCell().textContent=index+1;
 
-        // Add Spinner (Select)
+        // Add Dropdown (Select)
         const ctlCell=row.insertCell();
         const ctlSelect=document.createElement("select");
         ctlOptions.forEach(opt=>{ const o=document.createElement("option"); o.value=opt.v; o.text=opt.l; if(opt.v===tone.control) o.selected=true; ctlSelect.appendChild(o); });
@@ -56,7 +56,11 @@ function updateTable(){
         const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=100; repeatInput.value=tone.repeat||1; repeatCell.appendChild(repeatInput);
     
         // Onchange events for Freq, Vol, Repeat and Control inputs
-        freqInput.onchange = () => updateToneTableAndPlay(index); ctlSelect.onchange = () => updateToneTableAndPlay(index); volInput.onchange = () => updateToneTableAndPlay(index); repeatInput.onchange = () => updateToneTableAndPlay(index);
+        freqInput.onchange = () => updateToneTableAndPlay(index); ctlSelect.onchange = () => updateToneTableAndPlay(index); repeatInput.onchange = () => updateToneTableAndPlay(index);
+        volInput.onchange = () => {
+            updateToneTableAndPlay(index);
+            updatePlayBtnColor();
+        };
 
         // Add Play Button and Click function
         const playCell=row.insertCell();
@@ -64,6 +68,21 @@ function updateTable(){
         playCell.appendChild(playBtn);
         playBtn.onclick=()=>playStep(index); 
 
+        // After creating volInput and playBtn Set Play button according to vol input
+        function updatePlayBtnColor() {
+            if (parseInt(volInput.value) === 0) {
+                // Disable effect
+                playBtn.onmouseenter = () => playBtn.style.backgroundColor = "#616161"
+                playBtn.onmouseleave = () => playBtn.style.backgroundColor = "#757575";
+                playBtn.style.backgroundColor = "#757575";
+            } else {
+                // Normal effect 
+                playBtn.onmouseenter = () => playBtn.style.backgroundColor = "#29832C";
+                playBtn.onmouseleave = () => playBtn.style.backgroundColor = "#4CAF50";
+                playBtn.style.backgroundColor = "#4CAF50";
+            }
+        }
+        
         // Add Delete Button and Click function
         const delCell=row.insertCell();
         const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="deleteBtn"; 
@@ -85,6 +104,9 @@ function updateTable(){
             tonesArray.splice(index,0,{frequency:freq,control:ctl,volume:vol,repeat});
             updateTable();
         };
+
+        // Initial check
+        updatePlayBtnColor();
     
     });
     Array.from(tbody.rows).forEach((row,idx)=>row.dataset.index=idx);
@@ -93,7 +115,7 @@ function updateTable(){
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// TABLE: This plays the sound when inputs values are changed in Table (.onchange event declared in updateTable)
+// TABLE: This plays the sound when inputs values are changed with Table (.onchange event declared in updateTable)
 //-------------------------------------------------------------------------------------------------------------------
 function updateToneTableAndPlay(index) {
     const row = document.querySelector("#tonesTable tbody").rows[index];

@@ -17,7 +17,7 @@ function setupStepPanelInputsListener() {
             }
 
             // Refresh table labels
-            updateCopyLabels(); 
+            updateCopyLabels();                 // not needed???
 
             // Only play if "Play on Change" is checked
             if(document.getElementById("PlayOnChangechk").checked){

@@ -8,5 +8,5 @@ setupStepPanelInputsListener();
 // One time Setup call 
 setupKeyboardButtonListener();
 
-// Load default screech shoot json on startup
+// Load default screech shoot json at startup
 loadJSONScreechShootTable();

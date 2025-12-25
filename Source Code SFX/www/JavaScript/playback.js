@@ -5,7 +5,7 @@ function btnplayAllSequence(){
     if (typeof window.stopAudio === "function") {
         window.stopAudio();
     }
-    updateToneFromTable();
+    //updateToneFromTable();              // not needed!! toneArray only clears/changes on new table and load table
     if(typeof window.updateSamples ==="function"){
         const buffer=[];
         tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) buffer.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
@@ -15,7 +15,7 @@ function btnplayAllSequence(){
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// PLAYBACK: This adds the All Step Tones values from Table to tonersArray (frequency, Volume, Control and Repeat) 
+// PLAYBACK: NOT NEEDED!! DOUBLE CHECK This adds the All Step Tones values from Table to tonersArray (frequency, Volume, Control and Repeat) 
 //-------------------------------------------------------------------------------------------------------------------
 function updateToneFromTable(){
     const tbody=document.querySelector("#tonesTable tbody");

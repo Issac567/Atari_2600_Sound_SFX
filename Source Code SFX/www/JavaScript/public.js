@@ -1,11 +1,11 @@
-const DEBUG = false;                 // ← set false for release
+const DEBUG = true;                 // ← set false for release
 
 let tonesArray = [];
 let toneStopTime = 0                // to track stop time (Off duration: Silence Gap) (keyboard)
 
 const STEP_MS = 18;                 // part of equation matches "step played sustain" to "keyboard key down sustain".  18ms matches very close.  Lower value = longer repeat values (more gain) 
 const KEY_BUFFER_SAMPLE = 40;       // the higher the longer sustain tone can be heard when key pressed and also adds more latency. 50 = 125ms latency
-const KEY_SILENCE_MAX = 5000;       // 5 seconds max for adding silence gap to table.  if over 5 sec, it will not add silence table.  
+const KEY_SILENCE_MAX = 5000;       // 5 seconds max for adding silence gap to table.  if over 5 sec, it will not add silence gap tone to the table.  
 
 //-------------------------------------------------------------------------------------------------------------------
 // Show Toast

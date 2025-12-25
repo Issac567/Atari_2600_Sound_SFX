@@ -81,27 +81,29 @@ function setupKeyboardButtonListener() {
 
          // Real elapsed time (duration off)
         let elapsedStop = performance.now() - toneStopTime;
+
+        // If KeyUp is more than 5 seconds, don't add to table 
         if (elapsedStop > KEY_SILENCE_MAX) {
-            // If KeyUp is more than 5 seconds, don't add to table
             elapsedStop = 0;
             if (DEBUG) console.log("---------------------------------------");
-            if (DEBUG) console.log("Tone off RESET over limit");
+            if (DEBUG) console.log("Tone off RESET over limit, not adding");
             if (DEBUG) console.log("---------------------------------------");
         } else {
 
+            // WASM emulation time
+            if (typeof window.getEmulationTime === "function") {
+                emuTime = window.getEmulationTime();
+            }
+
             // Add emulation latency for elapsedStop. cause playsample has latency.
             const adjusted = elapsedStop + emuTime;
-
 
             // Calculate repeat
             const repeat = calculateRepeat(adjusted);
 
             // Get the object values put in newTone
             const newTone = {
-                frequency: 1,
-                control: 4,
-                volume: 0,
-                repeat: repeat
+                frequency: 1, control: 4, volume: 0, repeat: repeat
             };
  
             // Only add to table if "Add Played Tone" checkbox is checked
@@ -115,9 +117,9 @@ function setupKeyboardButtonListener() {
                 }
             }
             
-            if (DEBUG) console.log("emul Time: " + emuTime);
-            if (DEBUG) console.log("Repeat Unpressed: " + repeat);
-            if (DEBUG) console.log("Tone duration off:" +  elapsedStop.toFixed(2));
+            if (DEBUG) console.log("Repeat Unpressed:" + repeat);
+            if (DEBUG) console.log("Tone duration off (ms):" +  elapsedStop.toFixed(2));
+            if (DEBUG) console.log("Emulation time (ms):" + emuTime.toFixed(2));
             if (DEBUG) console.log("Adjusted time (ms):", adjusted.toFixed(2));
             if (DEBUG) console.log("---------------------------------------");
         }
@@ -156,10 +158,7 @@ function setupKeyboardButtonListener() {
 
             // Get the object values put in newTone
             const newTone = {
-                frequency: freq,
-                control: parseInt(document.getElementById("ctl").value),
-                volume: parseInt(document.getElementById("vol").value),
-                repeat: repeat
+                frequency: freq, control: parseInt(document.getElementById("ctl").value), volume: parseInt(document.getElementById("vol").value), repeat: repeat
             };
 
             // Only add to table if "Add Played Tone" checkbox is checked
@@ -172,7 +171,6 @@ function setupKeyboardButtonListener() {
             }
 
             if (DEBUG) console.log(" ")
-            if (DEBUG) console.log("FREQ:" + freq)
             if (DEBUG) console.log("Repeat Pressed:", repeat);
             if (DEBUG) console.log("Tone duration on (ms):", elapsedStart.toFixed(2));
             if (DEBUG) console.log("Emulation time (ms):", emuTime.toFixed(2));
@@ -181,7 +179,7 @@ function setupKeyboardButtonListener() {
             if (DEBUG) console.log(" ")
 
             // Reset
-            toneStartTime = 0;
+            toneStartTime = 0;      // remove not neccessary??
         }
     }
 
@@ -226,7 +224,6 @@ function btnSaveKeyboardLayout() {
 
     showToast("Keyboard layout saved as " + filename + ".json!");
 }
-
 
 //-------------------------------------------------------------------------------------------------------------------
 // KEYBOARD: Function to trigger file input click for btnLoadKeyboardLayout (Load Keyboard Layout)
