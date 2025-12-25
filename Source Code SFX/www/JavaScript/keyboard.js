@@ -179,7 +179,7 @@ function setupKeyboardButtonListener() {
             if (DEBUG) console.log(" ")
 
             // Reset
-            toneStartTime = 0;      // remove not neccessary??
+            //toneStartTime = 0;      // remove not neccessary??
         }
     }
 
@@ -269,4 +269,13 @@ function btnLoadKeyboardLayout(e) {
     };
     reader.readAsText(file);
     e.target.value = ""; // reset input
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+// KEYBOARD: "Keyboard Silence Tone" Checkbox 
+//-------------------------------------------------------------------------------------------------------------------
+function chkKeyboardSilenceTone(checked) {
+    if (checked) {
+        toneStopTime = 0;  // for keyboard Resets and prevents Silence Gap tone being added at inital press
+    }
 }

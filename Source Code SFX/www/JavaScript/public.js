@@ -1,4 +1,4 @@
-const DEBUG = false;                 // ← set false for release
+const DEBUG = true;                 // ← set false for release
 
 let tonesArray = [];
 let toneStopTime = 0                // to track stop time (Off duration: Silence Gap) (keyboard)
@@ -33,5 +33,4 @@ function loadJSONScreechShootTable() {
 
     tonesArray = JSON.parse(jsonData);
     updateTable();
-
 }
