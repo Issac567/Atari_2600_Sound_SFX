@@ -107,7 +107,7 @@ function setupKeyboardButtonListener() {
             };
  
             // Only add to table if "Add Played Tone" checkbox is checked
-            if (document.getElementById("chkAutoAddTone").checked) {
+            if (document.getElementById("chkAddPlayedTone").checked) {
                 // and if "Add Silence Gap" checkbox is checked
                 if (document.getElementById("chkAddSilenceTone").checked) {
                     tonesArray.push(newTone);
@@ -162,7 +162,7 @@ function setupKeyboardButtonListener() {
             };
 
             // Only add to table if "Add Played Tone" checkbox is checked
-            if (document.getElementById("chkAutoAddTone").checked) {
+            if (document.getElementById("chkAddPlayedTone").checked) {
                 tonesArray.push(newTone);
                 updateTable();
                 if (DEBUG) console.log(" ")
@@ -266,6 +266,13 @@ function btnLoadKeyboardLayout(e) {
     };
     reader.readAsText(file);
     e.target.value = ""; // reset input
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+// KEYBOARD: "Keyboard Add Played Tone" Checkbox 
+//-------------------------------------------------------------------------------------------------------------------
+function chkKeyboardAddPlayedTone(checked) {
+    document.getElementById("chkAddSilenceTone").disabled = !checked; 
 }
 
 //-------------------------------------------------------------------------------------------------------------------

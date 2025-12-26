@@ -200,7 +200,7 @@
                 <!-- This is a Add Played Tone Checkbox   -->
                 <div class="addKeyboardTone">
                     <label class="customCheckbox">
-                        <input type="checkbox" id="chkAutoAddTone">
+                        <input type="checkbox" id="chkAddPlayedTone" onclick="chkKeyboardAddPlayedTone(this.checked)">
                         <span class="checkmark"></span>
                         Add Played Tone
                     </label>
@@ -209,7 +209,7 @@
                 <!-- This is a Silence Gap Checkbox   -->
                 <div class="addKeyboardSilenceTone">
                     <label class="customCheckbox">
-                        <input type="checkbox" id="chkAddSilenceTone" onclick="chkKeyboardSilenceTone(this.checked)">
+                        <input type="checkbox" id="chkAddSilenceTone" onclick="chkKeyboardSilenceTone(this.checked)" disabled>
                         <span class="checkmark"></span>
                         Add Silence Gap
                     </label>
@@ -373,7 +373,7 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="versionLabel">Version 2.76</div>
+        <div id="versionLabel">Version 2.77</div>
 
 <!-- #endregion -->
 
