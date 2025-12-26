@@ -177,9 +177,6 @@ function setupKeyboardButtonListener() {
             if (DEBUG) console.log("Adjusted time (ms):", adjusted.toFixed(2));
             if (DEBUG) console.log("---------------------------------------");
             if (DEBUG) console.log(" ")
-
-            // Reset
-            //toneStartTime = 0;      // remove not neccessary??
         }
     }
 

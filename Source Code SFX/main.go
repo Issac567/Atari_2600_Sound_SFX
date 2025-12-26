@@ -40,13 +40,11 @@ type Tone struct {
 // Main
 // ======================================================================
 func main() {
-	js.Global().Set("updateSamples", js.FuncOf(updateSamples)) // first updateSamples = call from JS, second updateSamples = call in here
+	// first .Set = call from JS, js.FuncOf = call in here
+	js.Global().Set("updateSamples", js.FuncOf(updateSamples))
 	js.Global().Set("stopAudio", js.FuncOf(stopAudio))
 	js.Global().Set("playSample", js.FuncOf(playSample))
-
-	js.Global().Set("getEmulationTime", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		return lastEmulationTime
-	}))
+	js.Global().Set("getEmulationTime", js.FuncOf(getEmulationtime))
 
 	audioContext = js.Global().Get("AudioContext").New()
 	select {}
@@ -183,6 +181,13 @@ func stopAudio(this js.Value, args []js.Value) interface{} {
 	}
 	return nil
 
+}
+
+// ======================================================================
+// Last Emulation Processing time.
+// ======================================================================
+func getEmulationtime(this js.Value, args []js.Value) interface{} {
+	return lastEmulationTime
 }
 
 /* func addMessage(msg string) {
