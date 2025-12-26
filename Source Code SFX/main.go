@@ -84,8 +84,9 @@ func updateSamples(this js.Value, args []js.Value) interface{} {
 		return nil
 	}
 
-	content := args[0].String()
 	startTime := time.Now()
+
+	content := args[0].String()
 	var err error
 	tonesData, err = parseJson([]byte(content))
 	if err != nil {

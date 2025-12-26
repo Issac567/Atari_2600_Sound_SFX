@@ -75,17 +75,37 @@ function updateTable(){
         delBtn.onclick=()=>{ 
             tonesArray.splice(index,1); 
             updateTable(); 
+
+
+            
+   
+        
         }; 
 
         // Add Insert Before Button and Click function
         const insertCell=row.insertCell();
-        const insertBtn=document.createElement("button"); insertBtn.textContent="Insert Before"; insertBtn.className="insertBtn";
+        const insertBtn=document.createElement("button"); insertBtn.textContent="Duplicate"; insertBtn.className="insertBtn";
         insertCell.appendChild(insertBtn);
         insertBtn.onclick=()=>{
+
+            /*
+            // Old not using this method.  It takes step parameter values and insert before
+            // Just add to end and drag and move.  below is better alternative
             const freq=parseInt(document.getElementById("freq").value);
             const ctl=parseInt(document.getElementById("ctl").value);
             const vol=parseInt(document.getElementById("vol").value);
             const repeat=parseInt(document.getElementById("repeat").value)||1;
+            tonesArray.splice(index,0,{frequency:freq,control:ctl,volume:vol,repeat});
+            updateTable();
+            */
+      
+            // duplicates the selected row with table cell values not step parameters.
+            const tbody=document.querySelector("#tonesTable tbody");
+            const row=tbody.rows[index];
+            const ctl  = parseInt(row.cells[1].querySelector("select").value);
+            const freq = parseInt(row.cells[2].querySelector("input").value);
+            const vol=parseInt(row.cells[3].querySelector("input").value);
+            const repeat=parseInt(row.cells[4].querySelector("input").value)||1;
             tonesArray.splice(index,0,{frequency:freq,control:ctl,volume:vol,repeat});
             updateTable();
         };
