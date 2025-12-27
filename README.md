@@ -41,7 +41,7 @@ A web-based Atari 2600 sound effects editor using TIA sound generation, implemen
 
 **Notes:**
 - `init.js` must be loaded last so all functions exist before initial setup calls.
-- `copyTables.js` functions can be used by `playback.js` even if `copyTables.js` is loaded later, as long as the functions are called after DOM and script load.
+- `copyTables.js` functions can be used by `stepPanel.js` even if `copyTables.js` is loaded later, as long as the functions are called after DOM and script load.
 - `public.js` contains shared functions/constants used by multiple scripts.
 
 ---
