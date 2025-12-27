@@ -6,7 +6,7 @@ function btnplayAllSequence(){
         window.stopAudio();
     }
 
-    const LoopPlayback = document.getElementById("LoopPlaybackchk").checked;
+    const LoopPlayback = document.getElementById("id_LoopPlaybackchk").checked;
 
     if(typeof window.updateSamples ==="function"){
         const buffer=[];
@@ -26,7 +26,7 @@ function btnStopAudio(){
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// PLAYBACK: "Loop Playback" Button
+// PLAYBACK: "Loop Playback" checkbox
 //-------------------------------------------------------------------------------------------------------------------
 function chkLoopPlayback(checked) {
     if (!checked) {

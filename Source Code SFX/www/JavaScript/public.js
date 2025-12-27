@@ -11,7 +11,7 @@ const KEY_SILENCE_MAX = 5000;       // 5 seconds max for adding silence gap to t
 // Show Toast
 //-------------------------------------------------------------------------------------------------------------------
 function showToast(msg){
-    const toast=document.getElementById("toast");
+    const toast=document.getElementById("id_toast");
     toast.textContent=msg;
     toast.className="show";
     setTimeout(()=>{toast.className=toast.className.replace("show","");},3000);
@@ -28,7 +28,7 @@ function loadJSONScreechShootTable() {
                         {"control":3,"volume":15,"frequency":12,"repeat":1},{"control":3,"volume":15,"frequency":13,"repeat":1},{"control":3,"volume":15,"frequency":14,"repeat":1},
                         {"control":3,"volume":15,"frequency":15,"repeat":1}]`;
 
-    const title = document.getElementById('tonesTableTitle');
+    const title = document.getElementById('id_tonesTableTitle');
     title.textContent = "Screech Shoot";
 
     tonesArray = JSON.parse(jsonData);

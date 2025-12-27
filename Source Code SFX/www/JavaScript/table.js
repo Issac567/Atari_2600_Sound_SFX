@@ -2,7 +2,7 @@
 // TABLE: This updates Table with tones values from (Step Parameters input or Keyboard pressed buttons if enabled)
 //-------------------------------------------------------------------------------------------------------------------
 function updateTable(){
-    const tbody=document.querySelector("#tonesTable tbody");
+    const tbody=document.querySelector("#id_tonesTable tbody");
     tbody.innerHTML="";
     tonesArray.forEach((tone,index)=>{
         const row=tbody.insertRow();
@@ -64,13 +64,13 @@ function updateTable(){
 
         // Add Play Button and Click function
         const playCell=row.insertCell();
-        const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="playBtn"; 
+        const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="cls_playBtn"; 
         playCell.appendChild(playBtn);
         playBtn.onclick=()=>playStep(index); 
        
         // Add Delete Button and Click function
         const delCell=row.insertCell();
-        const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="deleteBtn"; 
+        const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="cls_deleteBtn"; 
         delCell.appendChild(delBtn);
         delBtn.onclick=()=>{ 
             tonesArray.splice(index,1); 
@@ -79,11 +79,11 @@ function updateTable(){
 
         // Add Insert Before Button and Click function
         const insertCell=row.insertCell();
-        const insertBtn=document.createElement("button"); insertBtn.textContent="Duplicate"; insertBtn.className="insertBtn";
+        const insertBtn=document.createElement("button"); insertBtn.textContent="Duplicate"; insertBtn.className="cls_insertBtn";
         insertCell.appendChild(insertBtn);
         insertBtn.onclick=()=>{
             // duplicates the selected row with table cell values not step parameters.
-            const tbody=document.querySelector("#tonesTable tbody");
+            const tbody=document.querySelector("#id_tonesTable tbody");
             const row=tbody.rows[index];
              if (!row) return;
             const ctl  = parseInt(row.cells[1].querySelector("select").value);
@@ -115,7 +115,7 @@ function updateTable(){
 // TABLE: This plays the sound when inputs values are changed with Table (.onchange event declared in updateTable)
 //-------------------------------------------------------------------------------------------------------------------
 function updateToneTableAndPlay(index) {
-    const row = document.querySelector("#tonesTable tbody").rows[index];
+    const row = document.querySelector("#id_tonesTable tbody").rows[index];
     if (!row) return;
 
     const ctl = parseInt(row.cells[1].querySelector("select").value);
@@ -130,7 +130,7 @@ function updateToneTableAndPlay(index) {
     updateCopyLabels(); 
 
     // Check if "Play on Change" is enabled
-    const playOnChange = document.getElementById("PlayOnChangechk").checked;
+    const playOnChange = document.getElementById("id_PlayOnChangechk").checked;
     if (playOnChange) {
         playStep(index);
     }

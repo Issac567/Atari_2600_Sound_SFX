@@ -5,7 +5,7 @@ function btnNewTable(){
     if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ 
         toneStopTime = 0;  // for keyboard Resets and prevents Silence Gap tone being added at inital press
         tonesArray=[]; updateTable(); showToast("New table created"); 
-        const title = document.getElementById('tonesTableTitle');
+        const title = document.getElementById('id_tonesTableTitle');
         title.textContent = "Untitled";
     } 
 }
@@ -20,7 +20,7 @@ function btnSaveTable(){
     const url = URL.createObjectURL(blob); 
 
     // Ask user for filename
-    let filename = prompt("Enter filename:", document.getElementById('tonesTableTitle').textContent);
+    let filename = prompt("Enter filename:", document.getElementById('id_tonesTableTitle').textContent);
     if (!filename) { 
         URL.revokeObjectURL(url);
         return; // user canceled
@@ -36,7 +36,7 @@ function btnSaveTable(){
     URL.revokeObjectURL(url); 
 
     // Update table title to match saved name
-    document.getElementById('tonesTableTitle').textContent = filename;
+    document.getElementById('id_tonesTableTitle').textContent = filename;
 
     showToast("Table saved as " + filename + ".json!");
 }
@@ -45,7 +45,7 @@ function btnSaveTable(){
 // TABLE MANAGEMENT: "Load Table" Button function to trigger file input click for btnLoadTableLayout
 //-------------------------------------------------------------------------------------------------------------------
 function triggerLoadTable() {
-    document.getElementById("loadTableFileInput").click();
+    document.getElementById("id_loadTableFileInput").click();
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ function btnLoadTableLayout(event) {
                 if (!step || typeof step !== "object") throw new Error(`Step ${i} not object`);
             });
 
-            const title = document.getElementById('tonesTableTitle');
+            const title = document.getElementById('id_tonesTableTitle');
             // Remove invalid filename characters
             title.textContent = file.name.replace(/\.[^/.]+$/, "");
 

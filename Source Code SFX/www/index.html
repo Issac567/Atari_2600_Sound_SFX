@@ -13,93 +13,93 @@
             /*================================================================================*/
             /* Styles for panel container and individual panels */
             /*================================================================================*/
-            .panelContainer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
-            .panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
+            .cls_panelContainer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
+            .cls_panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
 
             /*================================================================================*/
             /* KEYBOARD: Styles for Keyboard Panel layout */
             /*================================================================================*/
-            #keyboardPanel { width: 95%; height: 160px; margin: 20px auto 20px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+            #id_keyboardPanel { width: 95%; height: 160px; margin: 20px auto 20px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 
             /* Keyboard title */
-            #keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+            #id_keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 
             /* Keyboard keys container */
-            #keyboardKeys { display: flex; justify-content: flex-start; gap: 2px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 2px; padding-right: 2px; }
+            #id_keyboardKeys { display: flex; justify-content: flex-start; gap: 2px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 2px; padding-right: 2px; }
 
             /* Optional: style scrollbar */
-            #keyboardKeys::-webkit-scrollbar { height: 6px; }
-            #keyboardKeys::-webkit-scrollbar-thumb { background: #aaa; border-radius: 3px; }
+            #id_keyboardKeys::-webkit-scrollbar { height: 6px; }
+            #id_keyboardKeys::-webkit-scrollbar-thumb { background: #aaa; border-radius: 3px; }
 
             /* Individual keys */
-            #keyboardKeys button { flex: 1 1 0; min-width: 30px; height: 60px; margin: 2px 1px; border: 1px solid #555; border-radius: 4px; background: #eee; color: #111; font-weight: bold; cursor: pointer; user-select: none; text-align: center; transition: background 0.1s, transform 0.05s; }
+            #id_keyboardKeys button { flex: 1 1 0; min-width: 30px; height: 60px; margin: 2px 1px; border: 1px solid #555; border-radius: 4px; background: #eee; color: #111; font-weight: bold; cursor: pointer; user-select: none; text-align: center; transition: background 0.1s, transform 0.05s; }
 
             /* Key press / hover feedback */
-            #keyboardKeys :hover { background: #716767; }
-            #keyboardKeys :active { background: #CCC; transform: scale(0.95); }
+            #id_keyboardKeys button:hover { background: #716767; }
+            #id_keyboardKeys button:active { background: #CCC; transform: scale(0.95); }
 
             /* Responsive adjustments */
-            @media (max-width: 800px) { #keyboardKeys button { height: 50px; font-size: 0.9rem; } }
-            @media (max-width: 500px) { #keyboardKeys button { height: 40px; font-size: 0.8rem; } }
+            @media (max-width: 800px) { #id_keyboardKeys button { height: 50px; font-size: 0.9rem; } }
+            @media (max-width: 500px) { #id_keyboardKeys button { height: 40px; font-size: 0.8rem; } }
 
             /* Keyboard Export/Import Layout Buttons */
-            #keyboardFileButtons { display: flex; justify-content: center; gap: 16px; width: 100%; padding: 8px 0; margin-top: 10px; border-top: none; align-items: center; }
+            #id_keyboardFileButtons { display: flex; justify-content: center; gap: 16px; width: 100%; padding: 8px 0; margin-top: 10px; border-top: none; align-items: center; }
 
             /* Styles for "Import/Export Buttons"  */
-            #keyboardFileButtons .KeyboardSaveLoadBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:4px; cursor:pointer; padding:6px 14px; cursor: pointer; text-align: center; transition: background 0.2s; width:140px; }
-            #keyboardFileButtons .KeyboardSaveLoadBtn:hover { background-color: #616161; }
+            #id_keyboardFileButtons .cls_KeyboardSaveLoadBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:4px; cursor:pointer; padding:6px 14px; cursor: pointer; text-align: center; transition: background 0.2s; width:140px; }
+            #id_keyboardFileButtons .cls_KeyboardSaveLoadBtn:hover { background-color: #616161; }
 
             /* Stlyes for "Add Played Tones" and Silence Gap checkbox */
-            #keyboardFileButtons .KeyboardCheckbox{ width: 160px; display: flex; }
+            #id_keyboardFileButtons .cls_KeyboardCheckbox{ width: 160px; display: flex; }
 
             /*================================================================================*/
             /* STEP PARAMETERS: Styles for Step Parameters Panel layout */
             /*================================================================================*/
-            #stepPanel { width: 460px; height: 220px;}
+            #id_stepPanel { width: 460px; height: 220px;}
 
             /* Styles for headings, labels, textboxes and Dropdown */
-            .panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
-            #stepPanel .inputRow { display:flex; align-items:center; margin-bottom:10px; }
-            #stepPanel .inputRow label { flex:0 0 220px; text-align:right; margin-right:10px; }
-            #stepPanel .inputRow input[type="number"], .inputRow select { flex:1 1 auto; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; max-width:200px; }
-            #stepPanel .inputRow input:hover { border-color: #888;}
-            #stepPanel .inputRow select {text-align:left; max-width:210px;}
-            #stepPanel .inputRow select:hover { border-color: #888;}
+            .cls_panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
+            #id_stepPanel .cls_inputRow { display:flex; align-items:center; margin-bottom:10px; }
+            #id_stepPanel .cls_inputRow label { flex:0 0 220px; text-align:right; margin-right:10px; }
+            #id_stepPanel .cls_inputRow input[type="number"], .cls_inputRow select { flex:1 1 auto; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; max-width:200px; }
+            #id_stepPanel .cls_inputRow input:hover { border-color: #888;}
+            #id_stepPanel .cls_inputRow select {text-align:left; max-width:210px;}
+            #id_stepPanel .cls_inputRow select:hover { border-color: #888;}
 
             /* Styles for "Add Steps at end" Button */
-            #stepPanel .addStepsBtn { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
-            #stepPanel .addStepsBtn:hover { background-color:#1568B0; }
+            #id_stepPanel .cls_addStepsBtn { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
+            #id_stepPanel .cls_addStepsBtn:hover { background-color:#1568B0; }
 
             /*================================================================================*/
             /* PLAYBACK: Styles for Playback Management Panel layout */
             /*================================================================================*/
-            #playbackPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
+            #id_playbackPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
 
             /* Styles for "Play All" Button */
-            #playbackPanel .playAllBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
-            #playbackPanel .playAllBtn:hover { background-color: #29832C; }
+            #id_playbackPanel .cls_playAllBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
+            #id_playbackPanel .cls_playAllBtn:hover { background-color: #29832C; }
 
             /* Styles for "Stop" Button */
-            #playbackPanel .stopBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
-            #playbackPanel .stopBtn:hover { background-color:#616161; }
+            #id_playbackPanel .cls_stopBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
+            #id_playbackPanel .cls_stopBtn:hover { background-color:#616161; }
 
             /* Stlyes for "Loop Playback" and "PlayonChange" checkbox */
-            #playbackPanel .PlaybackCheckbox { width: 160px; display: flex; justify-content: left; }
+            #id_playbackPanel .cls_PlaybackCheckbox { width: 160px; display: flex; justify-content: left; }
  
             /*================================================================================*/
             /* TABLE MANAGEMENT: Styles for Table Management Panel layout */
             /*================================================================================*/
-            #tableManagementPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
+            #id_tableManagementPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
 
             /* Styles for All 3 Buttons */
-            #tableManagementPanel .ManagementBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
-            #tableManagementPanel .ManagementBtn:hover { background-color:#616161; }
+            #id_tableManagementPanel .cls_ManagementBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+            #id_tableManagementPanel .cls_ManagementBtn:hover { background-color:#616161; }
 
             /*================================================================================*/
             /* TABLE: Styles for table layout */
             /*================================================================================*/
             /* Style for Table Header title */
-            #tonesTableTitle { display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: white; margin-bottom: 15px; }           
+            #id_tonesTableTitle { display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: white; margin-bottom: 15px; }           
             
             /* Style for Table */
             table { border-collapse:collapse; margin:10px auto; width:97%; background-color:#2b2b2b; }
@@ -107,23 +107,23 @@
             th { background-color:#3a3a3a; }
 
             /* Styles for Dropdown and Textboxes */
-            #tonesTable select, #tonesTable input[type="number"] { background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; }
-            #tonesTable select { width:210px; text-align:left;}
-            #tonesTable select:hover { border-color: #888;}
-            #tonesTable input[type="number"] { width:80px; }
-            #tonesTable input:hover { border-color: #888;}
+            #id_tonesTable select, #id_tonesTable input[type="number"] { background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; }
+            #id_tonesTable select { width:210px; text-align:left;}
+            #id_tonesTable select:hover { border-color: #888;}
+            #id_tonesTable input[type="number"] { width:80px; }
+            #id_tonesTable input:hover { border-color: #888;}
 
             /* Styles for the "Play" Button  */
-            #tonesTable .playBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:110px; }
-            #tonesTable .playBtn:hover { background-color:#29832C; }
+            #id_tonesTable .cls_playBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:110px; }
+            #id_tonesTable .cls_playBtn:hover { background-color:#29832C; }
 
             /* Styles for the "Delete" Button  */
-            #tonesTable .deleteBtn { background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
-            #tonesTable .deleteBtn:hover { background-color:#9F1919; }
+            #id_tonesTable .cls_deleteBtn { background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
+            #id_tonesTable .cls_deleteBtn:hover { background-color:#9F1919; }
 
             /* Styles for "Duplicate"  */
-            #tonesTable .insertBtn { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:110px; }
-            #tonesTable .insertBtn:hover { background-color:#1568B0; }
+            #id_tonesTable .cls_insertBtn { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:110px; }
+            #id_tonesTable .cls_insertBtn:hover { background-color:#1568B0; }
 
             /* DRAG OVER: Style for table row being dragged over */
             tr.drag-over { border:2px dashed #ffcc00; }
@@ -131,23 +131,23 @@
             /*================================================================================*/
             /* FREQ/VOL LABEL: Styles for Frequency and Volume label at bottom */
             /*================================================================================*/
-            #frequencyTableLabel, #controlVolumeTableLabel { margin-top:20px; text-align:center; color:#ffcc00; }
+            #id_frequencyTableLabel, #id_controlVolumeTableLabel { margin-top:20px; text-align:center; color:#ffcc00; }
 
             /*================================================================================*/
             /* COPY TABLE: Styles for Copy Management Panel layout */
             /*================================================================================*/
-            #copyTablesPanel { width:200px; height: 170px; margin-top:0px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
+            #id_copyTablesPanel { width:200px; height: 170px; margin-top:0px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
 
             /* Styles for All 2 buttons  */
-            #copyTablesPanel .CopyMangBnt { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
-            #copyTablesPanel .CopyMangBnt:hover { background-color:#616161; }
+            #id_copyTablesPanel .cls_CopyMangBnt { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+            #id_copyTablesPanel .cls_CopyMangBnt:hover { background-color:#616161; }
 
             /*================================================================================*/
             /* TOAST: Styles for toast notifications */
             /*================================================================================*/
             /* Styles for toast message */
-            #toast { visibility:hidden; min-width:200px; background-color:#333; color:#fff; text-align:center; border-radius:4px; padding:10px; position:fixed; z-index:100; left:50%; bottom:30px; transform:translateX(-50%); font-size:16px; }
-            #toast.show { visibility:visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+            #id_toast { visibility:hidden; min-width:200px; background-color:#333; color:#fff; text-align:center; border-radius:4px; padding:10px; position:fixed; z-index:100; left:50%; bottom:30px; transform:translateX(-50%); font-size:16px; }
+            #id_toast.show { visibility:visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
 
             /* Fade-in animation for toast */
             @keyframes fadein { from {bottom:0; opacity:0;} to {bottom:30px; opacity:1;} }
@@ -158,16 +158,16 @@
             /*================================================================================*/
             /* PAYPAL: Styles for Pay Pal Panel layout */
             /*================================================================================*/
-            #paypalDonatePanel { margin-top: 20px; text-align: center; }
+            #id_paypalDonatePanel { margin-top: 20px; text-align: center; }
 
             /* Styles for PayPal button */
-            #paypalDonatePanel .paypalButton { display: inline-block; background-color: #0070BA; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s; }
-            #paypalDonatePanel .paypalButton:hover { background-color: #005C99; /* Darker blue on hover */ }
+            #id_paypalDonatePanel .cls_paypalButton { display: inline-block; background-color: #0070BA; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s; }
+            #id_paypalDonatePanel .cls_paypalButton:hover { background-color: #005C99; /* Darker blue on hover */ }
 
             /*================================================================================*/
             /* VERSION LABEL: Style for version label at the bottom of the editor */
             /*================================================================================*/
-            #versionLabel { text-align: center; margin: 20px 0; color: #888; font-size: 14px; font-style: italic; }
+            #id_versionLabel { text-align: center; margin: 20px 0; color: #888; font-size: 14px; font-style: italic; }
 
         </style>                    
     </head>
@@ -180,37 +180,37 @@
         <!-- ======================================= -->
         <!-- This is a Keyboard -->
         <!-- ======================================= -->
-        <div class="panel" id="keyboardPanel">
+        <div class="cls_panel" id="id_keyboardPanel">
             <!-- This is a header -->
             <h3>Keyboard (Hold Down Play + Draggable)</h3>
 
-            <div id="keyboardKeys"></div>
+            <div id="id_keyboardKeys"></div>
 
             <!-- Save / Load buttons INSIDE keyboard panel -->
-            <div id="keyboardFileButtons">
+            <div id="id_keyboardFileButtons">
                 <!-- This is a Save layout button -->
-                <button id="saveLayoutBtn" class="KeyboardSaveLoadBtn" onclick="btnSaveKeyboardLayout()">Save Layout</button>
+                <button id="id_saveLayoutBtn" class="cls_KeyboardSaveLoadBtn" onclick="btnSaveKeyboardLayout()">Save Layout</button>
             
                 <!-- This is a Load layout button triggers btnLoadKeyboardLayout -->
-                <button id="loadLayoutBtn" class="KeyboardSaveLoadBtn" onclick="triggerLoadLayout()">Load Layout</button>
+                <button id="id_loadLayoutBtn" class="cls_KeyboardSaveLoadBtn" onclick="triggerLoadLayout()">Load Layout</button>
             
                 <!-- File input for loading keyboard layout (JSON format) -->
-                <input type="file" id="loadKeyboardLayoutFileInput" accept=".json" hidden onchange="btnLoadKeyboardLayout(event)">
+                <input type="file" id="id_loadKeyboardLayoutFileInput" accept=".json" hidden onchange="btnLoadKeyboardLayout(event)">
 
                 <!-- This is a Add Played Tone Checkbox   -->
-                <div class="KeyboardCheckbox">
-                    <label class="customCheckbox">
-                        <input type="checkbox" id="chkAddPlayedTone" onclick="chkKeyboardAddPlayedTone(this.checked)">
-                        <span class="checkmark"></span>
+                <div class="cls_KeyboardCheckbox">
+                    <label class="cls_customCheckbox">
+                        <input type="checkbox" id="id_chkAddPlayedTone" onclick="chkKeyboardAddPlayedTone(this.checked)">
+                        <span class="cls_checkmark"></span>
                         Add Played Tone
                     </label>
                 </div>
 
                 <!-- This is a Silence Gap Checkbox   -->
-                <div class="KeyboardCheckbox">
-                    <label class="customCheckbox">
-                        <input type="checkbox" id="chkAddSilenceTone" onclick="chkKeyboardSilenceTone(this.checked)" disabled>
-                        <span class="checkmark"></span>
+                <div class="cls_KeyboardCheckbox">
+                    <label class="cls_customCheckbox">
+                        <input type="checkbox" id="id_chkAddSilenceTone" onclick="chkKeyboardSilenceTone(this.checked)" disabled>
+                        <span class="cls_checkmark"></span>
                         Add Silence Gap
                     </label>
                 </div>
@@ -221,15 +221,15 @@
         <!-- ======================================= -->
         <!-- This is a Step Parameters Panel -->
         <!-- ======================================= -->
-        <div class="panelContainer">
-            <div class="panel" id="stepPanel">
+        <div class="cls_panelContainer">
+            <div class="cls_panel" id="id_stepPanel">
                 <!-- This is a header -->
                 <h3>Step Parameters</h3>
         
                 <!-- This is a Control Dropbox -->
-                <div class="inputRow">
-                    <label for="ctl">Control:</label>
-                    <select id="ctl">
+                <div class="cls_inputRow">
+                    <label for="id_ctl">Control:</label>
+                    <select id="id_ctl">
                         <option value="1">1 = Buzzy</option><option value="2">2 = Distortion</option>
                         <option value="3">3 = Flangy</option><option value="4">4 = Pure</option>
                         <option value="5">5 = Pure</option><option value="6" selected>6 = Between Pure/Buzzy</option>
@@ -242,25 +242,25 @@
                 </div>
 
                 <!-- This is a Frequency Textbox -->
-                <div class="inputRow">
-                    <label for="freq">Frequency (0=high, 31=low):</label>
-                    <input id="freq" type="number" min="0" max="31" value="4">
+                <div class="cls_inputRow">
+                    <label for="id_freq">Frequency (0=high, 31=low):</label>
+                    <input id="id_freq" type="number" min="0" max="31" value="4">
                 </div>
 
                 <!-- This is a Volume Textbox -->
-                <div class="inputRow">
-                    <label for="vol">Volume (0=off, 15=high):</label>
-                    <input id="vol" type="number" min="0" max="15" value="10">
+                <div class="cls_inputRow">
+                    <label for="id_vol">Volume (0=off, 15=high):</label>
+                    <input id="id_vol" type="number" min="0" max="15" value="10">
                 </div>
 
                 <!-- This is a Repeat Textbox -->
-                <div class="inputRow">
-                    <label for="repeat">Repeat (1-100):</label>
-                    <input id="repeat" type="number" min="1" max="100" value="1">
+                <div class="cls_inputRow">
+                    <label for="id_repeat">Repeat (1-100):</label>
+                    <input id="id_repeat" type="number" min="1" max="100" value="1">
                 </div>
 
                 <!-- This is a Add Step at end Button -->
-                <button id="addStepsBtn" class="addStepsBtn" onclick="btnAddStepEnd()">
+                <button id="id_addStepsBtn" class="cls_addStepsBtn" onclick="btnAddStepEnd()">
                     Add Steps at End
                 </button>
 
@@ -269,30 +269,30 @@
         <!-- ======================================= -->
         <!-- This is a Playback Panel -->
         <!-- ======================================= -->
-            <div class="panel" id="playbackPanel">
+            <div class="cls_panel" id="id_playbackPanel">
                 <!-- This is a header -->
                 <h3>Playback</h3>
             
                 <!-- This is a Play All Button -->
-                <button id="playAllBtn" class="playAllBtn" onclick="btnplayAllSequence()">Play All</button>
+                <button id="id_playAllBtn" class="cls_playAllBtn" onclick="btnplayAllSequence()">Play All</button>
 
                 <!-- This is a Stop Button -->
-                <button id="stopBtn" class="stopBtn" onclick="btnStopAudio()">Stop</button>
+                <button id="id_stopBtn" class="cls_stopBtn" onclick="btnStopAudio()">Stop</button>
 
                 <!-- This is a Loop Playback Checkbox  -->
-                <div class="PlaybackCheckbox">
-                    <label class="customCheckbox">
-                    <input type="checkbox" id="LoopPlaybackchk" onclick="chkLoopPlayback(this.checked)">
-                    <span class="checkmark"></span>
+                <div class="cls_PlaybackCheckbox">
+                    <label class="cls_customCheckbox">
+                    <input type="checkbox" id="id_LoopPlaybackchk" onclick="chkLoopPlayback(this.checked)">
+                    <span class="cls_checkmark"></span>
                     Loop Playback
                     </label>
                 </div>
 
                 <!-- This is a Play on change Checkbox  -->
-                <div class="PlaybackCheckbox">
-                    <label class="customCheckbox">
-                    <input type="checkbox" id="PlayOnChangechk" checked>
-                    <span class="checkmark"></span>
+                <div class="cls_PlaybackCheckbox">
+                    <label class="cls_customCheckbox">
+                    <input type="checkbox" id="id_PlayOnChangechk" checked>
+                    <span class="cls_checkmark"></span>
                     Play on Change
                     </label>
                 </div>
@@ -301,29 +301,29 @@
         <!-- ======================================= -->
         <!-- This is a Table Management Panel -->
         <!-- ======================================= -->
-            <div class="panel" id="tableManagementPanel">
+            <div class="cls_panel" id="id_tableManagementPanel">
                 <!-- This is a header -->
                 <h3>Table Management</h3>
 
                 <!-- This is a New Table Button -->
-                <button id="newTableBtn" class="ManagementBtn" onclick="btnNewTable()">New Table</button>
+                <button id="id_newTableBtn" class="cls_ManagementBtn" onclick="btnNewTable()">New Table</button>
 
                 <!-- This is a New Save Button -->
-                <button id="saveTableBtn" class="ManagementBtn" onclick="btnSaveTable()">Save Table</button>
+                <button id="id_saveTableBtn" class="cls_ManagementBtn" onclick="btnSaveTable()">Save Table</button>
 
                 <!-- This is a Load Table Button Triggers the btnLoadTableLayout -->
-                <button id="loadTableBtn" class="ManagementBtn" onclick="triggerLoadTable()">Load Table</button>
+                <button id="id_loadTableBtn" class="cls_ManagementBtn" onclick="triggerLoadTable()">Load Table</button>
 
                 <!-- File input for loading table layout (JSON format) -->
-                <input type="file" id="loadTableFileInput" accept=".json" hidden onchange="btnLoadTableLayout(event)">
+                <input type="file" id="id_loadTableFileInput" accept=".json" hidden onchange="btnLoadTableLayout(event)">
             </div>
         </div>
 
         <!-- ======================================= -->
         <!-- This is a Table Headers -->
         <!-- ======================================= -->
-        <h3 id="tonesTableTitle">Table Name</h3>
-        <table id="tonesTable">
+        <h3 id="id_tonesTableTitle">Table Name</h3>
+        <table id="id_tonesTable">
             <thead>
                 <tr>
                     <th>#</th><th>Control</th><th>Frequency</th><th>Volume</th>
@@ -337,43 +337,43 @@
         <!-- ======================================= -->
         <!-- This is a Frequency Label at bottom -->
         <!-- ======================================= -->
-        <div id="frequencyTableLabel">Frequency Table:</div>
+        <div id="id_frequencyTableLabel">Frequency Table:</div>
 
         <!-- ======================================= -->
         <!-- This is a Control/Volume Label at bottom -->
         <!-- ======================================= -->
-        <div id="controlVolumeTableLabel">Control/Volume Table:</div>
+        <div id="id_controlVolumeTableLabel">Control/Volume Table:</div>
 
         <!-- ======================================= -->
         <!-- This is a Copy Table Panel -->
         <!-- ======================================= -->
-        <div class="panelContainer" style="justify-content:center; margin-top:20px;">
-            <div class="panel" id="copyTablesPanel">
+        <div class="cls_panelContainer" style="justify-content:center; margin-top:20px;">
+            <div class="cls_panel" id="id_copyTablesPanel">
                 <!-- This is a header -->
                 <h3>Copy Tables</h3>
 
                 <!-- This is a Copy Freq Button -->
-                <button id="copyFreqBtn" class="CopyMangBnt" onclick="btnCopyFrequency()">Copy Frequency Table</button>
+                <button id="id_copyFreqBtn" class="cls_CopyMangBnt" onclick="btnCopyFrequency()">Copy Frequency Table</button>
 
                 <!-- This is a Control/Vol Button -->
-                <button id="copyCtlVolBtn" class="CopyMangBnt" onclick="btnCopyControlVolume()">Copy Control/Volume Table</button>
+                <button id="id_copyCtlVolBtn" class="cls_CopyMangBnt" onclick="btnCopyControlVolume()">Copy Control/Volume Table</button>
             </div>
         </div>
 
         <!-- ======================================= -->
         <!-- This is a toast -->
         <!-- ======================================= -->
-        <div id="toast"></div>
+        <div id="id_toast"></div>
 
         <!-- ======================================= -->
         <!-- This is a Paypal Donation  -->
         <!-- ======================================= -->
-        <div class="panelContainer">
+        <div class="cls_panelContainer">
             <!-- PayPal Donate Panel -->
-            <div class="panel" id="paypalDonatePanel">
+            <div class="cls_panel" id="id_paypalDonatePanel">
                 <h3>Support Atari 2600 SFX Editor</h3>
                 <p>Every little bit helps keep this project alive!</p>
-                <a href="https://www.paypal.com/donate/?business=TXDQNPWL3YQPE&no_recurring=1&item_name=Support+my+work+%E2%80%94+every+little+bit+helps&currency_code=USD" target="_blank" class="paypalButton">
+                <a href="https://www.paypal.com/donate/?business=TXDQNPWL3YQPE&no_recurring=1&item_name=Support+my+work+%E2%80%94+every+little+bit+helps&currency_code=USD" target="_blank" class="cls_paypalButton">
                     Donate with PayPal
                 </a>
             </div>
@@ -382,7 +382,7 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="versionLabel">Version 2.78</div>
+        <div id="id_versionLabel">Version 2.80</div>
 
 <!-- #endregion -->
 

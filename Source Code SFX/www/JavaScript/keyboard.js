@@ -2,7 +2,7 @@
 // KEYBOARD: Setup Keyboard button listeners with mouse/touch/drag functions.  Creates 31 Buttons.
 //-------------------------------------------------------------------------------------------------------------------
 function setupKeyboardButtonListener() {
-    const keyboardDiv = document.getElementById("keyboardKeys");
+    const keyboardDiv = document.getElementById("id_keyboardKeys");
 
     let draggedKey = null;
 
@@ -71,8 +71,8 @@ function setupKeyboardButtonListener() {
     let emuTime = 0;        // emulation time to process the tonesArray data
 
     function playTone(freq) {
-        const ctl = parseInt(document.getElementById("ctl").value);
-        const vol = parseInt(document.getElementById("vol").value);
+        const ctl = parseInt(document.getElementById("id_ctl").value);
+        const vol = parseInt(document.getElementById("id_vol").value);
 
         const buffer = []; 
         for (let i = 0; i < KEY_BUFFER_SAMPLE; i++) {                                     
@@ -107,9 +107,9 @@ function setupKeyboardButtonListener() {
             };
  
             // Only add to table if "Add Played Tone" checkbox is checked
-            if (document.getElementById("chkAddPlayedTone").checked) {
+            if (document.getElementById("id_chkAddPlayedTone").checked) {
                 // and if "Add Silence Gap" checkbox is checked
-                if (document.getElementById("chkAddSilenceTone").checked) {
+                if (document.getElementById("id_chkAddSilenceTone").checked) {
                     tonesArray.push(newTone);
                     updateTable();
                     if (DEBUG) console.log("---------------------------------------");
@@ -158,11 +158,11 @@ function setupKeyboardButtonListener() {
 
             // Get the object values put in newTone
             const newTone = {
-                frequency: freq, control: parseInt(document.getElementById("ctl").value), volume: parseInt(document.getElementById("vol").value), repeat: repeat
+                frequency: freq, control: parseInt(document.getElementById("id_ctl").value), volume: parseInt(document.getElementById("id_vol").value), repeat: repeat
             };
 
             // Only add to table if "Add Played Tone" checkbox is checked
-            if (document.getElementById("chkAddPlayedTone").checked) {
+            if (document.getElementById("id_chkAddPlayedTone").checked) {
                 tonesArray.push(newTone);
                 updateTable();
                 if (DEBUG) console.log(" ")
@@ -192,7 +192,7 @@ function setupKeyboardButtonListener() {
 // KEYBOARD: "Save Layout" Button to file as JSON
 //-------------------------------------------------------------------------------------------------------------------
 function btnSaveKeyboardLayout() {
-    const keyboardDiv = document.getElementById("keyboardKeys");
+    const keyboardDiv = document.getElementById("id_keyboardKeys");
     const order = Array.from(keyboardDiv.children)
         .map(btn => btn.textContent);
 
@@ -226,14 +226,14 @@ function btnSaveKeyboardLayout() {
 // KEYBOARD: Function to trigger file input click for btnLoadKeyboardLayout (Load Keyboard Layout)
 //-------------------------------------------------------------------------------------------------------------------
 function triggerLoadLayout() {
-    document.getElementById("loadKeyboardLayoutFileInput").click();
+    document.getElementById("id_loadKeyboardLayoutFileInput").click();
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 // KEYBOARD: "Load Layout" Button from JSON file 
 //-------------------------------------------------------------------------------------------------------------------
 function btnLoadKeyboardLayout(e) {
-    const keyboardDiv = document.getElementById("keyboardKeys");
+    const keyboardDiv = document.getElementById("id_keyboardKeys");
     const file = e.target.files[0];
     if (!file) return;
 
@@ -272,7 +272,7 @@ function btnLoadKeyboardLayout(e) {
 // KEYBOARD: "Add Played Tone" Checkbox 
 //-------------------------------------------------------------------------------------------------------------------
 function chkKeyboardAddPlayedTone(checked) {
-    document.getElementById("chkAddSilenceTone").disabled = !checked; 
+    document.getElementById("id_chkAddSilenceTone").disabled = !checked; 
 }
 
 //-------------------------------------------------------------------------------------------------------------------
