@@ -6,19 +6,32 @@ function btnplayAllSequence(){
         window.stopAudio();
     }
 
+    const LoopPlayback = document.getElementById("LoopPlaybackchk").checked;
+
     if(typeof window.updateSamples ==="function"){
         const buffer=[];
         tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) buffer.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
         window.updateSamples(JSON.stringify(buffer));
-        if(typeof window.playSample ==="function") window.playSample(0);
+        if(typeof window.playSample ==="function") window.playSample(LoopPlayback);
     }
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// PLAYBACK: "Stop" button pressed - Stop Audio Main.Go call
+// PLAYBACK: "Stop" Button
 //-------------------------------------------------------------------------------------------------------------------
 function btnStopAudio(){ 
     if (typeof window.stopAudio === "function") {
         window.stopAudio();
+    }
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+// PLAYBACK: "Loop Playback" Button
+//-------------------------------------------------------------------------------------------------------------------
+function chkLoopPlayback(checked) {
+    if (!checked) {
+        if (typeof window.stopAudio === "function") {
+            window.stopAudio();
+        }
     }
 }

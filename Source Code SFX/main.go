@@ -145,13 +145,16 @@ func generateAudio(tones []Tone) []uint {
 // Playback
 // ======================================================================
 // JS version template:
-// func playSample(this js.Value, args []js.Value) interface{} {
+// func playSample(_ js.Value, _ []js.Value) interface{} {  // use this no arg
 // func playSample(audioData []uint) {
-func playSample(_ js.Value, _ []js.Value) interface{} { // _ serves as Ignore
+func playSample(this js.Value, args []js.Value) interface{} {
 	if len(audioData) == 0 {
 		log.Println("playSample len = 0")
 		return nil
 	}
+
+	loopPlayback := args[0].Bool() // <-- convert js.Value to Go Bool
+	//log.Printf("ARG0 = %v", loopPlayback)
 
 	buffer := audioContext.Call("createBuffer", 2, len(audioData)/2, sampleRate)
 
@@ -165,6 +168,7 @@ func playSample(_ js.Value, _ []js.Value) interface{} { // _ serves as Ignore
 
 	audioSource = audioContext.Call("createBufferSource")
 	audioSource.Set("buffer", buffer)
+	audioSource.Set("loop", loopPlayback)
 	audioSource.Call("connect", audioContext.Get("destination"))
 	audioSource.Call("start", 0)
 

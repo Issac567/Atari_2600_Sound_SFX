@@ -11,7 +11,7 @@ function btnNewTable(){
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// TABLE MANAGEMENT: Save Table Button, this will save tone values as Json (Frequency, COntrol, Volume and Repeat)
+// TABLE MANAGEMENT: "Save Table" Button, this will save tone values as Json (Frequency, COntrol, Volume and Repeat)
 // Remember Frequency, Control and Volume is only used to generate the tone
 //-------------------------------------------------------------------------------------------------------------------
 function btnSaveTable(){ 
@@ -49,7 +49,7 @@ function triggerLoadTable() {
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// TABLE MANAGEMENT: "Load Table" Button get JSON data for Table
+// TABLE MANAGEMENT: "Load Table" Button, get JSON data for Table
 //-------------------------------------------------------------------------------------------------------------------
 function btnLoadTableLayout(event) {
     toneStopTime = 0; // for keyboard Resets and prevents Silence Gap tone being added at inital press

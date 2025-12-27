@@ -129,7 +129,7 @@ function setupKeyboardButtonListener() {
 
         if(typeof window.stopAudio ==="function") window.stopAudio();
         if(typeof window.updateSamples ==="function") window.updateSamples(JSON.stringify(buffer));
-        if(typeof window.playSample ==="function") window.playSample(0);
+        if(typeof window.playSample ==="function") window.playSample(false);
     }
 
     //*******************************************************************
@@ -226,7 +226,7 @@ function btnSaveKeyboardLayout() {
 // KEYBOARD: Function to trigger file input click for btnLoadKeyboardLayout (Load Keyboard Layout)
 //-------------------------------------------------------------------------------------------------------------------
 function triggerLoadLayout() {
-    document.getElementById("loadKeyboardLayoutFile").click();
+    document.getElementById("loadKeyboardLayoutFileInput").click();
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -269,14 +269,14 @@ function btnLoadKeyboardLayout(e) {
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// KEYBOARD: "Keyboard Add Played Tone" Checkbox 
+// KEYBOARD: "Add Played Tone" Checkbox 
 //-------------------------------------------------------------------------------------------------------------------
 function chkKeyboardAddPlayedTone(checked) {
     document.getElementById("chkAddSilenceTone").disabled = !checked; 
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// KEYBOARD: "Keyboard Silence Tone" Checkbox 
+// KEYBOARD: "Add Silence Gap" Checkbox 
 //-------------------------------------------------------------------------------------------------------------------
 function chkKeyboardSilenceTone(checked) {
     if (checked) {

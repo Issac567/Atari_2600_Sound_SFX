@@ -46,11 +46,11 @@
             #keyboardFileButtons { display: flex; justify-content: center; gap: 16px; width: 100%; padding: 8px 0; margin-top: 10px; border-top: none; align-items: center; }
 
             /* Styles for "Import/Export Buttons"  */
-            #keyboardFileButtons .uniformLoadSaveBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:4px; cursor:pointer; padding:6px 14px; cursor: pointer; text-align: center; transition: background 0.2s; width:140px; }
-            #keyboardFileButtons .uniformLoadSaveBtn:hover { background-color: #616161; }
+            #keyboardFileButtons .KeyboardSaveLoadBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:4px; cursor:pointer; padding:6px 14px; cursor: pointer; text-align: center; transition: background 0.2s; width:140px; }
+            #keyboardFileButtons .KeyboardSaveLoadBtn:hover { background-color: #616161; }
 
             /* Stlyes for "Add Played Tones" and Silence Gap checkbox */
-            #keyboardFileButtons .addKeyboardTone, #keyboardFileButtons .addKeyboardSilenceTone { width: 160px; display: flex; }
+            #keyboardFileButtons .KeyboardCheckbox{ width: 160px; display: flex; }
 
             /*================================================================================*/
             /* STEP PARAMETERS: Styles for Step Parameters Panel layout */
@@ -83,17 +83,17 @@
             #playbackPanel .stopBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
             #playbackPanel .stopBtn:hover { background-color:#616161; }
 
-            /* Stlyes for "Play on Change" checkbox */
-            #playbackPanel .playOnChangeRow { width: 160px; display: flex; justify-content: center; margin-bottom: 15px; }
-
+            /* Stlyes for "Loop Playback" and "PlayonChange" checkbox */
+            #playbackPanel .PlaybackCheckbox { width: 160px; display: flex; justify-content: left; }
+ 
             /*================================================================================*/
             /* TABLE MANAGEMENT: Styles for Table Management Panel layout */
             /*================================================================================*/
             #tableManagementPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
 
             /* Styles for All 3 Buttons */
-            #tableManagementPanel .uniformMangBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
-            #tableManagementPanel .uniformMangBtn:hover { background-color:#616161; }
+            #tableManagementPanel .ManagementBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+            #tableManagementPanel .ManagementBtn:hover { background-color:#616161; }
 
             /*================================================================================*/
             /* TABLE: Styles for table layout */
@@ -139,8 +139,8 @@
             #copyTablesPanel { width:200px; height: 170px; margin-top:0px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
 
             /* Styles for All 2 buttons  */
-            #copyTablesPanel .uniformCopyBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
-            #copyTablesPanel .uniformCopyBtn:hover { background-color:#616161; }
+            #copyTablesPanel .CopyMangBnt { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+            #copyTablesPanel .CopyMangBnt:hover { background-color:#616161; }
 
             /*================================================================================*/
             /* TOAST: Styles for toast notifications */
@@ -189,16 +189,16 @@
             <!-- Save / Load buttons INSIDE keyboard panel -->
             <div id="keyboardFileButtons">
                 <!-- This is a Save layout button -->
-                <button id="loadLayoutBtn" class="uniformLoadSaveBtn" onclick="btnSaveKeyboardLayout()">Save Layout</button>
+                <button id="saveLayoutBtn" class="KeyboardSaveLoadBtn" onclick="btnSaveKeyboardLayout()">Save Layout</button>
             
-                <!-- This is a Load layout button -->
-                <button id="saveLayoutBtn" class="uniformLoadSaveBtn" onclick="triggerLoadLayout()">Load Layout</button>
+                <!-- This is a Load layout button triggers btnLoadKeyboardLayout -->
+                <button id="loadLayoutBtn" class="KeyboardSaveLoadBtn" onclick="triggerLoadLayout()">Load Layout</button>
             
                 <!-- File input for loading keyboard layout (JSON format) -->
-                <input type="file" id="loadKeyboardLayoutFile" accept=".json" hidden onchange="btnLoadKeyboardLayout(event)">
+                <input type="file" id="loadKeyboardLayoutFileInput" accept=".json" hidden onchange="btnLoadKeyboardLayout(event)">
 
                 <!-- This is a Add Played Tone Checkbox   -->
-                <div class="addKeyboardTone">
+                <div class="KeyboardCheckbox">
                     <label class="customCheckbox">
                         <input type="checkbox" id="chkAddPlayedTone" onclick="chkKeyboardAddPlayedTone(this.checked)">
                         <span class="checkmark"></span>
@@ -207,7 +207,7 @@
                 </div>
 
                 <!-- This is a Silence Gap Checkbox   -->
-                <div class="addKeyboardSilenceTone">
+                <div class="KeyboardCheckbox">
                     <label class="customCheckbox">
                         <input type="checkbox" id="chkAddSilenceTone" onclick="chkKeyboardSilenceTone(this.checked)" disabled>
                         <span class="checkmark"></span>
@@ -259,8 +259,8 @@
                     <input id="repeat" type="number" min="1" max="100" value="1">
                 </div>
 
-                <!-- This is a Add Step to end Button -->
-                <button id="addStepsBtn" onclick="btnAddStepEnd()" class="addStepsBtn">
+                <!-- This is a Add Step at end Button -->
+                <button id="addStepsBtn" class="addStepsBtn" onclick="btnAddStepEnd()">
                     Add Steps at End
                 </button>
 
@@ -274,13 +274,22 @@
                 <h3>Playback</h3>
             
                 <!-- This is a Play All Button -->
-                <button id="playAllBtn" onclick="btnplayAllSequence()" class="playAllBtn">Play All</button>
+                <button id="playAllBtn" class="playAllBtn" onclick="btnplayAllSequence()">Play All</button>
 
                 <!-- This is a Stop Button -->
-                <button id="stopBtn" onclick="btnStopAudio()" class="stopBtn">Stop</button>
+                <button id="stopBtn" class="stopBtn" onclick="btnStopAudio()">Stop</button>
+
+                <!-- This is a Loop Playback Checkbox  -->
+                <div class="PlaybackCheckbox">
+                    <label class="customCheckbox">
+                    <input type="checkbox" id="LoopPlaybackchk" onclick="chkLoopPlayback(this.checked)">
+                    <span class="checkmark"></span>
+                    Loop Playback
+                    </label>
+                </div>
 
                 <!-- This is a Play on change Checkbox  -->
-                <div class="playOnChangeRow">
+                <div class="PlaybackCheckbox">
                     <label class="customCheckbox">
                     <input type="checkbox" id="PlayOnChangechk" checked>
                     <span class="checkmark"></span>
@@ -297,13 +306,13 @@
                 <h3>Table Management</h3>
 
                 <!-- This is a New Table Button -->
-                <button id="newTableBtn" class="uniformMangBtn" onclick="btnNewTable()">New Table</button>
+                <button id="newTableBtn" class="ManagementBtn" onclick="btnNewTable()">New Table</button>
 
                 <!-- This is a New Save Button -->
-                <button id="saveTableBtn" class="uniformMangBtn" onclick="btnSaveTable()">Save Table</button>
+                <button id="saveTableBtn" class="ManagementBtn" onclick="btnSaveTable()">Save Table</button>
 
-                <!-- This is a Load Table Button -->
-                <button id="loadTableBtn" class="uniformMangBtn" onclick="triggerLoadTable()">Load Table</button>
+                <!-- This is a Load Table Button Triggers the btnLoadTableLayout -->
+                <button id="loadTableBtn" class="ManagementBtn" onclick="triggerLoadTable()">Load Table</button>
 
                 <!-- File input for loading table layout (JSON format) -->
                 <input type="file" id="loadTableFileInput" accept=".json" hidden onchange="btnLoadTableLayout(event)">
@@ -344,10 +353,10 @@
                 <h3>Copy Tables</h3>
 
                 <!-- This is a Copy Freq Button -->
-                <button id="copyFreqBtn" class="uniformCopyBtn" onclick="btnCopyFrequency()">Copy Frequency Table</button>
+                <button id="copyFreqBtn" class="CopyMangBnt" onclick="btnCopyFrequency()">Copy Frequency Table</button>
 
                 <!-- This is a Control/Vol Button -->
-                <button id="copyCtlVolBtn" class="uniformCopyBtn" onclick="btnCopyControlVolume()">Copy Control/Volume Table</button>
+                <button id="copyCtlVolBtn" class="CopyMangBnt" onclick="btnCopyControlVolume()">Copy Control/Volume Table</button>
             </div>
         </div>
 
@@ -373,7 +382,7 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="versionLabel">Version 2.77</div>
+        <div id="versionLabel">Version 2.78</div>
 
 <!-- #endregion -->
 

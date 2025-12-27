@@ -137,7 +137,7 @@ function updateToneTableAndPlay(index) {
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// TABLE: "Play" button in Table is pressed, this will play the selected step
+// TABLE: "Play" Button, this will play the selected step
 //-------------------------------------------------------------------------------------------------------------------
 function playStep(index){
     if (typeof window.stopAudio === "function") {
@@ -149,6 +149,6 @@ function playStep(index){
     for(let i=0;i<(step.repeat||1);i++) buffer.push({frequency:step.frequency,control:step.control,volume:step.volume});
     if(typeof window.updateSamples ==="function"){
         window.updateSamples(JSON.stringify(buffer));
-        if(typeof window.playSample ==="function") window.playSample(0);
+        if(typeof window.playSample ==="function") window.playSample(false);
     }
 }

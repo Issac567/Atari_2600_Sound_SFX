@@ -26,7 +26,7 @@ function setupStepPanelInputsListener() {
                 }
                 if(typeof window.updateSamples === "function"){
                     window.updateSamples(JSON.stringify(buffer));
-                    if(typeof window.playSample === "function") window.playSample(0);
+                    if(typeof window.playSample === "function") window.playSample(false);
                 }
             }
         });
@@ -34,7 +34,7 @@ function setupStepPanelInputsListener() {
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// STEP PARAMETERS: "Add Steps at end" Button is pressed, Step Parameters inputs will load into Table
+// STEP PARAMETERS: "Add Steps at end" Button, Step Parameters inputs will be loaded into Table
 //-------------------------------------------------------------------------------------------------------------------
 function btnAddStepEnd(){
     const freq=parseInt(document.getElementById("freq").value);
