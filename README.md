@@ -28,7 +28,7 @@ A web-based Atari 2600 sound effects editor using TIA sound generation, implemen
 | `public.js` | Shared helper functions and constants. |
 | `keyboard.js` | Keyboard input handling. |
 | `stepPanel.js` | Step panel UI interactions and updates. |
-| `playback.js` | Handles playback functions, e.g., play/pause, updateCopyLabels. |
+| `playback.js` | Handles playback functions, e.g., play/stop/loop. |
 | `tableManagement.js` | Table save/load and JSON management. |
 | `table.js` | Table rendering and UI updates. |
 | `copyTables.js` | Copy frequency and control/volume tables in `.byte` format. |
