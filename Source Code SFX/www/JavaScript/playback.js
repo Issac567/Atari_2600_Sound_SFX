@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------------------------------
-// PLAYBACK: "Play All" Button is pressed, this will play all steps from Table in sequence
+// PLAYBACK: "Play All" Button and will play all steps from Table in sequence
 //-------------------------------------------------------------------------------------------------------------------
 function btnplayAllSequence(){
     if (typeof window.stopAudio === "function") {
         window.stopAudio();
     }
 
-    const LoopPlayback = document.getElementById("id_LoopPlaybackchk").checked;
+    const LoopPlayback = document.getElementById("id_LoopPlayback").checked;
 
     if(typeof window.updateSamples ==="function"){
         const buffer=[];

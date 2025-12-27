@@ -42,16 +42,16 @@ function btnSaveTable(){
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// TABLE MANAGEMENT: "Load Table" Button function to trigger file input click for btnLoadTableLayout
+// TABLE MANAGEMENT: "Load Table" Button function to trigger file input click for triggerLoadTable
 //-------------------------------------------------------------------------------------------------------------------
-function triggerLoadTable() {
+function btnLoadTable() {
     document.getElementById("id_loadTableFileInput").click();
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// TABLE MANAGEMENT: "Load Table" Button, get JSON data for Table
+// TABLE MANAGEMENT: Triggers and get JSON data for Table
 //-------------------------------------------------------------------------------------------------------------------
-function btnLoadTableLayout(event) {
+function triggerLoadTable(event) {
     toneStopTime = 0; // for keyboard Resets and prevents Silence Gap tone being added at inital press
     
     const file = event.target.files[0];

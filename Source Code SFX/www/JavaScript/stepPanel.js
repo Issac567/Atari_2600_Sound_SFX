@@ -20,7 +20,7 @@ function setupStepPanelInputsListener() {
             updateCopyLabels();                 // not needed???
 
             // Only play if "Play on Change" is checked
-            if(document.getElementById("id_PlayOnChangechk").checked){
+            if(document.getElementById("id_PlayOnChange").checked){
                 if (typeof window.stopAudio === "function") {
                     window.stopAudio();
                 }

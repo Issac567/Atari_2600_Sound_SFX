@@ -11,12 +11,6 @@
             h1 { text-align: center; margin: 20px 0; }
 
             /*================================================================================*/
-            /* Styles for panel container and individual panels */
-            /*================================================================================*/
-            .cls_panelContainer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
-            .cls_panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
-
-            /*================================================================================*/
             /* KEYBOARD: Styles for Keyboard Panel layout */
             /*================================================================================*/
             #id_keyboardPanel { width: 95%; height: 160px; margin: 20px auto 20px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
@@ -51,14 +45,20 @@
 
             /* Stlyes for "Add Played Tones" and Silence Gap checkbox */
             #id_keyboardFileButtons .cls_KeyboardCheckbox{ width: 160px; display: flex; }
+            
+            /*================================================================================*/
+            /* Styles for panel container, individual panels and headers */
+            /*================================================================================*/
+            .cls_panelContainer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
+            .cls_panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
+            .cls_panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
 
             /*================================================================================*/
             /* STEP PARAMETERS: Styles for Step Parameters Panel layout */
             /*================================================================================*/
-            #id_stepPanel { width: 460px; height: 220px;}
+            #id_stepPanel { width: 450px; height: 220px;}
 
-            /* Styles for headings, labels, textboxes and Dropdown */
-            .cls_panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
+            /* Styles for labels, textboxes and Dropdown */
             #id_stepPanel .cls_inputRow { display:flex; align-items:center; margin-bottom:10px; }
             #id_stepPanel .cls_inputRow label { flex:0 0 220px; text-align:right; margin-right:10px; }
             #id_stepPanel .cls_inputRow input[type="number"], .cls_inputRow select { flex:1 1 auto; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; max-width:200px; }
@@ -67,8 +67,8 @@
             #id_stepPanel .cls_inputRow select:hover { border-color: #888;}
 
             /* Styles for "Add Steps at end" Button */
-            #id_stepPanel .cls_addStepsBtn { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
-            #id_stepPanel .cls_addStepsBtn:hover { background-color:#1568B0; }
+            #id_stepPanel .cls_AddStepsEnd { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
+            #id_stepPanel .cls_AddStepsEnd:hover { background-color:#1568B0; }
 
             /*================================================================================*/
             /* PLAYBACK: Styles for Playback Management Panel layout */
@@ -76,12 +76,12 @@
             #id_playbackPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
 
             /* Styles for "Play All" Button */
-            #id_playbackPanel .cls_playAllBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
-            #id_playbackPanel .cls_playAllBtn:hover { background-color: #29832C; }
+            #id_playbackPanel .cls_playAllSequence { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
+            #id_playbackPanel .cls_playAllSequence:hover { background-color: #29832C; }
 
             /* Styles for "Stop" Button */
-            #id_playbackPanel .cls_stopBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
-            #id_playbackPanel .cls_stopBtn:hover { background-color:#616161; }
+            #id_playbackPanel .cls_StopAudio { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
+            #id_playbackPanel .cls_StopAudio:hover { background-color:#616161; }
 
             /* Stlyes for "Loop Playback" and "PlayonChange" checkbox */
             #id_playbackPanel .cls_PlaybackCheckbox { width: 160px; display: flex; justify-content: left; }
@@ -101,10 +101,10 @@
             /* Style for Table Header title */
             #id_tonesTableTitle { display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: white; margin-bottom: 15px; }           
             
-            /* Style for Table */
+            /* Style for Table, Table Header and Table Data */
             table { border-collapse:collapse; margin:10px auto; width:97%; background-color:#2b2b2b; }
-            th, td { border:1px solid #555; padding:5px 10px; text-align:center; }
-            th { background-color:#3a3a3a; }
+            #id_tonesTable th, #id_tonesTable td { border:1px solid #555; padding:5px 10px; text-align:center; }
+            #id_tonesTable th { background-color:#3a3a3a; }
 
             /* Styles for Dropdown and Textboxes */
             #id_tonesTable select, #id_tonesTable input[type="number"] { background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; }
@@ -125,8 +125,8 @@
             #id_tonesTable .cls_insertBtn { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:110px; }
             #id_tonesTable .cls_insertBtn:hover { background-color:#1568B0; }
 
-            /* DRAG OVER: Style for table row being dragged over */
-            tr.drag-over { border:2px dashed #ffcc00; }
+            /* DRAG OVER: Style for Table Row being dragged over */
+            #id_tonesTable tr.drag-over { border:2px dashed #ffcc00; }
 
             /*================================================================================*/
             /* FREQ/VOL LABEL: Styles for Frequency and Volume label at bottom */
@@ -189,18 +189,18 @@
             <!-- Save / Load buttons INSIDE keyboard panel -->
             <div id="id_keyboardFileButtons">
                 <!-- This is a Save layout button -->
-                <button id="id_saveLayoutBtn" class="cls_KeyboardSaveLoadBtn" onclick="btnSaveKeyboardLayout()">Save Layout</button>
+                <button id="id_SaveKeyboardLayout" class="cls_KeyboardSaveLoadBtn" onclick="btnSaveKeyboardLayout()">Save Layout</button>
             
-                <!-- This is a Load layout button triggers btnLoadKeyboardLayout -->
-                <button id="id_loadLayoutBtn" class="cls_KeyboardSaveLoadBtn" onclick="triggerLoadLayout()">Load Layout</button>
+                <!-- This is a Load layout button triggers triggerLoadKeyboardLayout -->
+                <button id="id_LoadKeyboardLayout" class="cls_KeyboardSaveLoadBtn" onclick="btnLoadKeyboardLayout()">Load Layout</button>
             
                 <!-- File input for loading keyboard layout (JSON format) -->
-                <input type="file" id="id_loadKeyboardLayoutFileInput" accept=".json" hidden onchange="btnLoadKeyboardLayout(event)">
+                <input type="file" id="id_loadKeyboardLayoutFileInput" accept=".json" hidden onchange="triggerLoadKeyboardLayout(event)">
 
                 <!-- This is a Add Played Tone Checkbox   -->
                 <div class="cls_KeyboardCheckbox">
                     <label class="cls_customCheckbox">
-                        <input type="checkbox" id="id_chkAddPlayedTone" onclick="chkKeyboardAddPlayedTone(this.checked)">
+                        <input type="checkbox" id="id_KeyboardAddPlayedTone" onclick="chkKeyboardAddPlayedTone(this.checked)">
                         <span class="cls_checkmark"></span>
                         Add Played Tone
                     </label>
@@ -209,7 +209,7 @@
                 <!-- This is a Silence Gap Checkbox   -->
                 <div class="cls_KeyboardCheckbox">
                     <label class="cls_customCheckbox">
-                        <input type="checkbox" id="id_chkAddSilenceTone" onclick="chkKeyboardSilenceTone(this.checked)" disabled>
+                        <input type="checkbox" id="id_KeyboardSilenceTone" onclick="chkKeyboardSilenceTone(this.checked)" disabled>
                         <span class="cls_checkmark"></span>
                         Add Silence Gap
                     </label>
@@ -260,7 +260,7 @@
                 </div>
 
                 <!-- This is a Add Step at end Button -->
-                <button id="id_addStepsBtn" class="cls_addStepsBtn" onclick="btnAddStepEnd()">
+                <button id="id_AddStepsEnd" class="cls_AddStepsEnd" onclick="btnAddStepEnd()">
                     Add Steps at End
                 </button>
 
@@ -274,15 +274,15 @@
                 <h3>Playback</h3>
             
                 <!-- This is a Play All Button -->
-                <button id="id_playAllBtn" class="cls_playAllBtn" onclick="btnplayAllSequence()">Play All</button>
+                <button id="id_playAllSequence" class="cls_playAllSequence" onclick="btnplayAllSequence()">Play All</button>
 
                 <!-- This is a Stop Button -->
-                <button id="id_stopBtn" class="cls_stopBtn" onclick="btnStopAudio()">Stop</button>
+                <button id="id_StopAudio" class="cls_StopAudio" onclick="btnStopAudio()">Stop</button>
 
                 <!-- This is a Loop Playback Checkbox  -->
                 <div class="cls_PlaybackCheckbox">
                     <label class="cls_customCheckbox">
-                    <input type="checkbox" id="id_LoopPlaybackchk" onclick="chkLoopPlayback(this.checked)">
+                    <input type="checkbox" id="id_LoopPlayback" onclick="chkLoopPlayback(this.checked)">
                     <span class="cls_checkmark"></span>
                     Loop Playback
                     </label>
@@ -291,7 +291,7 @@
                 <!-- This is a Play on change Checkbox  -->
                 <div class="cls_PlaybackCheckbox">
                     <label class="cls_customCheckbox">
-                    <input type="checkbox" id="id_PlayOnChangechk" checked>
+                    <input type="checkbox" id="id_PlayOnChange" checked>
                     <span class="cls_checkmark"></span>
                     Play on Change
                     </label>
@@ -306,21 +306,21 @@
                 <h3>Table Management</h3>
 
                 <!-- This is a New Table Button -->
-                <button id="id_newTableBtn" class="cls_ManagementBtn" onclick="btnNewTable()">New Table</button>
+                <button id="id_NewTable" class="cls_ManagementBtn" onclick="btnNewTable()">New Table</button>
 
                 <!-- This is a New Save Button -->
-                <button id="id_saveTableBtn" class="cls_ManagementBtn" onclick="btnSaveTable()">Save Table</button>
+                <button id="id_SaveTable" class="cls_ManagementBtn" onclick="btnSaveTable()">Save Table</button>
 
-                <!-- This is a Load Table Button Triggers the btnLoadTableLayout -->
-                <button id="id_loadTableBtn" class="cls_ManagementBtn" onclick="triggerLoadTable()">Load Table</button>
+                <!-- This is a Load Table Button Triggers the triggerLoadTable -->
+                <button id="id_LoadTable" class="cls_ManagementBtn" onclick="btnLoadTable()">Load Table</button>
 
                 <!-- File input for loading table layout (JSON format) -->
-                <input type="file" id="id_loadTableFileInput" accept=".json" hidden onchange="btnLoadTableLayout(event)">
+                <input type="file" id="id_loadTableFileInput" accept=".json" hidden onchange="triggerLoadTable(event)">
             </div>
         </div>
 
         <!-- ======================================= -->
-        <!-- This is a Table Headers -->
+        <!-- This is a Table and Header -->
         <!-- ======================================= -->
         <h3 id="id_tonesTableTitle">Table Name</h3>
         <table id="id_tonesTable">
@@ -353,10 +353,10 @@
                 <h3>Copy Tables</h3>
 
                 <!-- This is a Copy Freq Button -->
-                <button id="id_copyFreqBtn" class="cls_CopyMangBnt" onclick="btnCopyFrequency()">Copy Frequency Table</button>
+                <button id="id_CopyFrequency" class="cls_CopyMangBnt" onclick="btnCopyFrequency()">Copy Frequency Table</button>
 
                 <!-- This is a Control/Vol Button -->
-                <button id="id_copyCtlVolBtn" class="cls_CopyMangBnt" onclick="btnCopyControlVolume()">Copy Control/Volume Table</button>
+                <button id="id_CopyControlVolume" class="cls_CopyMangBnt" onclick="btnCopyControlVolume()">Copy Control/Volume Table</button>
             </div>
         </div>
 
@@ -382,7 +382,7 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="id_versionLabel">Version 2.80</div>
+        <div id="id_versionLabel">Version 2.81</div>
 
 <!-- #endregion -->
 

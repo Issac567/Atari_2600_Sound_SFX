@@ -130,14 +130,14 @@ function updateToneTableAndPlay(index) {
     updateCopyLabels(); 
 
     // Check if "Play on Change" is enabled
-    const playOnChange = document.getElementById("id_PlayOnChangechk").checked;
+    const playOnChange = document.getElementById("id_PlayOnChange").checked;
     if (playOnChange) {
         playStep(index);
     }
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// TABLE: "Play" Button, this will play the selected step
+// TABLE: "Play" Button and will play the selected step
 //-------------------------------------------------------------------------------------------------------------------
 function playStep(index){
     if (typeof window.stopAudio === "function") {

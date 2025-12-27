@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------------------------------------------------------
-// KEYBOARD: Setup Keyboard button listeners with mouse/touch/drag functions.  Creates 31 Buttons.
+// KEYBOARD: Setup Keyboard button listeners with mouse/touch/drag functions.  Creates 32 Buttons.
 //-------------------------------------------------------------------------------------------------------------------
 function setupKeyboardButtonListener() {
     const keyboardDiv = document.getElementById("id_keyboardKeys");
@@ -107,9 +107,9 @@ function setupKeyboardButtonListener() {
             };
  
             // Only add to table if "Add Played Tone" checkbox is checked
-            if (document.getElementById("id_chkAddPlayedTone").checked) {
+            if (document.getElementById("id_KeyboardAddPlayedTone").checked) {
                 // and if "Add Silence Gap" checkbox is checked
-                if (document.getElementById("id_chkAddSilenceTone").checked) {
+                if (document.getElementById("id_KeyboardSilenceTone").checked) {
                     tonesArray.push(newTone);
                     updateTable();
                     if (DEBUG) console.log("---------------------------------------");
@@ -162,7 +162,7 @@ function setupKeyboardButtonListener() {
             };
 
             // Only add to table if "Add Played Tone" checkbox is checked
-            if (document.getElementById("id_chkAddPlayedTone").checked) {
+            if (document.getElementById("id_KeyboardAddPlayedTone").checked) {
                 tonesArray.push(newTone);
                 updateTable();
                 if (DEBUG) console.log(" ")
@@ -223,16 +223,16 @@ function btnSaveKeyboardLayout() {
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// KEYBOARD: Function to trigger file input click for btnLoadKeyboardLayout (Load Keyboard Layout)
+// KEYBOARD: "Load Layout" Button function to trigger file input click for triggerLoadKeyboardLayout
 //-------------------------------------------------------------------------------------------------------------------
-function triggerLoadLayout() {
+function btnLoadKeyboardLayout() {
     document.getElementById("id_loadKeyboardLayoutFileInput").click();
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// KEYBOARD: "Load Layout" Button from JSON file 
+// KEYBOARD: Triggers and get JSON data for Keyboard Layout 
 //-------------------------------------------------------------------------------------------------------------------
-function btnLoadKeyboardLayout(e) {
+function triggerLoadKeyboardLayout(e) {
     const keyboardDiv = document.getElementById("id_keyboardKeys");
     const file = e.target.files[0];
     if (!file) return;
@@ -272,7 +272,7 @@ function btnLoadKeyboardLayout(e) {
 // KEYBOARD: "Add Played Tone" Checkbox 
 //-------------------------------------------------------------------------------------------------------------------
 function chkKeyboardAddPlayedTone(checked) {
-    document.getElementById("id_chkAddSilenceTone").disabled = !checked; 
+    document.getElementById("id_KeyboardSilenceTone").disabled = !checked; 
 }
 
 //-------------------------------------------------------------------------------------------------------------------
