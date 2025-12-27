@@ -67,7 +67,7 @@ A web-based Atari 2600 sound effects editor using TIA sound generation, implemen
 ## How to Run
 
 1. **Compile WebAssembly:**  
-   - Double-click **`build.bat`** to compile `main.go` into `main.wasm` saved in `/www` folder.  
+   - Double-click **`build.bat`** to compile `main.go` into `main.wasm` saved in `www/` folder.  
 
 2. **Open the project in VS Code:**  
    - Right-click `index.html` → **Open with Live Server**.  
