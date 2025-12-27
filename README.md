@@ -83,6 +83,6 @@ A web-based Atari 2600 sound effects editor using TIA sound generation, implemen
 
 ## Notes
 
-- The editor automatically loads `main.wasm`, `wasm_exec.js`, and all JavaScript files from the `JavaScript/` folder.  
+- The editor automatically loads `main.wasm`, `wasm_exec.js`, and all JavaScript files from the `www/JavaScript/` folder.  
 - Mobile browsers may have inconsistent audio playback; desktop recommended.  
 - `build.bat` uses Go modules (`go.mod` and `go.sum`) to automatically manage dependencies.
