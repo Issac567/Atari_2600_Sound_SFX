@@ -34,7 +34,7 @@ function setupStepPanelInputsListener() {
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-// STEP PARAMETERS: "Add Steps at end" Button, Step Parameters inputs will be loaded into Table
+// STEP PARAMETERS: "Add Steps at End" Button, Step Parameters inputs will be loaded into Table
 //-------------------------------------------------------------------------------------------------------------------
 function btnAddStepEnd(){
     const freq=parseInt(document.getElementById("id_freq").value);

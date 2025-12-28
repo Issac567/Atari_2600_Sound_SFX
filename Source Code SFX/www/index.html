@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="icon" href="data:,"> <!-- Remove annoying no fav icon -->
         <meta charset="UTF-8">
         <title>Atari 2600 SFX Editor</title>
         <style>
@@ -11,9 +12,16 @@
             h1 { text-align: center; margin: 20px 0; }
 
             /*================================================================================*/
+            /* Styles for panel container, individual panels and headers */
+            /*================================================================================*/
+            .cls_panelContainer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; margin-top:20px;  }
+            .cls_panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
+            .cls_panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
+            
+            /*================================================================================*/
             /* KEYBOARD: Styles for Keyboard Panel layout */
             /*================================================================================*/
-            #id_keyboardPanel { width: 95%; height: 160px; margin: 20px auto 20px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+            #id_keyboardPanel.cls_panel { width: 95%; height: 160px; margin: 20px auto 20px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 
             /* Keyboard title */
             #id_keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
@@ -22,7 +30,7 @@
             #id_keyboardKeys { display: flex; justify-content: flex-start; gap: 2px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 2px; padding-right: 2px; }
 
             /* Optional: style scrollbar */
-            #id_keyboardKeys::-webkit-scrollbar { height: 6px; }
+            #id_keyboardKeys::-webkit-scrollbar { height: 8px; }
             #id_keyboardKeys::-webkit-scrollbar-thumb { background: #aaa; border-radius: 3px; }
 
             /* Individual keys */
@@ -47,33 +55,26 @@
             #id_keyboardFileButtons .cls_KeyboardCheckbox{ width: 160px; display: flex; }
             
             /*================================================================================*/
-            /* Styles for panel container, individual panels and headers */
-            /*================================================================================*/
-            .cls_panelContainer { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
-            .cls_panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
-            .cls_panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
-
-            /*================================================================================*/
             /* STEP PARAMETERS: Styles for Step Parameters Panel layout */
             /*================================================================================*/
-            #id_stepPanel { width: 450px; height: 220px;}
+            #id_stepPanel.cls_panel { width: 430px; height: 220px;}
 
             /* Styles for labels, textboxes and Dropdown */
             #id_stepPanel .cls_inputRow { display:flex; align-items:center; margin-bottom:10px; }
             #id_stepPanel .cls_inputRow label { flex:0 0 220px; text-align:right; margin-right:10px; }
-            #id_stepPanel .cls_inputRow input[type="number"], .cls_inputRow select { flex:1 1 auto; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; max-width:200px; }
+            #id_stepPanel .cls_inputRow input[type="number"], #id_stepPanel .cls_inputRow select { flex:1 1 auto; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:5px; text-align:center; max-width:180px; }
             #id_stepPanel .cls_inputRow input:hover { border-color: #888;}
-            #id_stepPanel .cls_inputRow select {text-align:left; max-width:210px;}
+            #id_stepPanel .cls_inputRow select {text-align:left; padding:6px; max-width:190px;}
             #id_stepPanel .cls_inputRow select:hover { border-color: #888;}
 
-            /* Styles for "Add Steps at end" Button */
-            #id_stepPanel .cls_AddStepsEnd { margin-left:230px; padding:6px 12px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:210px; }
+            /* Styles for "Add Steps at End" Button */
+            #id_stepPanel .cls_AddStepsEnd { flex:1 1 auto;  background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px;  max-width:190px; }
             #id_stepPanel .cls_AddStepsEnd:hover { background-color:#1568B0; }
 
             /*================================================================================*/
             /* PLAYBACK: Styles for Playback Management Panel layout */
             /*================================================================================*/
-            #id_playbackPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
+            #id_playbackPanel.cls_panel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
 
             /* Styles for "Play All" Button */
             #id_playbackPanel .cls_playAllSequence { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
@@ -89,7 +90,7 @@
             /*================================================================================*/
             /* TABLE MANAGEMENT: Styles for Table Management Panel layout */
             /*================================================================================*/
-            #id_tableManagementPanel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
+            #id_tableManagementPanel.cls_panel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
 
             /* Styles for All 3 Buttons */
             #id_tableManagementPanel .cls_ManagementBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
@@ -99,16 +100,16 @@
             /* TABLE: Styles for table layout */
             /*================================================================================*/
             /* Style for Table Header title */
-            #id_tonesTableTitle { display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: white; margin-bottom: 15px; }           
+            #id_tonesTableTitle { display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: white; margin-bottom: 20px; }           
             
             /* Style for Table, Table Header and Table Data */
             table { border-collapse:collapse; margin:10px auto; width:97%; background-color:#2b2b2b; }
-            #id_tonesTable th, #id_tonesTable td { border:1px solid #555; padding:5px 10px; text-align:center; }
+            #id_tonesTable th, #id_tonesTable td { border:1px solid #555; padding:6px 10px; text-align:center; }
             #id_tonesTable th { background-color:#3a3a3a; }
 
             /* Styles for Dropdown and Textboxes */
-            #id_tonesTable select, #id_tonesTable input[type="number"] { background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:4px; text-align:center; }
-            #id_tonesTable select { width:210px; text-align:left;}
+            #id_tonesTable select, #id_tonesTable input[type="number"] { background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:5px; text-align:center; }
+            #id_tonesTable select { width:190px; padding:6px; text-align:left;}
             #id_tonesTable select:hover { border-color: #888;}
             #id_tonesTable input[type="number"] { width:80px; }
             #id_tonesTable input:hover { border-color: #888;}
@@ -118,7 +119,7 @@
             #id_tonesTable .cls_playBtn:hover { background-color:#29832C; }
 
             /* Styles for the "Delete" Button  */
-            #id_tonesTable .cls_deleteBtn { background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
+            #id_tonesTable .cls_deleteBtn { background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width: 50px; }
             #id_tonesTable .cls_deleteBtn:hover { background-color:#9F1919; }
 
             /* Styles for "Duplicate"  */
@@ -131,12 +132,15 @@
             /*================================================================================*/
             /* FREQ/VOL LABEL: Styles for Frequency and Volume label at bottom */
             /*================================================================================*/
+            #id_FreqCtrlLabel.cls_panel { width: 95%; }
+
+             /* Styles for both Labels */
             #id_frequencyTableLabel, #id_controlVolumeTableLabel { margin-top:20px; text-align:center; color:#ffcc00; }
 
             /*================================================================================*/
             /* COPY TABLE: Styles for Copy Management Panel layout */
             /*================================================================================*/
-            #id_copyTablesPanel { width:200px; height: 170px; margin-top:0px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
+            #id_copyTablesPanel.cls_panel { width:200px; height: 170px; margin-top:0px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
 
             /* Styles for All 2 buttons  */
             #id_copyTablesPanel .cls_CopyMangBnt { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
@@ -172,8 +176,6 @@
         </style>                    
     </head>
     <body>
-<!-- #region HTML -->
-
         <!-- This is a header -->
         <h1>Atari 2600 SFX Editor with TIA Sound Generator</h1>
 
@@ -260,10 +262,15 @@
                 </div>
 
                 <!-- This is a Add Step at end Button -->
-                <button id="id_AddStepsEnd" class="cls_AddStepsEnd" onclick="btnAddStepEnd()">
-                    Add Steps at End
-                </button>
-
+                <div class="cls_inputRow">
+                    <label></label>
+                    <button id="id_AddStepsEnd"
+                            class="cls_AddStepsEnd"
+                            onclick="btnAddStepEnd()">
+                        Add Steps at End
+                    </button>
+                </div>
+                
             </div>
 
         <!-- ======================================= -->
@@ -333,24 +340,29 @@
             <tbody></tbody>
         </table>
         
+        <!-- ======================================= -->
+        <!-- This is a Freq/Crtl/Volume Label Panel -->
+        <!-- ======================================= -->
+        <div class="cls_panelContainer">
+            <div class="cls_panel" id="id_FreqCtrlLabel">
+                <!-- This is a header -->
+                <h3>Byte Tables</h3>
 
-        <!-- ======================================= -->
-        <!-- This is a Frequency Label at bottom -->
-        <!-- ======================================= -->
-        <div id="id_frequencyTableLabel">Frequency Table:</div>
+                <!-- This is a Freq Label -->
+                <div id="id_frequencyTableLabel">Frequency Table:</div>
 
-        <!-- ======================================= -->
-        <!-- This is a Control/Volume Label at bottom -->
-        <!-- ======================================= -->
-        <div id="id_controlVolumeTableLabel">Control/Volume Table:</div>
+                <!-- This is a Control/Vol Label -->
+                <div id="id_controlVolumeTableLabel">Control/Volume Table:</div>
+            </div>
+        </div>
 
         <!-- ======================================= -->
         <!-- This is a Copy Table Panel -->
         <!-- ======================================= -->
-        <div class="cls_panelContainer" style="justify-content:center; margin-top:20px;">
+        <div class="cls_panelContainer">
             <div class="cls_panel" id="id_copyTablesPanel">
                 <!-- This is a header -->
-                <h3>Copy Tables</h3>
+                <h3>Copy Byte Tables</h3>
 
                 <!-- This is a Copy Freq Button -->
                 <button id="id_CopyFrequency" class="cls_CopyMangBnt" onclick="btnCopyFrequency()">Copy Frequency Table</button>
@@ -382,9 +394,7 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="id_versionLabel">Version 2.81</div>
-
-<!-- #endregion -->
+        <div id="id_versionLabel">Version 2.82</div>
 
         <script src="JavaScript/wasm_exec.js"></script>
 
