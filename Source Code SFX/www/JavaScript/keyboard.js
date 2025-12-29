@@ -85,9 +85,6 @@ function setupKeyboardButtonListener() {
         // If KeyUp is more than 5 seconds, don't add to table 
         if (elapsedStop > KEY_SILENCE_MAX) {
             elapsedStop = 0;
-            if (DEBUG) console.log("---------------------------------------");
-            if (DEBUG) console.log("Tone off RESET over limit, not adding");
-            if (DEBUG) console.log("---------------------------------------");
         } else {
 
             // WASM emulation time
@@ -112,16 +109,8 @@ function setupKeyboardButtonListener() {
                 if (document.getElementById("id_KeyboardSilenceTone").checked) {
                     tonesArray.push(newTone);
                     updateTable();
-                    if (DEBUG) console.log("---------------------------------------");
-                    if (DEBUG) console.log("Tone table entry added SILENCE:", tonesArray[tonesArray.length - 1]);
                 }
             }
-            
-            if (DEBUG) console.log("Repeat Unpressed:" + repeat);
-            if (DEBUG) console.log("Tone duration off (ms):" +  elapsedStop.toFixed(2));
-            if (DEBUG) console.log("Emulation time (ms):" + emuTime.toFixed(2));
-            if (DEBUG) console.log("Adjusted time (ms):", adjusted.toFixed(2));
-            if (DEBUG) console.log("---------------------------------------");
         }
        
         // Record start time for toneStartTime
@@ -165,18 +154,7 @@ function setupKeyboardButtonListener() {
             if (document.getElementById("id_KeyboardAddPlayedTone").checked) {
                 tonesArray.push(newTone);
                 updateTable();
-                if (DEBUG) console.log(" ")
-                if (DEBUG) console.log("---------------------------------------");
-                if (DEBUG) console.log("Tone table entry added:", tonesArray[tonesArray.length - 1]);
             }
-
-            if (DEBUG) console.log(" ")
-            if (DEBUG) console.log("Repeat Pressed:", repeat);
-            if (DEBUG) console.log("Tone duration on (ms):", elapsedStart.toFixed(2));
-            if (DEBUG) console.log("Emulation time (ms):", emuTime.toFixed(2));
-            if (DEBUG) console.log("Adjusted time (ms):", adjusted.toFixed(2));
-            if (DEBUG) console.log("---------------------------------------");
-            if (DEBUG) console.log(" ")
         }
     }
 
@@ -203,7 +181,7 @@ function btnSaveKeyboardLayout() {
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url;
+    a.href=url;
 
     // Ask user for filename
     let filename = prompt("Enter filename for keyboard layout:", "keyboard-layout");

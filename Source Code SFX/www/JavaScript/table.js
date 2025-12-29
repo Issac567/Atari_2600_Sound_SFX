@@ -2,12 +2,12 @@
 // TABLE: This updates Table with tones values from (Step Parameters input or Keyboard pressed buttons if enabled)
 //-------------------------------------------------------------------------------------------------------------------
 function updateTable(){
-    const tbody=document.querySelector("#id_tonesTable tbody");
+    const tbody = document.querySelector("#id_tonesTable tbody");
     tbody.innerHTML="";
     tonesArray.forEach((tone,index)=>{
-        const row=tbody.insertRow();
+        const row = tbody.insertRow();
         row.setAttribute("draggable","true");
-        row.dataset.index=index;
+        row.dataset.index = index;
 
         // Add drag listener for Table
         row.addEventListener("dragstart",e=>{ e.dataTransfer.setData("text/plain",index); e.currentTarget.style.opacity="0.5"; });
@@ -16,10 +16,11 @@ function updateTable(){
         row.addEventListener("dragleave",e=>{ row.classList.remove("drag-over"); });
         row.addEventListener("drop",e=>{
             e.preventDefault(); row.classList.remove("drag-over");
-            const draggedIndex=parseInt(e.dataTransfer.getData("text/plain"));
-            const targetIndex=parseInt(row.dataset.index);
-            if(draggedIndex===targetIndex) return;
-            const draggedTone=tonesArray[draggedIndex];
+            const draggedIndex = parseInt(e.dataTransfer.getData("text/plain"));
+            const targetIndex = parseInt(row.dataset.index);
+            if(draggedIndex === targetIndex) return;
+            saveState();
+            const draggedTone = tonesArray[draggedIndex];
             tonesArray.splice(draggedIndex,1);
             tonesArray.splice(targetIndex,0,draggedTone);
             updateTable();
@@ -38,22 +39,22 @@ function updateTable(){
         row.insertCell().textContent=index+1;
 
         // Add Dropdown (Select)
-        const ctlCell=row.insertCell();
-        const ctlSelect=document.createElement("select");
-        ctlOptions.forEach(opt=>{ const o=document.createElement("option"); o.value=opt.v; o.text=opt.l; if(opt.v===tone.control) o.selected=true; ctlSelect.appendChild(o); });
+        const ctlCell = row.insertCell();
+        const ctlSelect = document.createElement("select");
+        ctlOptions.forEach(opt=>{ const o = document.createElement("option"); o.value=opt.v; o.text=opt.l; if(opt.v===tone.control) o.selected=true; ctlSelect.appendChild(o); });
         ctlCell.appendChild(ctlSelect);
 
         // Add Frequency Textbox
-        const freqCell=row.insertCell();
-        const freqInput=document.createElement("input"); freqInput.type="number"; freqInput.min=0; freqInput.max=31; freqInput.value=tone.frequency; freqCell.appendChild(freqInput);
+        const freqCell = row.insertCell();
+        const freqInput = document.createElement("input"); freqInput.type="number"; freqInput.min=0; freqInput.max=31; freqInput.value=tone.frequency; freqCell.appendChild(freqInput);
 
         // Add Volume Textbox
-        const volCell=row.insertCell();
-        const volInput=document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volCell.appendChild(volInput);
+        const volCell = row.insertCell();
+        const volInput = document.createElement("input"); volInput.type="number"; volInput.min=0; volInput.max=15; volInput.value=tone.volume; volCell.appendChild(volInput);
 
         // Add Repeat Textbox
-        const repeatCell=row.insertCell();
-        const repeatInput=document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=100; repeatInput.value=tone.repeat||1; repeatCell.appendChild(repeatInput);
+        const repeatCell = row.insertCell();
+        const repeatInput = document.createElement("input"); repeatInput.type="number"; repeatInput.min=1; repeatInput.max=100; repeatInput.value=tone.repeat||1; repeatCell.appendChild(repeatInput);
     
         // Onchange events for Freq, Vol, Repeat and Control inputs
         freqInput.onchange = () => updateToneTableAndPlay(index); ctlSelect.onchange = () => updateToneTableAndPlay(index); repeatInput.onchange = () => updateToneTableAndPlay(index);
@@ -63,33 +64,35 @@ function updateTable(){
         };
 
         // Add Play Button and Click function
-        const playCell=row.insertCell();
-        const playBtn=document.createElement("button"); playBtn.textContent="Play"; playBtn.className="cls_playBtn"; 
+        const playCell = row.insertCell();
+        const playBtn = document.createElement("button"); playBtn.textContent = "Play"; playBtn.className = "cls_playBtn"; 
         playCell.appendChild(playBtn);
-        playBtn.onclick=()=>playStep(index); 
+        playBtn.onclick = ()=>playStep(index); 
        
         // Add Delete Button and Click function
-        const delCell=row.insertCell();
-        const delBtn=document.createElement("button"); delBtn.textContent="X"; delBtn.className="cls_deleteBtn"; 
+        const delCell = row.insertCell();
+        const delBtn = document.createElement("button"); delBtn.textContent = "X"; delBtn.className = "cls_deleteBtn"; 
         delCell.appendChild(delBtn);
-        delBtn.onclick=()=>{ 
+        delBtn.onclick = ()=>{ 
+            saveState();
             tonesArray.splice(index,1); 
             updateTable(); 
         }; 
 
         // Add Insert Before Button and Click function
-        const insertCell=row.insertCell();
-        const insertBtn=document.createElement("button"); insertBtn.textContent="Duplicate"; insertBtn.className="cls_insertBtn";
+        const insertCell = row.insertCell();
+        const insertBtn = document.createElement("button"); insertBtn.textContent = "Duplicate"; insertBtn.className = "cls_insertBtn";
         insertCell.appendChild(insertBtn);
-        insertBtn.onclick=()=>{
+        insertBtn.onclick = ()=>{
             // duplicates the selected row with table cell values not step parameters.
             const tbody=document.querySelector("#id_tonesTable tbody");
             const row=tbody.rows[index];
-             if (!row) return;
-            const ctl  = parseInt(row.cells[1].querySelector("select").value);
+            if (!row) return;
+            saveState();
+            const ctl = parseInt(row.cells[1].querySelector("select").value);
             const freq = parseInt(row.cells[2].querySelector("input").value);
-            const vol=parseInt(row.cells[3].querySelector("input").value);
-            const repeat=parseInt(row.cells[4].querySelector("input").value)||1;
+            const vol = parseInt(row.cells[3].querySelector("input").value);
+            const repeat = parseInt(row.cells[4].querySelector("input").value)||1;
             tonesArray.splice(index,0,{frequency:freq,control:ctl,volume:vol,repeat});
             updateTable();
         };
@@ -115,6 +118,7 @@ function updateTable(){
 // TABLE: This plays the sound when inputs values are changed with Table (.onchange event declared in updateTable)
 //-------------------------------------------------------------------------------------------------------------------
 function updateToneTableAndPlay(index) {
+    saveState();
     const row = document.querySelector("#id_tonesTable tbody").rows[index];
     if (!row) return;
 
@@ -140,15 +144,21 @@ function updateToneTableAndPlay(index) {
 // TABLE: "Play" Button and will play the selected step
 //-------------------------------------------------------------------------------------------------------------------
 function playStep(index){
-    if (typeof window.stopAudio === "function") {
-        window.stopAudio();
-    }
-    const step=tonesArray[index];
+    if (typeof window.stopAudio === "function") (window.stopAudio)();
+    
+    const step = tonesArray[index];
     if(!step) return;
-    const buffer=[];
-    for(let i=0;i<(step.repeat||1);i++) buffer.push({frequency:step.frequency,control:step.control,volume:step.volume});
-    if(typeof window.updateSamples ==="function"){
+    const buffer = [];
+    const repeatCount = step.repeat || 1;
+    for (let i = 0; i < repeatCount; i++) {
+        buffer.push({
+            frequency: step.frequency,
+            control:   step.control,
+            volume:    step.volume
+        });
+    }
+    if(typeof window.updateSamples === "function"){
         window.updateSamples(JSON.stringify(buffer));
-        if(typeof window.playSample ==="function") window.playSample(false);
+        if(typeof window.playSample === "function") (window.playSample)(false);
     }
 }

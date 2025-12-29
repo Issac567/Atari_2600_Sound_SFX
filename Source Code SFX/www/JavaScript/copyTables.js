@@ -20,15 +20,15 @@ function btnCopyControlVolume(){
 // COPY TABLE: The clipboard SFX table bytes from 2 labels (Frequency Table: and Control/Volume Table:)
 //-------------------------------------------------------------------------------------------------------------------
 function updateCopyLabels(){
-    const expanded=[];
+    const expanded = [];
     tonesArray.forEach(s=>{ for(let i=0;i<(s.repeat||1);i++) expanded.push({frequency:s.frequency,control:s.control,volume:s.volume}); });
 
-    const freqArray=["byte. 0"].concat(expanded.map(s=>s.frequency).reverse());
+    const freqArray = ["byte. 0"].concat(expanded.map(s=>s.frequency).reverse());
     document.getElementById("id_frequencyTableLabel").textContent="Frequency Table: "+freqArray.join(", ");
 
-    const cvArray=["byte. 0"].concat(expanded.map(step=>{
-        const byte=((step.control&0x0F)<<4)|(step.volume&0x0F);
-        return "$"+byte.toString(16).padStart(2,"0").toUpperCase();
+    const cvArray = ["byte. 0"].concat(expanded.map(step=>{
+        const byte = ((step.control&0x0F) << 4)|(step.volume & 0x0F);
+        return "$" + byte.toString(16).padStart(2,"0").toUpperCase();
     }).reverse());
     document.getElementById("id_controlVolumeTableLabel").textContent="Control/Volume Table: "+cvArray.join(", ");
 
