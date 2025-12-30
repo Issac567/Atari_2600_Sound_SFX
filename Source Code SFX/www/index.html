@@ -144,21 +144,19 @@
             .cls_panelContainer2 { display: flex; justify-content: center; flex-wrap: nowrap; margin-top:10px; }
             
             /*================================================================================*/
-            /* BYTE TABLES: Styles for Freq/Ctrl/Vol Panel layout */
+            /* BYTE TABLES: Styles for Byte Tables Panel layout */
             /*================================================================================*/
-            #id_byteTablePanel.cls_panel { flex: 0 0 auto; width: 95%; }
+            #id_byteTablePanel.cls_panel { flex: 0 0 auto; width: 95%;}
+            
+            /* Styles for CopyMangBnt Panel  */
+            #id_copyButtonsPanel.cls_panel2 {display: flex; justify-content: center; gap:10px;}
+
+            /* Styles for All 2 buttons  */
+            #id_copyButtonsPanel .cls_CopyMangBnt { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+            #id_copyButtonsPanel .cls_CopyMangBnt:hover { background-color:#616161; }
 
              /* Styles for both Labels */
             #id_byteTablePanel .cls_byteTableLabel{ margin-top:20px; text-align:center; color:#ffcc00; }
-
-            /*================================================================================*/
-            /* COPY BYTE TABLES: Styles for Copy Management Panel layout */
-            /*================================================================================*/
-            #id_copyTablesPanel.cls_panel { flex: 0 0 auto; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center;}
-
-            /* Styles for All 2 buttons  */
-            #id_copyTablesPanel .cls_CopyMangBnt { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
-            #id_copyTablesPanel .cls_CopyMangBnt:hover { background-color:#616161; }
 
             /*================================================================================*/
             /* PAYPAL: Styles for Pay Pal Panel layout */
@@ -367,34 +365,26 @@
         </table>
         
         <!-- ======================================= -->
-        <!-- This is a Freq/Crtl/Volume Label Panel -->
+        <!-- This is a Byte Tables Panel -->
         <!-- ======================================= -->
         <div class="cls_panelContainer2">
             <div class="cls_panel" id="id_byteTablePanel">
                 <!-- This is a header -->
                 <h3>Byte Tables</h3>
 
+                <div class="cls_panel2" id="id_copyButtonsPanel">
+                    <!-- This is a Copy Freq Button -->
+                    <button id="id_CopyFrequency" class="cls_CopyMangBnt" onclick="btnCopyFrequency()">Copy Frequency Table</button>
+
+                    <!-- This is a Control/Vol Button -->
+                    <button id="id_CopyControlVolume" class="cls_CopyMangBnt" onclick="btnCopyControlVolume()">Copy Control/Volume Table</button>
+                </div>
+
                 <!-- This is a Freq Label -->
                 <div id="id_frequencyTableLabel" class="cls_byteTableLabel">Frequency Table:</div>
 
                 <!-- This is a Control/Vol Label -->
                 <div id="id_controlVolumeTableLabel" class="cls_byteTableLabel">Control/Volume Table:</div>
-            </div>
-        </div>
-
-        <!-- ======================================= -->
-        <!-- This is a Copy Table Panel -->
-        <!-- ======================================= -->
-        <div class="cls_panelContainer2">
-            <div class="cls_panel" id="id_copyTablesPanel">
-                <!-- This is a header -->
-                <h3>Copy Byte Tables</h3>
-
-                <!-- This is a Copy Freq Button -->
-                <button id="id_CopyFrequency" class="cls_CopyMangBnt" onclick="btnCopyFrequency()">Copy Frequency Table</button>
-
-                <!-- This is a Control/Vol Button -->
-                <button id="id_CopyControlVolume" class="cls_CopyMangBnt" onclick="btnCopyControlVolume()">Copy Control/Volume Table</button>
             </div>
         </div>
 
@@ -420,7 +410,7 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="id_versionLabel">Version 3.07</div>
+        <div id="id_versionLabel">Version 3.08</div>
 
         <script src="JavaScript/wasm_exec.js"></script>
 
