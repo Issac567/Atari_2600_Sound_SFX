@@ -1,10 +1,10 @@
 const DEBUG = false;                // ← set false for release
 
 let tonesArray = [];                // array of objects: { freq, volume, control, repeat }
-let tonesHistory = [];              // Undo history
+let undoHistory = [];               // Undo history
 let redoHistory = [];               // Redo history
 
-let toneStopTime = 0                // to track stop time (Off duration: Silence Gap) (keyboard)
+let toneStopTime = 0;               // to track stop time (Off duration: Silence Gap) (keyboard)
 let toastTimeout;                   
 
 const STEP_MS = 18;                 // part of equation matches "step played sustain" to "keyboard key down sustain".  18ms matches very close.  Lower value = longer repeat values (more gain) 

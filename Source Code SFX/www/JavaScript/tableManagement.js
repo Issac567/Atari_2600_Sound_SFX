@@ -3,7 +3,7 @@
 //-------------------------------------------------------------------------------------------------------------------
 function btnNewTable(){ 
     if(confirm("Are you sure you want to create a new table? This will clear all current steps.")){ 
-        tonesHistory.length = 0;
+        undoHistory.length = 0;
         redoHistory.length = 0;
         toneStopTime = 0;  // for keyboard Resets and prevents Silence Gap tone being added at inital press
         tonesArray = []; updateTable(); showToast("New table created"); 
@@ -73,7 +73,7 @@ function triggerLoadTable(event) {
             // Remove invalid filename characters
             title.textContent = file.name.replace(/\.[^/.]+$/, "");
 
-            tonesHistory.length = 0;
+            undoHistory.length = 0;
             redoHistory.length = 0;
 
             tonesArray = loadedTones;
