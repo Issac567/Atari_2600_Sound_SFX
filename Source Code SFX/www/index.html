@@ -15,12 +15,12 @@
             /* Styles for panel container and first 4 panels */
             /*================================================================================*/
             .cls_panelContainer { /*overflow-x: auto;*/ margin-left: 20px; margin-right: 20px; display: flex; justify-content: left; gap: 10px; flex-wrap: nowrap; }
-            .cls_panel { flex: 1 ;/*flex: 1 1 auto; */ /* flex-grow:1, flex-shrink:1, flex-basis:auto */border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
+            .cls_panel { flex: 1 1 auto;/*flex: 1 1 auto; */ /* flex-grow:1, flex-shrink:1, flex-basis:auto */border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
          
             /*================================================================================*/
             /* Styles for panel headers (all) */
             /*================================================================================*/
-            .cls_panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
+            .cls_panel h3 { margin-top:0; margin-bottom:10px; text-align:center; }
             
             /*================================================================================*/
             /* STEP PARAMETERS: Styles for Step Parameters Panel layout */
@@ -42,41 +42,41 @@
             /*================================================================================*/
             /* PLAYBACK: Styles for Playback Management Panel layout */
             /*================================================================================*/
-            #id_playbackPanel.cls_panel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
+            #id_playbackPanel.cls_panel { min-width: 160px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
 
             /* Styles for "Play All" Button */
-            #id_playbackPanel .cls_playAllSequence { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:180px; }
+            #id_playbackPanel .cls_playAllSequence { margin-left: 10px; margin-right: 10px; background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:auto; }
             #id_playbackPanel .cls_playAllSequence:hover { background-color: #29832C; }
 
             /* Styles for "Stop" Button */
-            #id_playbackPanel .cls_StopAudio { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; text-align:center; }
+            #id_playbackPanel .cls_StopAudio { margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:auto; text-align:center; }
             #id_playbackPanel .cls_StopAudio:hover { background-color:#616161; }
 
             /* Stlyes for "Loop Playback" and "PlayonChange" checkbox */
-            #id_playbackPanel .cls_PlaybackCheckbox { width: 160px; display: flex; justify-content: left; }
+            #id_playbackPanel .cls_PlaybackCheckbox { margin-left: 10px; margin-right: 10px; width: auto; }
  
             /*================================================================================*/
             /* TABLE MANAGEMENT: Styles for Table Management Panel layout */
             /*================================================================================*/
-            #id_tableManagementPanel.cls_panel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
+            #id_tableManagementPanel.cls_panel { min-width: 160px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
 
             /* Styles for All 3 Buttons */
-            #id_tableManagementPanel .cls_ManagementBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+            #id_tableManagementPanel .cls_ManagementBtn { margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:auto; }
             #id_tableManagementPanel .cls_ManagementBtn:hover { background-color:#616161; }
 
             /*================================================================================*/
             /* UNDO/REDO: Styles for Undo/Redo Panel layout */
             /*================================================================================*/
-            #id_undoRedoPanel.cls_panel { width: 200px; height: 220px; display:flex; flex-direction: column; align-items:center; gap:15px }
+            #id_undoRedoPanel.cls_panel { min-width: 160px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
 
             /* Styles for All 3 Buttons */
-            #id_undoRedoPanel .cls_UndoRedoBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+            #id_undoRedoPanel .cls_UndoRedoBtn { margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:auto; }
             #id_undoRedoPanel .cls_UndoRedoBtn:hover { background-color:#616161; }
 
             /*================================================================================*/
             /* KEYBOARD: Styles for Keyboard Panel layout */
             /*================================================================================*/
-            #id_keyboardPanel.cls_panel { width: 95%; height: 160px; margin: 10px auto 10px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+            #id_keyboardPanel.cls_panel { width: 95%; height: 150px; margin: 10px auto 20px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 
             /* Keyboard title */
             #id_keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
@@ -107,16 +107,16 @@
             #id_keyboardFileButtons .cls_KeyboardSaveLoadBtn:hover { background-color: #616161; }
 
             /* Stlyes for "Add Played Tones" and Silence Gap checkbox */
-            #id_keyboardFileButtons .cls_KeyboardCheckbox{ width: 160px; display: flex; }
+            #id_keyboardFileButtons .cls_KeyboardCheckbox{ width: 160px; }
 
             /*================================================================================*/
             /* TABLE: Styles for table layout */
             /*================================================================================*/
             /* Style for Table Header title */
-            #id_tonesTableTitle { display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: white; margin-bottom: 20px; }           
+            #id_tonesTableTitle { display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: white; margin-bottom: 10px; }           
             
             /* Style for Table, Table Header and Table Data */
-            table { /*border-collapse:collapse; */ margin:10px auto; width:97%; background-color:#2b2b2b; }
+            table { /*border-collapse:collapse; */ margin:0px auto; width:97%; background-color:#2b2b2b; }
             #id_tonesTable th, #id_tonesTable td { border:1px solid #555; padding:6px 10px; text-align:center; }
             #id_tonesTable th { background-color:#3a3a3a; }
 
@@ -145,7 +145,7 @@
             /*================================================================================*/
             /* Styles container panel for (Byte Table, Copy Table, and Paypal)
             /*================================================================================*/
-            .cls_panelContainer2 { display: flex; justify-content: center; gap: 10px; flex-wrap: nowrap; margin-top:10px;  }
+            .cls_panelContainer2 { display: flex; justify-content: center; gap: 10px; flex-wrap: nowrap; margin-top:10px; }
             
             /*================================================================================*/
             /* BYTE TABLES: Styles for Freq/Ctrl/Vol Panel layout */
@@ -158,7 +158,7 @@
             /*================================================================================*/
             /* COPY BYTE TABLES: Styles for Copy Management Panel layout */
             /*================================================================================*/
-            #id_copyTablesPanel.cls_panel { flex: 0 0 auto; width:200px; height: 170px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
+            #id_copyTablesPanel.cls_panel { flex: 0 0 auto; width:200px; height: 170px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center;}
 
             /* Styles for All 2 buttons  */
             #id_copyTablesPanel .cls_CopyMangBnt { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
@@ -424,7 +424,7 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="id_versionLabel">Version 3.05</div>
+        <div id="id_versionLabel">Version 3.06</div>
 
         <script src="JavaScript/wasm_exec.js"></script>
 
