@@ -35,10 +35,12 @@ function setupStepPanelInputsListener() {
 // STEP PARAMETERS: "Add Steps at End" Button, Step Parameters inputs will be loaded into Table
 //-------------------------------------------------------------------------------------------------------------------
 function btnAddStepEnd(){
+    saveState();
     const freq = parseInt(document.getElementById("id_freq").value);
     const vol = parseInt(document.getElementById("id_vol").value);
     const ctl = parseInt(document.getElementById("id_ctl").value);
     const repeat = parseInt(document.getElementById("id_repeat").value)||1;
     tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
     updateTable();
+
 }
