@@ -15,7 +15,7 @@
             /* Styles for panel container and first 4 panels */
             /*================================================================================*/
             .cls_panelContainer { /*overflow-x: auto;*/ margin-left: 20px; margin-right: 20px; display: flex; justify-content: left; gap: 10px; flex-wrap: nowrap; }
-            .cls_panel { /*flex: 1 1 auto; */ /* flex-grow:1, flex-shrink:1, flex-basis:auto */border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
+            .cls_panel { flex: 1;/*flex: 1 1 auto; */ /* flex-grow:1, flex-shrink:1, flex-basis:auto */border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
          
             /*================================================================================*/
             /* Styles for panel headers (all) */
@@ -23,45 +23,9 @@
             .cls_panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
 
             /*================================================================================*/
-            /* KEYBOARD: Styles for Keyboard Panel layout */
-            /*================================================================================*/
-            #id_keyboardPanel.cls_panel { width: 95%; height: 160px; margin: 10px auto 10px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
-
-            /* Keyboard title */
-            #id_keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
-
-            /* Keyboard keys container */
-            #id_keyboardKeys { display: flex; justify-content: flex-start; gap: 2px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 2px; padding-right: 2px; }
-
-            /* Optional: style scrollbar */
-            #id_keyboardKeys::-webkit-scrollbar { height: 8px; }
-            #id_keyboardKeys::-webkit-scrollbar-thumb { background: #aaa; border-radius: 3px; }
-
-            /* Individual keys */
-            #id_keyboardKeys button { flex: 1 1 0; min-width: 30px; height: 60px; margin: 2px 1px; border: 1px solid #555; border-radius: 4px; background: #eee; color: #111; font-weight: bold; cursor: pointer; user-select: none; text-align: center; transition: background 0.1s, transform 0.05s; }
-
-            /* Key press / hover feedback */
-            #id_keyboardKeys button:hover { background: #716767; }
-            #id_keyboardKeys button:active { background: #CCC; transform: scale(0.95); }
-
-            /* Responsive adjustments */
-            @media (max-width: 800px) { #id_keyboardKeys button { height: 50px; font-size: 0.9rem; } }
-            @media (max-width: 500px) { #id_keyboardKeys button { height: 40px; font-size: 0.8rem; } }
-
-            /* Keyboard Export/Import Layout Buttons */
-            #id_keyboardFileButtons { display: flex; justify-content: center; gap: 16px; width: 100%; padding: 8px 0; margin-top: 10px; border-top: none; align-items: center; }
-
-            /* Styles for "Import/Export Buttons"  */
-            #id_keyboardFileButtons .cls_KeyboardSaveLoadBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:4px; cursor:pointer; padding:6px 14px; cursor: pointer; text-align: center; transition: background 0.2s; width:140px; }
-            #id_keyboardFileButtons .cls_KeyboardSaveLoadBtn:hover { background-color: #616161; }
-
-            /* Stlyes for "Add Played Tones" and Silence Gap checkbox */
-            #id_keyboardFileButtons .cls_KeyboardCheckbox{ width: 160px; display: flex; }
-            
-            /*================================================================================*/
             /* STEP PARAMETERS: Styles for Step Parameters Panel layout */
             /*================================================================================*/
-            #id_stepPanel.cls_panel { flex: 1; max-width: 600px; width: 430px; height: 220px;}
+            #id_stepPanel.cls_panel { /*flex: 1; */ max-width: 600px; width: 430px; height: 220px; }
 
             /* Styles for labels, textboxes and Dropdown */
             #id_stepPanel .cls_inputRow { display:flex; align-items:center; margin-bottom:10px; }
@@ -143,6 +107,42 @@
             #id_tonesTable tr.drag-over { border:2px dashed #ffcc00; }
 
             /*================================================================================*/
+            /* KEYBOARD: Styles for Keyboard Panel layout */
+            /*================================================================================*/
+            #id_keyboardPanel.cls_panel { width: 95%; height: 160px; margin: 0px auto 0px auto; padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+
+            /* Keyboard title */
+            #id_keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+
+            /* Keyboard keys container */
+            #id_keyboardKeys { display: flex; justify-content: flex-start; gap: 2px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 2px; padding-right: 2px; }
+
+            /* Optional: style scrollbar */
+            #id_keyboardKeys::-webkit-scrollbar { height: 8px; }
+            #id_keyboardKeys::-webkit-scrollbar-thumb { background: #aaa; border-radius: 3px; }
+
+            /* Individual keys */
+            #id_keyboardKeys button { flex: 1 1 0; min-width: 30px; height: 60px; margin: 2px 1px; border: 1px solid #555; border-radius: 4px; background: #eee; color: #111; font-weight: bold; cursor: pointer; user-select: none; text-align: center; transition: background 0.1s, transform 0.05s; }
+
+            /* Key press / hover feedback */
+            #id_keyboardKeys button:hover { background: #716767; }
+            #id_keyboardKeys button:active { background: #CCC; transform: scale(0.95); }
+
+            /* Responsive adjustments */
+            @media (max-width: 800px) { #id_keyboardKeys button { height: 50px; font-size: 0.9rem; } }
+            @media (max-width: 500px) { #id_keyboardKeys button { height: 40px; font-size: 0.8rem; } }
+
+            /* Keyboard Export/Import Layout Buttons */
+            #id_keyboardFileButtons { display: flex; justify-content: center; gap: 16px; width: 100%; padding: 8px 0; margin-top: 10px; border-top: none; align-items: center; }
+
+            /* Styles for "Import/Export Buttons"  */
+            #id_keyboardFileButtons .cls_KeyboardSaveLoadBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:4px; cursor:pointer; padding:6px 14px; cursor: pointer; text-align: center; transition: background 0.2s; width:140px; }
+            #id_keyboardFileButtons .cls_KeyboardSaveLoadBtn:hover { background-color: #616161; }
+
+            /* Stlyes for "Add Played Tones" and Silence Gap checkbox */
+            #id_keyboardFileButtons .cls_KeyboardCheckbox{ width: 160px; display: flex; }
+            
+            /*================================================================================*/
             /* Styles container panel for (Byte Table, Copy Table, and Paypal)
             /*================================================================================*/
             .cls_panelContainer2 { display: flex; justify-content: center; gap: 10px; flex-wrap: nowrap; margin-top:10px;  }
@@ -196,46 +196,6 @@
     <body>
         <!-- This is a header -->
         <h1>Atari 2600 SFX Editor with TIA Sound Generator</h1>
-
-        <!-- ======================================= -->
-        <!-- This is a Keyboard -->
-        <!-- ======================================= -->
-        <div class="cls_panel" id="id_keyboardPanel">
-            <!-- This is a header -->
-            <h3>Keyboard (Hold Down Play + Draggable)</h3>
-
-            <div id="id_keyboardKeys"></div>
-
-            <!-- Save / Load buttons INSIDE keyboard panel -->
-            <div id="id_keyboardFileButtons">
-                <!-- This is a Save layout button -->
-                <button id="id_SaveKeyboardLayout" class="cls_KeyboardSaveLoadBtn" onclick="btnSaveKeyboardLayout()">Save Layout</button>
-            
-                <!-- This is a Load layout button triggers triggerLoadKeyboardLayout -->
-                <button id="id_LoadKeyboardLayout" class="cls_KeyboardSaveLoadBtn" onclick="btnLoadKeyboardLayout()">Load Layout</button>
-            
-                <!-- File input for loading keyboard layout (JSON format) -->
-                <input type="file" id="id_loadKeyboardLayoutFileInput" accept=".json" hidden onchange="triggerLoadKeyboardLayout(event)">
-
-                <!-- This is a Add Played Tone Checkbox   -->
-                <div class="cls_KeyboardCheckbox">
-                    <label class="cls_customCheckbox">
-                        <input type="checkbox" id="id_KeyboardAddPlayedTone" onclick="chkKeyboardAddPlayedTone(this.checked)">
-                        <span class="cls_checkmark"></span>
-                        Add Played Tone
-                    </label>
-                </div>
-
-                <!-- This is a Silence Gap Checkbox   -->
-                <div class="cls_KeyboardCheckbox">
-                    <label class="cls_customCheckbox">
-                        <input type="checkbox" id="id_KeyboardSilenceTone" onclick="chkKeyboardSilenceTone(this.checked)" disabled>
-                        <span class="cls_checkmark"></span>
-                        Add Silence Gap
-                    </label>
-                </div>
-            </div>
-        </div>
 
         <!-- ======================================= -->
         <!-- This is a Step Parameters Panel -->
@@ -369,7 +329,47 @@
             </thead>
             <tbody></tbody>
         </table>
-        
+     
+        <!-- ======================================= -->
+        <!-- This is a Keyboard -->
+        <!-- ======================================= -->
+        <div class="cls_panel" id="id_keyboardPanel">
+            <!-- This is a header -->
+            <h3>Keyboard (Hold Down Play + Draggable)</h3>
+
+            <div id="id_keyboardKeys"></div>
+
+            <!-- Save / Load buttons INSIDE keyboard panel -->
+            <div id="id_keyboardFileButtons">
+                <!-- This is a Save layout button -->
+                <button id="id_SaveKeyboardLayout" class="cls_KeyboardSaveLoadBtn" onclick="btnSaveKeyboardLayout()">Save Layout</button>
+            
+                <!-- This is a Load layout button triggers triggerLoadKeyboardLayout -->
+                <button id="id_LoadKeyboardLayout" class="cls_KeyboardSaveLoadBtn" onclick="btnLoadKeyboardLayout()">Load Layout</button>
+            
+                <!-- File input for loading keyboard layout (JSON format) -->
+                <input type="file" id="id_loadKeyboardLayoutFileInput" accept=".json" hidden onchange="triggerLoadKeyboardLayout(event)">
+
+                <!-- This is a Add Played Tone Checkbox   -->
+                <div class="cls_KeyboardCheckbox">
+                    <label class="cls_customCheckbox">
+                        <input type="checkbox" id="id_KeyboardAddPlayedTone" onclick="chkKeyboardAddPlayedTone(this.checked)">
+                        <span class="cls_checkmark"></span>
+                        Add Played Tone
+                    </label>
+                </div>
+
+                <!-- This is a Silence Gap Checkbox   -->
+                <div class="cls_KeyboardCheckbox">
+                    <label class="cls_customCheckbox">
+                        <input type="checkbox" id="id_KeyboardSilenceTone" onclick="chkKeyboardSilenceTone(this.checked)" disabled>
+                        <span class="cls_checkmark"></span>
+                        Add Silence Gap
+                    </label>
+                </div>
+            </div>
+        </div>
+
         <!-- ======================================= -->
         <!-- This is a Freq/Crtl/Volume Label Panel -->
         <!-- ======================================= -->
@@ -424,7 +424,7 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="id_versionLabel">Version 3.02</div>
+        <div id="id_versionLabel">Version 3.03</div>
 
         <script src="JavaScript/wasm_exec.js"></script>
 
