@@ -12,12 +12,16 @@
             h1 { text-align: center; margin: 20px 0; }
 
             /*================================================================================*/
-            /* Styles for panel container, individual panels and headers */
+            /* Styles for panel container and first 4 panels */
             /*================================================================================*/
-            .cls_panelContainer { display: flex; justify-content: center; gap: 10px; flex-wrap: nowrap; margin-top:10px;  }
-            .cls_panel { border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
+            .cls_panelContainer { /*overflow-x: auto;*/ margin-left: 20px; margin-right: 20px; display: flex; justify-content: left; gap: 10px; flex-wrap: nowrap; }
+            .cls_panel { /*flex: 1 1 auto; */ /* flex-grow:1, flex-shrink:1, flex-basis:auto */border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
+         
+            /*================================================================================*/
+            /* Styles for panel headers (all) */
+            /*================================================================================*/
             .cls_panel h3 { margin-top:0; margin-bottom:15px; text-align:center; }
-            
+
             /*================================================================================*/
             /* KEYBOARD: Styles for Keyboard Panel layout */
             /*================================================================================*/
@@ -57,7 +61,7 @@
             /*================================================================================*/
             /* STEP PARAMETERS: Styles for Step Parameters Panel layout */
             /*================================================================================*/
-            #id_stepPanel.cls_panel { width: 430px; height: 220px;}
+            #id_stepPanel.cls_panel { flex: 1; max-width: 600px; width: 430px; height: 220px;}
 
             /* Styles for labels, textboxes and Dropdown */
             #id_stepPanel .cls_inputRow { display:flex; align-items:center; margin-bottom:10px; }
@@ -112,7 +116,7 @@
             #id_tonesTableTitle { display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: white; margin-bottom: 20px; }           
             
             /* Style for Table, Table Header and Table Data */
-            table { border-collapse:collapse; margin:10px auto; width:97%; background-color:#2b2b2b; }
+            table { /*border-collapse:collapse; */ margin:10px auto; width:97%; background-color:#2b2b2b; }
             #id_tonesTable th, #id_tonesTable td { border:1px solid #555; padding:6px 10px; text-align:center; }
             #id_tonesTable th { background-color:#3a3a3a; }
 
@@ -139,21 +143,40 @@
             #id_tonesTable tr.drag-over { border:2px dashed #ffcc00; }
 
             /*================================================================================*/
-            /* FREQ/CTRL/VOL BYTE LABEL: Styles for Freq/Ctrl/Vol Panel layout */
+            /* Styles container panel for (Byte Table, Copy Table, and Paypal)
             /*================================================================================*/
-            #id_byteTablePanel.cls_panel { width: 95%; }
+            .cls_panelContainer2 { display: flex; justify-content: center; gap: 10px; flex-wrap: nowrap; margin-top:10px;  }
+            
+            /*================================================================================*/
+            /* BYTE TABLES: Styles for Freq/Ctrl/Vol Panel layout */
+            /*================================================================================*/
+            #id_byteTablePanel.cls_panel { flex: 0 0 auto; width: 95%; }
 
              /* Styles for both Labels */
             #id_byteTablePanel .cls_byteTableLabel{ margin-top:20px; text-align:center; color:#ffcc00; }
 
             /*================================================================================*/
-            /* COPY TABLE: Styles for Copy Management Panel layout */
+            /* COPY BYTE TABLES: Styles for Copy Management Panel layout */
             /*================================================================================*/
-            #id_copyTablesPanel.cls_panel { width:200px; height: 170px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
+            #id_copyTablesPanel.cls_panel { flex: 0 0 auto; width:200px; height: 170px; text-align:center; display:flex; flex-direction:column; gap:15px; align-items:center; }
 
             /* Styles for All 2 buttons  */
             #id_copyTablesPanel .cls_CopyMangBnt { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
             #id_copyTablesPanel .cls_CopyMangBnt:hover { background-color:#616161; }
+
+            /*================================================================================*/
+            /* PAYPAL: Styles for Pay Pal Panel layout */
+            /*================================================================================*/
+            #id_paypalDonatePanel.cls_panel { flex: 0 0 auto; text-align: center; }
+
+            /* Styles for PayPal button */
+            #id_paypalDonatePanel .cls_paypalButton { display: inline-block; background-color: #0070BA; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s; }
+            #id_paypalDonatePanel .cls_paypalButton:hover { background-color: #005C99; /* Darker blue on hover */ }
+
+            /*================================================================================*/
+            /* VERSION LABEL: Style for version label at the bottom of the editor */
+            /*================================================================================*/
+            #id_versionLabel { text-align: center; color: #888; font-size: 14px; font-style: italic; margin-top: 20px; margin-bottom: 20px;}
 
             /*================================================================================*/
             /* TOAST: Styles for toast notifications */
@@ -167,20 +190,6 @@
 
             /* Fade-out animation for toast */
             @keyframes fadeout { from {bottom:30px; opacity:1;} to {bottom:0; opacity:0;} }
-
-            /*================================================================================*/
-            /* PAYPAL: Styles for Pay Pal Panel layout */
-            /*================================================================================*/
-            #id_paypalDonatePanel.cls_panel { text-align: center; }
-
-            /* Styles for PayPal button */
-            #id_paypalDonatePanel .cls_paypalButton { display: inline-block; background-color: #0070BA; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s; }
-            #id_paypalDonatePanel .cls_paypalButton:hover { background-color: #005C99; /* Darker blue on hover */ }
-
-            /*================================================================================*/
-            /* VERSION LABEL: Style for version label at the bottom of the editor */
-            /*================================================================================*/
-            #id_versionLabel { text-align: center; color: #888; font-size: 14px; font-style: italic; margin-top: 20px; margin-bottom: 20px;}
 
         </style>                    
     </head>
@@ -364,7 +373,7 @@
         <!-- ======================================= -->
         <!-- This is a Freq/Crtl/Volume Label Panel -->
         <!-- ======================================= -->
-        <div class="cls_panelContainer">
+        <div class="cls_panelContainer2">
             <div class="cls_panel" id="id_byteTablePanel">
                 <!-- This is a header -->
                 <h3>Byte Tables</h3>
@@ -380,7 +389,7 @@
         <!-- ======================================= -->
         <!-- This is a Copy Table Panel -->
         <!-- ======================================= -->
-        <div class="cls_panelContainer">
+        <div class="cls_panelContainer2">
             <div class="cls_panel" id="id_copyTablesPanel">
                 <!-- This is a header -->
                 <h3>Copy Byte Tables</h3>
@@ -401,7 +410,7 @@
         <!-- ======================================= -->
         <!-- This is a Paypal Donation  -->
         <!-- ======================================= -->
-        <div class="cls_panelContainer">
+        <div class="cls_panelContainer2">
             <!-- PayPal Donate Panel -->
             <div class="cls_panel" id="id_paypalDonatePanel">
                 <h3>Support Atari 2600 SFX Editor</h3>
@@ -415,7 +424,7 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="id_versionLabel">Version 3.01</div>
+        <div id="id_versionLabel">Version 3.02</div>
 
         <script src="JavaScript/wasm_exec.js"></script>
 

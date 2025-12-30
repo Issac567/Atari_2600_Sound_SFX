@@ -42,5 +42,4 @@ function btnAddStepEnd(){
     const repeat = parseInt(document.getElementById("id_repeat").value)||1;
     tonesArray.push({frequency:freq,control:ctl,volume:vol,repeat});
     updateTable();
-
 }
