@@ -107,6 +107,7 @@ function setupKeyboardButtonListener() {
             if (document.getElementById("id_KeyboardAddPlayedTone").checked) {
                 // and if "Add Silence Gap" checkbox is checked
                 if (document.getElementById("id_KeyboardSilenceTone").checked) {
+                    saveState();
                     tonesArray.push(newTone);
                     updateTable();
                 }
@@ -152,6 +153,7 @@ function setupKeyboardButtonListener() {
 
             // Only add to table if "Add Played Tone" checkbox is checked
             if (document.getElementById("id_KeyboardAddPlayedTone").checked) {
+                saveState();
                 tonesArray.push(newTone);
                 updateTable();
             }

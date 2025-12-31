@@ -26,13 +26,13 @@
             /* Styles for labels, textboxes and Dropdown */
             #id_stepPanel .cls_inputRow { display:flex; align-items:center; margin-bottom:10px; }
             #id_stepPanel .cls_inputRow label { width: 220px; text-align:right; margin-right:10px; }
-            #id_stepPanel .cls_inputRow input[type="number"], #id_stepPanel .cls_inputRow select { background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:5px 5px; text-align:center; width:179px; max-width:179px; }
+            #id_stepPanel .cls_inputRow input[type="number"], #id_stepPanel .cls_inputRow select { width:179px; max-width:179px; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:5px 5px; text-align:center;}
             #id_stepPanel .cls_inputRow input:hover { border-color: #888;}
-            #id_stepPanel .cls_inputRow select {text-align:left; padding:6px 5px; width: 190px; max-width:190px;}
+            #id_stepPanel .cls_inputRow select { width: 190px; max-width:190px; text-align:left; padding:6px 5px; }
             #id_stepPanel .cls_inputRow select:hover { border-color: #888;}
 
             /* Styles for "Add Steps at End" Button */
-            #id_stepPanel .cls_AddStepsEnd { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px 5px; width:190px; max-width:190px; }
+            #id_stepPanel .cls_AddStepsEnd {  width:190px; max-width:190px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px 5px; }
             #id_stepPanel .cls_AddStepsEnd:hover { background-color:#1568B0; }
 
             /*================================================================================*/
@@ -41,15 +41,15 @@
             #id_playbackPanel.cls_panel { min-width: 160px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
 
             /* Styles for "Play All" Button */
-            #id_playbackPanel .cls_playAllSequence { margin-left: 10px; margin-right: 10px; background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:auto; }
+            #id_playbackPanel .cls_playAllSequence {  width:auto; margin-left: 10px; margin-right: 10px; background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
             #id_playbackPanel .cls_playAllSequence:hover { background-color: #29832C; }
 
             /* Styles for "Stop" Button */
-            #id_playbackPanel .cls_StopAudio { margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:auto; text-align:center; }
+            #id_playbackPanel .cls_StopAudio {  width:auto; margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; text-align:center; }
             #id_playbackPanel .cls_StopAudio:hover { background-color:#616161; }
 
             /* Stlyes for "Loop Playback" and "PlayonChange" checkbox */
-            #id_playbackPanel .cls_PlaybackCheckbox { margin-left: 10px; margin-right: 10px; width: auto; }
+            #id_playbackPanel .cls_PlaybackCheckbox { width: auto; margin-left: 10px; margin-right: 10px; }
  
             /*================================================================================*/
             /* 3. TABLE MANAGEMENT: Styles for Table Management Panel layout */
@@ -57,7 +57,7 @@
             #id_tableManagementPanel.cls_panel { min-width: 160px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
 
             /* Styles for All 3 Buttons */
-            #id_tableManagementPanel .cls_ManagementBtn { margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:auto; }
+            #id_tableManagementPanel .cls_ManagementBtn { width:auto; margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; }
             #id_tableManagementPanel .cls_ManagementBtn:hover { background-color:#616161; }
 
             /*================================================================================*/
@@ -66,7 +66,7 @@
             #id_undoRedoPanel.cls_panel { min-width: 160px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
 
             /* Styles for All 3 Buttons */
-            #id_undoRedoPanel .cls_UndoRedoBtn { margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:auto; }
+            #id_undoRedoPanel .cls_UndoRedoBtn { width:auto; margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; }
             #id_undoRedoPanel .cls_UndoRedoBtn:hover { background-color:#616161; }
 
             /*================================================================================*/
@@ -96,10 +96,10 @@
             @media (max-width: 500px) { #id_keyboardKeys button { height: 40px; font-size: 0.8rem; } }
 
             /* Keyboard Export/Import Layout Buttons */
-            #id_keyboardFileButtons { display: flex; justify-content: center; gap: 16px; width: 100%; padding: 8px 0; margin-top: 10px; border-top: none; align-items: center; }
+            #id_keyboardFileButtons { width: 100%; display: flex; justify-content: center; gap: 16px; padding: 8px 0; margin-top: 10px; border-top: none; align-items: center; }
 
             /* Styles for "Import/Export Buttons"  */
-            #id_keyboardFileButtons .cls_KeyboardSaveLoadBtn { background-color:#757575; color:white; border:1px solid #555; border-radius:4px; cursor:pointer; padding:6px 14px; cursor: pointer; text-align: center; transition: background 0.2s; width:140px; }
+            #id_keyboardFileButtons .cls_KeyboardSaveLoadBtn { width:140px; background-color:#757575; color:white; border:1px solid #555; border-radius:4px; cursor:pointer; padding:6px 14px; cursor: pointer; text-align: center; transition: background 0.2s;  }
             #id_keyboardFileButtons .cls_KeyboardSaveLoadBtn:hover { background-color: #616161; }
 
             /* Stlyes for "Add Played Tones" and Silence Gap checkbox */
@@ -112,7 +112,7 @@
             #id_tonesTableTitle { display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: white; margin-bottom: 10px; }           
             
             /* Style for Table, Table Header and Table Data */
-            table { /*border-collapse:collapse; */ margin:0px auto; width:97%; background-color:#2b2b2b; }
+            table { /*border-collapse:collapse; */  width:97%; margin:0px auto; background-color:#2b2b2b; }
             #id_tonesTable th, #id_tonesTable td { border:1px solid #555; padding:6px 10px; text-align:center; }
             #id_tonesTable th { background-color:#3a3a3a; }
 
@@ -123,16 +123,16 @@
             #id_tonesTable input[type="number"] { width:80px; }
             #id_tonesTable input:hover { border-color: #888;}
 
-            /* Styles for the "Play" Button  */
-            #id_tonesTable .cls_playBtn { background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width:110px; }
+            /* Styles for the "Play" Button */
+            #id_tonesTable .cls_playBtn {  width:110px; background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px;}
             #id_tonesTable .cls_playBtn:hover { background-color:#29832C; }
 
-            /* Styles for the "Delete" Button  */
-            #id_tonesTable .cls_deleteBtn { background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; width: 50px; }
+            /* Styles for the "Delete" Button */
+            #id_tonesTable .cls_deleteBtn { width: 50px; background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
             #id_tonesTable .cls_deleteBtn:hover { background-color:#9F1919; }
 
-            /* Styles for "Duplicate"  */
-            #id_tonesTable .cls_insertBtn { background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:110px; }
+            /* Styles for "Duplicate" */
+            #id_tonesTable .cls_insertBtn { width:110px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; }
             #id_tonesTable .cls_insertBtn:hover { background-color:#1568B0; }
 
             /* DRAG OVER: Style for Table Row being dragged over */
@@ -152,7 +152,7 @@
             #id_copyButtonsPanel.cls_panel2 {display: flex; justify-content: center; gap:10px;}
 
             /* Styles for All 2 buttons  */
-            #id_copyButtonsPanel .cls_CopyMangBnt { background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; width:180px; }
+            #id_copyButtonsPanel .cls_CopyMangBnt { width:180px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; }
             #id_copyButtonsPanel .cls_CopyMangBnt:hover { background-color:#616161; }
 
              /* Styles for both Labels */
@@ -370,7 +370,7 @@
         <div class="cls_panelContainer2">
             <div class="cls_panel" id="id_byteTablePanel">
                 <!-- This is a header -->
-                <h3>Byte Tables</h3>
+                <h3>Table Bytes</h3>
 
                 <div class="cls_panel2" id="id_copyButtonsPanel">
                     <!-- This is a Copy Freq Button -->
@@ -410,8 +410,11 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="id_versionLabel">Version 3.08</div>
+        <div id="id_versionLabel">Version 3.09</div>
 
+        <!-- ======================================= -->
+        <!-- Java Script files-->
+        <!-- ======================================= -->
         <script src="JavaScript/wasm_exec.js"></script>
 
         <script src="JavaScript/public.js"></script>
