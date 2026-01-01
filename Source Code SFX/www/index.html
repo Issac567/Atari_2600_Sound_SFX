@@ -1,191 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <link rel="icon" href="data:,"> <!-- Remove annoying no fav icon -->
+        <link rel="icon" href="data:,">             <!-- Remove annoying no fav icon -->
+        <link rel="stylesheet" href="styles.css">   <!-- Seperate CSS in another file -->
         <meta charset="UTF-8">
-        <title>Atari 2600 SFX Editor</title>
-        <style>
-            /*================================================================================*/
-            /* General body and header styles */
-            /*================================================================================*/
-            body { background-color: #1e1e1e; color: #f0f0f0; font-family: Arial, sans-serif; margin:0; padding:0; }
-            h1 { text-align: center; margin: 20px 0; }
-
-            /*================================================================================*/
-            /* Styles for panel container, first 4 panels and all headers in panels*/
-            /*================================================================================*/
-            .cls_panelContainer { /*overflow-x: auto;*/ margin-left: 20px; margin-right: 20px; display: flex; justify-content: flex-start; gap: 10px; flex-wrap: nowrap; }
-            .cls_panel { flex: 1 1 auto; /* flex-grow:1, flex-shrink:1, flex-basis:auto */border: 1px solid #555; padding: 15px; background-color: #2b2b2b; border-radius: 5px; }
-            .cls_panel h3 { margin-top:0; margin-bottom:10px; text-align:center; }
-            
-            /*================================================================================*/
-            /* 1. STEP PARAMETERS: Styles for Step Parameters Panel layout */
-            /*================================================================================*/
-            #id_stepPanel.cls_panel { max-width: 600px; width: 430px; height: 220px;}
-
-            /* Styles for labels, textboxes and Dropdown */
-            #id_stepPanel .cls_inputRow { display:flex; align-items:center; margin-bottom:10px; }
-            #id_stepPanel .cls_inputRow label { width: 220px; text-align:right; margin-right:10px; }
-            #id_stepPanel .cls_inputRow input[type="number"], #id_stepPanel .cls_inputRow select { width:179px; max-width:179px; background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:5px 5px; text-align:center;}
-            #id_stepPanel .cls_inputRow input:hover { border-color: #888;}
-            #id_stepPanel .cls_inputRow select { width: 190px; max-width:190px; text-align:left; padding:6px 5px; }
-            #id_stepPanel .cls_inputRow select:hover { border-color: #888;}
-
-            /* Styles for "Add Steps at End" Button */
-            #id_stepPanel .cls_AddStepsEnd {  width:190px; max-width:190px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px 5px; }
-            #id_stepPanel .cls_AddStepsEnd:hover { background-color:#1568B0; }
-
-            /*================================================================================*/
-            /* 2. PLAYBACK: Styles for Playback Management Panel layout */
-            /*================================================================================*/
-            #id_playbackPanel.cls_panel { min-width: 160px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
-
-            /* Styles for "Play All" Button */
-            #id_playbackPanel .cls_playAllSequence {  width:auto; margin-left: 10px; margin-right: 10px; background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
-            #id_playbackPanel .cls_playAllSequence:hover { background-color: #29832C; }
-
-            /* Styles for "Stop" Button */
-            #id_playbackPanel .cls_StopAudio {  width:auto; margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; text-align:center; }
-            #id_playbackPanel .cls_StopAudio:hover { background-color:#616161; }
-
-            /* Stlyes for "Loop Playback" and "PlayonChange" checkbox */
-            #id_playbackPanel .cls_PlaybackCheckbox { width: auto; margin-left: 10px; margin-right: 10px; }
- 
-            /*================================================================================*/
-            /* 3. TABLE MANAGEMENT: Styles for Table Management Panel layout */
-            /*================================================================================*/
-            #id_tableManagementPanel.cls_panel { min-width: 160px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
-
-            /* Styles for All 3 Buttons */
-            #id_tableManagementPanel .cls_ManagementBtn { width:auto; margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; }
-            #id_tableManagementPanel .cls_ManagementBtn:hover { background-color:#616161; }
-
-            /*================================================================================*/
-            /* 4. UNDO/REDO: Styles for Undo/Redo Panel layout */
-            /*================================================================================*/
-            #id_undoRedoPanel.cls_panel { min-width: 160px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
-
-            /* Styles for All 3 Buttons */
-            #id_undoRedoPanel .cls_UndoRedoBtn { width:auto; margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; }
-            #id_undoRedoPanel .cls_UndoRedoBtn:hover { background-color:#616161; }
-
-            /*================================================================================*/
-            /* KEYBOARD: Styles for Keyboard Panel layout */
-            /*================================================================================*/
-            #id_keyboardPanel.cls_panel {width: 95%; height: 150px; margin: 10px auto 20px auto; /*top,right,bottom,left*/ padding: 10px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
-
-            /* Keyboard title */
-            #id_keyboardPanel h3 { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
-
-            /* Keyboard keys container */
-            #id_keyboardKeys { display: flex; justify-content: flex-start; gap: 2px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 2px; padding-right: 2px; }
-
-            /* Optional: style scrollbar */
-            #id_keyboardKeys::-webkit-scrollbar { height: 8px; }
-            #id_keyboardKeys::-webkit-scrollbar-thumb { background: #aaa; border-radius: 3px; }
-
-            /* Individual keys */
-            #id_keyboardKeys button { flex: 1 1 0; min-width: 30px; height: 60px; margin: 2px 1px;/* top/bottom and left/right */ border: 1px solid #555; border-radius: 4px; background: #eee; color: #111; font-weight: bold; cursor: pointer; user-select: none; text-align: center; transition: background 0.1s, transform 0.05s; }
-
-            /* Key press / hover feedback */
-            #id_keyboardKeys button:hover { background: #716767; }
-            #id_keyboardKeys button:active { background: #CCC; transform: scale(0.95); }
-
-            /* Responsive adjustments */
-            @media (max-width: 800px) { #id_keyboardKeys button { height: 50px; font-size: 0.9rem; } }
-            @media (max-width: 500px) { #id_keyboardKeys button { height: 40px; font-size: 0.8rem; } }
-
-            /* Keyboard Export/Import Layout Buttons */
-            #id_keyboardFileButtons { width: 100%; display: flex; justify-content: center; gap: 16px; padding: 8px 0; margin-top: 10px; border-top: none; align-items: center; }
-
-            /* Styles for "Import/Export Buttons"  */
-            #id_keyboardFileButtons .cls_KeyboardSaveLoadBtn { width:140px; background-color:#757575; color:white; border:1px solid #555; border-radius:4px; cursor:pointer; padding:6px 14px; cursor: pointer; text-align: center; transition: background 0.2s;  }
-            #id_keyboardFileButtons .cls_KeyboardSaveLoadBtn:hover { background-color: #616161; }
-
-            /* Stlyes for "Add Played Tones" and Silence Gap checkbox */
-            #id_keyboardFileButtons .cls_KeyboardCheckbox{ width: 160px; }
-
-            /*================================================================================*/
-            /* TABLE: Styles for table layout */
-            /*================================================================================*/
-            /* Style for Table Header title */
-            #id_tonesTableTitle { display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; color: white; margin-bottom: 10px; }           
-            
-            /* Style for Table, Table Header and Table Data */
-            table { /*border-collapse:collapse; */  width:97%; margin:0px auto; background-color:#2b2b2b; }
-            #id_tonesTable th, #id_tonesTable td { border:1px solid #555; padding:6px 10px; text-align:center; }
-            #id_tonesTable th { background-color:#3a3a3a; }
-
-            /* Styles for Dropdown and Textboxes */
-            #id_tonesTable select, #id_tonesTable input[type="number"] { background-color:#333; color:#f0f0f0; border:1px solid #555; border-radius:3px; padding:5px; text-align:center; }
-            #id_tonesTable select { width:190px; padding:6px; text-align:left;}
-            #id_tonesTable select:hover { border-color: #888;}
-            #id_tonesTable input[type="number"] { width:80px; }
-            #id_tonesTable input:hover { border-color: #888;}
-
-            /* Styles for the "Play" Button */
-            #id_tonesTable .cls_playBtn {  width:110px; background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px;}
-            #id_tonesTable .cls_playBtn:hover { background-color:#29832C; }
-
-            /* Styles for the "Delete" Button */
-            #id_tonesTable .cls_deleteBtn { width: 50px; background-color:#F44336; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
-            #id_tonesTable .cls_deleteBtn:hover { background-color:#9F1919; }
-
-            /* Styles for "Duplicate" */
-            #id_tonesTable .cls_insertBtn { width:110px; background-color:#2196F3; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; }
-            #id_tonesTable .cls_insertBtn:hover { background-color:#1568B0; }
-
-            /* DRAG OVER: Style for Table Row being dragged over */
-            #id_tonesTable tr.drag-over { border:2px dashed #ffcc00; }
-
-            /*================================================================================*/
-            /* Styles for panel container (Byte Table, Copy Table, and Paypal uses this)
-            /*================================================================================*/
-            .cls_panelContainer2 { display: flex; justify-content: center; flex-wrap: nowrap; margin-top:10px; }
-            
-            /*================================================================================*/
-            /* BYTE TABLES: Styles for Byte Tables Panel layout */
-            /*================================================================================*/
-            #id_byteTablePanel.cls_panel { flex: 0 0 auto; width: 95%;}
-            
-            /* Styles for CopyMangBnt Panel  */
-            #id_copyButtonsPanel.cls_panel2 {display: flex; justify-content: center; gap:10px;}
-
-            /* Styles for All 2 buttons  */
-            #id_copyButtonsPanel .cls_CopyMangBnt { width:180px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; }
-            #id_copyButtonsPanel .cls_CopyMangBnt:hover { background-color:#616161; }
-
-             /* Styles for both Labels */
-            #id_byteTablePanel .cls_byteTableLabel{ margin-top:20px; text-align:center; color:#ffcc00; }
-
-            /*================================================================================*/
-            /* PAYPAL: Styles for Pay Pal Panel layout */
-            /*================================================================================*/
-            #id_paypalDonatePanel.cls_panel { flex: 0 0 auto; text-align: center; gap: 15px;}
-
-            /* Styles for PayPal button */
-            #id_paypalDonatePanel .cls_paypalButton { display: inline-block; background-color: #0070BA; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.2s; }
-            #id_paypalDonatePanel .cls_paypalButton:hover { background-color: #005C99; /* Darker blue on hover */ }
-
-            /*================================================================================*/
-            /* VERSION LABEL: Style for version label at the bottom of the editor */
-            /*================================================================================*/
-            #id_versionLabel { text-align: center; color: #888; font-size: 14px; font-style: italic; margin-top: 20px; margin-bottom: 20px;}
-
-            /*================================================================================*/
-            /* TOAST: Styles for toast notifications */
-            /*================================================================================*/
-            /* Styles for toast message */
-            #id_toast { visibility:hidden; min-width:200px; background-color:#333; color:#fff; text-align:center; border-radius:4px; padding:10px; position:fixed; z-index:100; left:50%; bottom:30px; transform:translateX(-50%); font-size:16px; }
-            #id_toast.show { visibility:visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-
-            /* Fade-in animation for toast */
-            @keyframes fadein { from {bottom:0; opacity:0;} to {bottom:30px; opacity:1;} }
-
-            /* Fade-out animation for toast */
-            @keyframes fadeout { from {bottom:30px; opacity:1;} to {bottom:0; opacity:0;} }
-
-        </style>                    
+        <title>Atari 2600 SFX Editor</title>                  
     </head>
     <body>
         <!-- This is a header -->
@@ -389,11 +208,6 @@
         </div>
 
         <!-- ======================================= -->
-        <!-- This is a toast -->
-        <!-- ======================================= -->
-        <div id="id_toast"></div>
-
-        <!-- ======================================= -->
         <!-- This is a Paypal Donation  -->
         <!-- ======================================= -->
         <div class="cls_panelContainer2">
@@ -410,7 +224,12 @@
         <!-- ======================================= -->
         <!-- This is a Version label -->
         <!-- ======================================= -->
-        <div id="id_versionLabel">Version 3.09</div>
+        <div id="id_versionLabel">Version 3.10</div>
+
+        <!-- ======================================= -->
+        <!-- This is a toast -->
+        <!-- ======================================= -->
+        <div id="id_toast"></div>
 
         <!-- ======================================= -->
         <!-- Java Script files-->

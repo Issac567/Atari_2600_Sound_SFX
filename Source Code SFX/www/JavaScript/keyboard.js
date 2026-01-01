@@ -60,7 +60,7 @@ function setupKeyboardButtonListener() {
     //*******************************************************************
     // Play Tone when button pressed
     //*******************************************************************
-    // Add Silence Gap is not efficient at all.  Ill fix it in future.
+    // Add Silence Gap is not efficient.  Ill fix it in future.
     // toneStopTime is public.  I need to reset it when new table or load table
     // Prevents Silence Gap Tone being added to table at initial key press. 
     // But, currently issues with user not using keyboard key, then recommended to wait 5 seconds
