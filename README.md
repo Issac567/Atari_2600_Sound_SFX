@@ -20,6 +20,7 @@ A web-based Atari 2600 sound effects editor using TIA sound generation, implemen
 | File | Description |
 |------|-------------|
 | `index.html` | Main web interface. |
+| `styles.css` | Styles for html. |
 | `main.go` | Go WebAssembly code for TIA audio generation. |
 | `build.bat` | Batch file to compile Go source to `main.wasm`. |
 | `go.mod` / `go.sum` | Required for Go compilation and dependency management. |
