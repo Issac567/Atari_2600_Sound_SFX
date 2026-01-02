@@ -5,7 +5,7 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 
 	"log"
 	"syscall/js"
@@ -57,21 +57,32 @@ func parseJson(jsonFile []byte) ([]Tone, error) {
 	var tones []Tone
 	err := json.Unmarshal(jsonFile, &tones)
 	if err != nil {
-		return nil, errors.New("failed to parse JSON tones: " + err.Error())
+		return nil, fmt.Errorf("failed to parse JSON tones: %v", err)
 	}
 
 	// Validate ranges
-	for _, t := range tones {
+	for i, t := range tones {
+		var stepLabel string
+		if len(tones) == 1 {
+			// if array 1 then display current (Play Step or Row Change)
+			stepLabel = "current"
+		} else {
+			// Display which Step Number (Play All)
+			stepLabel = fmt.Sprintf("step %d", i+1)
+		}
+
+		// err contains the message in updateSamples
 		if t.Frequency < 0 || t.Frequency > 31 {
-			return nil, errors.New("frequency out of range")
+			return nil, fmt.Errorf("%s: frequency out of range (%d)", stepLabel, t.Frequency)
 		}
 		if t.Volume < 0 || t.Volume > 15 {
-			return nil, errors.New("volume out of range")
+			return nil, fmt.Errorf("%s: volume out of range (%d)", stepLabel, t.Volume)
 		}
 		if t.Control < 1 || t.Control > 15 {
-			return nil, errors.New("control out of range")
+			return nil, fmt.Errorf("%s: control out of range (%d)", stepLabel, t.Control)
 		}
 	}
+
 	return tones, nil
 }
 
@@ -91,7 +102,8 @@ func updateSamples(this js.Value, args []js.Value) interface{} {
 	tonesData, err = parseJson([]byte(content))
 	if err != nil {
 		log.Printf("tiaAudio: %s", err.Error())
-		//addMessage(err.Error())
+		msg := err.Error()
+		js.Global().Call("showToast", msg)
 		return nil
 	}
 
@@ -100,9 +112,6 @@ func updateSamples(this js.Value, args []js.Value) interface{} {
 
 	// Save emulation time in milliseconds
 	lastEmulationTime = float64(time.Since(startTime).Milliseconds())
-
-	//log.Printf("tiaAudio: emulation time %s", time.Since(startTime))
-	//log.Printf("tiaAudio: number of tones: %d", len(tonesData))
 
 	return nil
 }
@@ -194,11 +203,3 @@ func stopAudio(this js.Value, args []js.Value) interface{} {
 func getEmulationtime(this js.Value, args []js.Value) interface{} {
 	return lastEmulationTime
 }
-
-/* func addMessage(msg string) {
-	contentDiv := js.Global().Get("document").Call("getElementById", "userFeedback")
-	if contentDiv.IsNull() || contentDiv.IsUndefined() {
-		return
-	}
-	contentDiv.Set("innerHTML", msg)
-} */

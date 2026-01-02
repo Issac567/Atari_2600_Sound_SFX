@@ -32,7 +32,7 @@ h1 { text-align: center; margin: 20px 0; }
 /*================================================================================*/
 /* 2. PLAYBACK: Styles for Playback Management Panel Layout */
 /*================================================================================*/
-#id_playbackPanel.cls_panel { min-width: 160px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
+#id_playbackPanel.cls_panel { min-width: 150px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
 
 /* Styles for "Play All" Button */
 #id_playbackPanel .cls_playAllSequence {  width: auto; margin-left: 10px; margin-right: 10px; background-color: #4CAF50; color:white; border:none; cursor:pointer; border-radius:3px; padding:8px; }
@@ -43,12 +43,12 @@ h1 { text-align: center; margin: 20px 0; }
 #id_playbackPanel .cls_StopAudio:hover { background-color:#616161; }
 
 /* Stlyes for "Loop Playback" and "Play on Change" checkbox */
-#id_playbackPanel .cls_PlaybackCheckbox { width: auto; margin-left: 10px; margin-right: 10px; }
+#id_playbackPanel .cls_PlaybackCheckbox { width: auto; margin-left: 5px; margin-right: 5px; }
 
 /*================================================================================*/
 /* 3. TABLE MANAGEMENT: Styles for Table Management Panel Layout */
 /*================================================================================*/
-#id_tableManagementPanel.cls_panel { min-width: 160px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
+#id_tableManagementPanel.cls_panel { min-width: 150px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
 
 /* Styles for All 3 Buttons */
 #id_tableManagementPanel .cls_ManagementBtn { width: auto; margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; }
@@ -57,7 +57,7 @@ h1 { text-align: center; margin: 20px 0; }
 /*================================================================================*/
 /* 4. UNDO/REDO: Styles for Undo/Redo Panel Layout */
 /*================================================================================*/
-#id_undoRedoPanel.cls_panel { min-width: 160px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
+#id_undoRedoPanel.cls_panel { min-width: 150px; width: 200px; height: 220px; display:flex; flex-direction: column; align-items:stretch; gap:15px; }
 
 /* Styles for All 3 Buttons */
 #id_undoRedoPanel .cls_UndoRedoBtn { width: auto; margin-left: 10px; margin-right: 10px; background-color:#757575; color:white; border:1px solid #555; border-radius:3px; cursor:pointer; padding:8px; }
