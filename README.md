@@ -1,6 +1,6 @@
 # Atari 2600 SFX Editor
 
-https://issac567.github.io/Atari_2600_Sound_SFX/
+https://ElectronicFan.github.io/Atari_2600_Sound_SFX/
 
 A web-based Atari 2600 sound effects editor using TIA sound generation, implemented with Go and WebAssembly.
 
